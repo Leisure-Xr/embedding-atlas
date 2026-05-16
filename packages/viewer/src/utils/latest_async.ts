@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Apple Inc. Licensed under MIT License.
 
 /**
- * Wraps an async function so that only the latest invocation's result
- * will be passed to onResult. Earlier pending results are ignored. Errors are also ignored.
+ * 包装异步函数，使只有最新一次调用的结果会传给 onResult。
+ * 更早的待处理结果会被忽略，错误也会被忽略。
  */
 export function latestAsync<Args extends any[], R>(
   asyncFn: (...args: Args) => Promise<R>,

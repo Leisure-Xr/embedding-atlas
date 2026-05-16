@@ -41,10 +41,10 @@ export class ReconnectingWebSocket {
       this.ws = new WebSocket(this.endpoint);
 
       this.ws.onopen = () => {
-        console.debug("WebSocket connected");
+        console.debug("WebSocket 已连接");
         this.reconnectAttempts = 0;
         this.onStatus?.("connected");
-        // Reset delay to initial value on successful connection
+        // 连接成功后将延迟重置为初始值。
       };
 
       this.ws.onmessage = (event) => {
@@ -52,22 +52,22 @@ export class ReconnectingWebSocket {
       };
 
       this.ws.onclose = (event) => {
-        console.debug("WebSocket closed:", event.code, event.reason);
+        console.debug("WebSocket 已关闭：", event.code, event.reason);
         this.ws = null;
 
         if (this.shouldReconnect && this.reconnectAttempts < this.maxReconnectAttempts) {
           this.scheduleReconnect();
         } else if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-          console.error("Max reconnection attempts reached, giving up");
+          console.error("已达到最大重连次数，停止重连");
           this.onStatus?.("error");
         }
       };
 
       this.ws.onerror = (error) => {
-        console.error("WebSocket error:", error);
+        console.error("WebSocket 错误：", error);
       };
     } catch (error) {
-      console.error("Failed to create WebSocket:", error);
+      console.error("创建 WebSocket 失败：", error);
       if (this.shouldReconnect && this.reconnectAttempts < this.maxReconnectAttempts) {
         this.scheduleReconnect();
       } else {
@@ -84,7 +84,7 @@ export class ReconnectingWebSocket {
     this.reconnectAttempts++;
     const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), this.maxReconnectDelay);
 
-    console.debug(`Scheduling reconnection attempt ${this.reconnectAttempts} in ${delay}ms`);
+    console.debug(`将在 ${delay}ms 后进行第 ${this.reconnectAttempts} 次重连`);
 
     this.reconnectTimeoutId = window.setTimeout(() => {
       this.reconnectTimeoutId = null;

@@ -4,7 +4,7 @@ import { type JSONSchema7 } from "json-schema";
 import { writable, type Readable, type Writable } from "svelte/store";
 import { ReconnectingWebSocket } from "./reconnecting_websocket.js";
 
-/** A type that mirrors the current design in the upcoming navigator.modelContext API */
+/** 与即将推出的 navigator.modelContext API 当前设计相对应的类型。 */
 export interface ModelContextAPI {
   provideContext(context: MCPContext): void;
 
@@ -15,28 +15,28 @@ export interface MCPContext {
   tools?: MCPTool[];
 }
 
-/** Tool definition interface */
+/** 工具定义接口。 */
 export interface MCPTool {
-  /** Unique name for the tool */
+  /** 工具的唯一名称。 */
   name: string;
 
-  /** The title of the tool */
+  /** 工具标题。 */
   title?: string;
 
-  /** Natural language description of what the tool does */
+  /** 工具作用的自然语言描述。 */
   description: string;
 
-  /** JSON Schema defining the input parameters */
+  /** 定义输入参数的 JSON Schema。 */
   inputSchema: JSONSchema7;
 
-  /** JSON Schema defining the output parameters */
+  /** 定义输出参数的 JSON Schema。 */
   outputSchema?: JSONSchema7;
 
-  /** Function that implements the tool and returns a result */
+  /** 实现工具并返回结果的函数。 */
   execute: (input: any, agent: unknown) => Promise<ToolResponse>;
 }
 
-/** Tool response format */
+/** 工具响应格式。 */
 export interface ToolResponse {
   content: Array<{
     type: "text" | "image" | "video";
@@ -99,7 +99,7 @@ export class MCPWebSocketServer implements ModelContextAPI {
           const response = await this.processRequest(request);
           this.ws.send(JSON.stringify(response));
         } catch (error) {
-          console.error("Error processing MCP request:", error);
+          console.error("处理 MCP 请求时出错：", error);
         }
       },
       onStatus: (value) => {
@@ -154,12 +154,12 @@ export class MCPWebSocketServer implements ModelContextAPI {
       case "tools/call":
         return await this.toolsCall(params);
       default:
-        throw new Error(`method ${method} is not implemented`);
+        throw new Error(`方法 ${method} 未实现`);
     }
   }
 
   async initialize(params: { clientInfo: { name: string } }) {
-    console.info("MCP Initialize", params.clientInfo);
+    console.info("MCP 初始化", params.clientInfo);
     return {
       protocolVersion: "2024-11-05",
       capabilities: {
@@ -171,9 +171,9 @@ export class MCPWebSocketServer implements ModelContextAPI {
       },
       serverInfo: {
         name: "Embedding Atlas",
-        title: "Embedding Atlas MCP Server",
+        title: "Embedding Atlas MCP 服务器",
         version: "1.0.0",
-        description: "MCP server for the Embedding Atlas frontend",
+        description: "用于 Embedding Atlas 前端的 MCP 服务器",
         icons: [
           {
             src: "https://apple.github.io/embedding-atlas/favicon.svg",
@@ -183,7 +183,7 @@ export class MCPWebSocketServer implements ModelContextAPI {
         ],
         websiteUrl: "https://apple.github.io/embedding-atlas",
       },
-      instructions: "Optional instructions for the client",
+      instructions: "客户端可使用的可选说明",
     };
   }
 
@@ -202,13 +202,13 @@ export class MCPWebSocketServer implements ModelContextAPI {
   async toolsCall(params: { name: string; arguments: any }): Promise<ToolResponse> {
     let tool = this.toolsMap.get(params.name);
     if (tool == undefined) {
-      throw new Error("tool not found");
+      throw new Error("未找到工具");
     }
     try {
       return await tool.execute(params.arguments, undefined);
     } catch (e: any) {
       return {
-        content: [{ type: "text", text: "Exception: " + e.toString() }],
+        content: [{ type: "text", text: "异常：" + e.toString() }],
         isError: true,
       };
     }

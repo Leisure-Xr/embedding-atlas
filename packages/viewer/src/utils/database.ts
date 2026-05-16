@@ -5,7 +5,7 @@ import * as SQL from "@uwdata/mosaic-sql";
 
 import { createDuckDB } from "./duckdb.js";
 
-/** Initialize the database connector for a Mosaic coordinator */
+/** 为 Mosaic 协调器初始化数据库连接器。 */
 export async function initializeDatabase(
   coordinator: Coordinator,
   type: "wasm" | "socket" | "rest",
@@ -24,7 +24,7 @@ export async function initializeDatabase(
   }
 }
 
-/** Convert a Mosaic predicate to SQL string */
+/** 将 Mosaic 谓词转换为 SQL 字符串。 */
 export function predicateToString(predicate: ReturnType<Selection["predicate"]>): string | null {
   if (predicate == null) {
     return null;
@@ -54,7 +54,7 @@ export function resolveSQLTemplate(template: string, vars: Record<string, string
   });
 }
 
-/** Column description */
+/** 列描述。 */
 export interface ColumnDesc {
   name: string;
   type: string;

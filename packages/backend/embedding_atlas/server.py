@@ -27,7 +27,7 @@ def make_server(
     cors: bool | list[str] = False,
     duckdb_uri: str | None = None,
 ):
-    """Creates a server for hosting Embedding Atlas"""
+    """创建用于托管 Embedding Atlas 的服务器。"""
 
     app = FastAPI()
 
@@ -59,14 +59,14 @@ def make_server(
     @app.get("/data/metadata.json")
     async def get_metadata():
         meta = {}
-        # Database
+        # 数据库。
         if duckdb_uri is None or duckdb_uri == "wasm":
             meta["database"] = {"type": "wasm", "load": True}
         elif duckdb_uri == "server":
-            # Point to the server itself.
+            # 指向服务器自身。
             meta["database"] = {"type": "rest"}
         else:
-            # Point to the given uri.
+            # 指向给定 URI。
             if duckdb_uri.startswith("http"):
                 meta["database"] = {
                     "type": "rest",
@@ -80,8 +80,8 @@ def make_server(
                     "load": True,
                 }
             else:
-                raise ValueError("invalid DuckDB uri")
-        # MCP
+                raise ValueError("无效的 DuckDB uri")
+        # MCP。
         if mcp:
             meta["mcp"] = {"type": "websocket"}
 
@@ -126,7 +126,7 @@ def make_server(
                     data = result.df().to_json(orient="records")
                     return Response(data, headers={"Content-Type": "application/json"})
                 else:
-                    raise ValueError(f"Unknown command {command}")
+                    raise ValueError(f"未知 command：{command}")
             except Exception as e:
                 return JSONResponse({"error": str(e)}, status_code=500)
 
@@ -190,7 +190,7 @@ def make_server(
     if mcp:
         make_mcp_proxy(app)
 
-    # Static files for the frontend
+    # 前端静态文件。
     app.mount("/", StaticFiles(directory=static_path, html=True))
 
     return app
@@ -223,7 +223,7 @@ class WebSocketHandler:
         except json.JSONDecodeError:
             pass
         except Exception as e:
-            print(f"Error processing WebSocket message: {e}")
+            print(f"处理 WebSocket 消息时出错：{e}")
 
     async def _cleanup(self):
         self.is_connected = False
@@ -233,9 +233,9 @@ class WebSocketHandler:
         self.pending_requests.clear()
 
     async def send_request(self, request: dict) -> dict:
-        """Send a request to the WebSocket and wait for response"""
+        """向 WebSocket 发送请求并等待响应。"""
         if not self.is_connected:
-            raise HTTPException(status_code=503, detail="WebSocket disconnected")
+            raise HTTPException(status_code=503, detail="WebSocket 已断开连接")
 
         request_id = str(uuid.uuid4())
         payload = {"id": request_id, "request": request}
@@ -250,14 +250,14 @@ class WebSocketHandler:
 
         except asyncio.TimeoutError:
             self.pending_requests.pop(request_id, None)
-            raise HTTPException(status_code=408, detail="Request timeout")
+            raise HTTPException(status_code=408, detail="请求超时")
         except Exception as e:
             self.pending_requests.pop(request_id, None)
             if not self.is_connected:
-                raise HTTPException(status_code=503, detail="WebSocket disconnected")
+                raise HTTPException(status_code=503, detail="WebSocket 已断开连接")
             else:
                 raise HTTPException(
-                    status_code=500, detail=f"Internal server error: {str(e)}"
+                    status_code=500, detail=f"内部服务器错误：{str(e)}"
                 )
 
     async def send_close(self):
@@ -294,7 +294,7 @@ def make_mcp_proxy(app: FastAPI):
         # Check if we have a connected WebSocket handler
         handler = last_handler["handler"]
         if handler is None or not handler.is_connected:
-            raise HTTPException(status_code=503, detail="No MCP WebSocket connected")
+            raise HTTPException(status_code=503, detail="没有已连接的 MCP WebSocket")
 
         return await handler.send_request(await request.json())
 

@@ -6,7 +6,7 @@
     status?: string | null;
   }
 
-  let { status = "Loading..." }: Props = $props();
+  let { status = "加载中..." }: Props = $props();
 </script>
 
 <div role="status" class="flex flex-row items-center">

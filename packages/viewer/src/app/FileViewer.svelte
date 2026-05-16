@@ -48,7 +48,7 @@
     hashParams = {};
   }
 
-  // Load existing state from URL if available
+  // 如果 URL 中有现有状态，则加载它。
   onMount(async () => {
     await loadHashParams();
     if (hashParams.data != undefined && typeof hashParams.data == "string") {
@@ -56,11 +56,11 @@
     }
   });
 
-  /** Load data from inputs (list of files or urls) */
+  /** 从输入（文件或 URL 列表）加载数据。 */
   async function loadData(inputs: (File | { url: string })[]) {
     stage = "messages";
     try {
-      logger.info("Initializing database...");
+      logger.info("正在初始化数据库...");
       await databaseInitialized;
 
       let db = await (coordinator.databaseConnector()! as DuckDBWASMConnector).getDuckDB();
@@ -70,7 +70,7 @@
       let describeResult = await coordinator.query(`DESCRIBE TABLE dataset`);
       describe = Array.from(describeResult) as typeof describe;
 
-      // Create the __row_index__ column to use as row id
+      // 创建 __row_index__ 列，用作行 id。
       await coordinator.exec(`
         CREATE OR REPLACE SEQUENCE __row_index_sequence__ MINVALUE 0 START 0;
         ALTER TABLE dataset ADD COLUMN IF NOT EXISTS __row_index__ INTEGER DEFAULT nextval('__row_index_sequence__');
@@ -112,7 +112,7 @@
         let model = spec.embedding.compute.model;
         let x = input + "_proj_x";
         let y = input + "_proj_y";
-        let msg = logger.info(`Embedding: Initialize`);
+        let msg = logger.info(`嵌入：初始化`);
         await computeEmbedding({
           coordinator: coordinator,
           table: "dataset",
@@ -124,7 +124,7 @@
           model: model,
           umapOptions: spec.embedding.compute.umapOptions,
           callback: (message, progress) => {
-            msg.update({ text: `Embedding: ${message}`, progress: progress });
+            msg.update({ text: `嵌入：${message}`, progress: progress });
           },
         });
         projectionColumns = { x, y };
@@ -176,24 +176,24 @@
       {#if stage == "load-data"}
         <div class="w-[40rem] flex flex-col gap-2">
           <FileUpload extensions={[".csv", ".parquet", ".json", ".jsonl"]} multiple={true} onUpload={loadData} />
-          <div class="w-full text-center text-slate-400 dark:text-slate-500">&mdash; or &mdash;</div>
+          <div class="w-full text-center text-slate-400 dark:text-slate-500">&mdash; 或 &mdash;</div>
           <URLInput onConfirm={(url) => loadData([{ url: url }])} />
           {#if hashParams.settings != undefined || hashParams.state != undefined}
             <div
               class="text-slate-600 dark:text-slate-300 mt-4 flex flex-col items-start gap-1 border-l-2 pl-2 border-slate-400 dark:border-slate-600"
             >
-              <div>A saved view is available in the URL. It will be restored after the data loads.</div>
+              <div>URL 中包含已保存的视图，数据加载后将自动恢复。</div>
               <button
                 class="flex gap-1 items-center border bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600 dark:text-slate-400 rounded-md pl-1 pr-2"
                 onclick={clearHashParams}
               >
                 <IconClose class="w-4 h-4" />
-                Clear Saved View
+                清除保存的视图
               </button>
             </div>
           {/if}
           <div class="text-slate-400 dark:text-slate-500 mt-4">
-            All data remains confined to the browser and is not transmitted elsewhere.
+            所有数据都仅保留在浏览器内，不会传输到其他位置。
           </div>
         </div>
       {:else if stage == "columns"}

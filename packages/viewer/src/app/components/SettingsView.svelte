@@ -122,40 +122,37 @@
 >
   <div class="flex flex-col gap-2 pb-4">
     <!-- Text column -->
-    <h2 class="text-slate-500 dark:text-slate-500">Search and Tooltip (optional)</h2>
+    <h2 class="text-slate-500 dark:text-slate-500">搜索和提示框（可选）</h2>
     <p class="text-sm text-slate-400 dark:text-slate-600">
-      The selected column, if any, will be used for full-text search and tooltips. Choose a column with freeform text,
-      such as a description, chat messages, or a summary.
+      如果选择了列，该列将用于全文搜索和提示框。请选择包含自由文本的列，例如描述、聊天消息或摘要。
     </p>
     <div class="w-full flex flex-row items-center">
-      <div class="w-[6rem] dark:text-slate-400">Text</div>
+      <div class="w-[6rem] dark:text-slate-400">文本</div>
       <Select
         class="flex-1 min-w-0"
         value={textColumn}
         onChange={(v) => (textColumn = v)}
         options={[
-          { value: undefined, label: "(none)" },
+          { value: undefined, label: "（无）" },
           ...stringColumns.map((x) => ({ value: x.column_name, label: `${x.column_name} (${x.column_type})` })),
         ]}
       />
     </div>
     <div class="my-2"></div>
     <!-- Embedding Config -->
-    <h2 class="text-slate-500 dark:text-slate-500">Embedding View (optional)</h2>
+    <h2 class="text-slate-500 dark:text-slate-500">嵌入视图（可选）</h2>
     <p class="text-sm text-slate-400 dark:text-slate-600">
-      To enable the embedding view, you can either (a) pick a pair of pre-computed X and Y columns; or (b) pick a text
-      column and compute the embedding projection in browser. For large data, it's recommended to pre-compute the
-      embedding and its 2D projection.
+      要启用嵌入视图，可以选择一对预计算的 X/Y 列，也可以选择文本列并在浏览器中计算嵌入投影。对于大数据集，建议提前计算嵌入和二维投影。
     </p>
     <div class="flex items-start">
       <SegmentedControl
         value={embeddingMode}
         onChange={(v) => (embeddingMode = v as any)}
         options={[
-          { value: "precomputed", label: "Pre-computed" },
-          { value: "from-text", label: "From Text" },
-          { value: "from-image", label: "From Image" },
-          { value: "none", label: "None" },
+          { value: "precomputed", label: "预计算" },
+          { value: "from-text", label: "从文本计算" },
+          { value: "from-image", label: "从图片计算" },
+          { value: "none", label: "无" },
         ]}
       />
     </div>
@@ -167,7 +164,7 @@
           value={embeddingXColumn}
           onChange={(v) => (embeddingXColumn = v)}
           options={[
-            { value: undefined, label: "(none)" },
+            { value: undefined, label: "（无）" },
             ...numericalColumns.map((x) => ({ value: x.column_name, label: `${x.column_name} (${x.column_type})` })),
           ]}
         />
@@ -179,81 +176,79 @@
           value={embeddingYColumn}
           onChange={(v) => (embeddingYColumn = v)}
           options={[
-            { value: undefined, label: "(none)" },
+            { value: undefined, label: "（无）" },
             ...numericalColumns.map((x) => ({ value: x.column_name, label: `${x.column_name} (${x.column_type})` })),
           ]}
         />
       </div>
       <div class="w-full flex flex-row items-center">
-        <div class="w-[6rem] dark:text-slate-400">Neighbors</div>
+        <div class="w-[6rem] dark:text-slate-400">近邻</div>
         <Select
           class="flex-1 min-w-0"
           value={embeddingNeighborsColumn}
           onChange={(v) => (embeddingNeighborsColumn = v)}
           options={[
-            { value: undefined, label: "(none)" },
+            { value: undefined, label: "（无）" },
             ...columns.map((x) => ({ value: x.column_name, label: `${x.column_name} (${x.column_type})` })),
           ]}
         />
       </div>
       <p class="text-sm text-slate-400 dark:text-slate-600">
-        Neighbors column should contain pre-computed nearest neighbors in format: <code
+        近邻列应包含预计算的最近邻，格式为：<code
           >{`{ "ids": [n1, n2, ...], "distances": [d1, d2, ...] }`}</code
-        >. IDs should be zero-based row indices.
+        >。ID 应为从 0 开始的行索引。
       </p>
     {:else if embeddingMode == "from-text"}
       <div class="w-full flex flex-row items-center">
-        <div class="w-[6rem] dark:text-slate-400">Text</div>
+        <div class="w-[6rem] dark:text-slate-400">文本</div>
         <Select
           class="flex-1 min-w-0"
           value={embeddingTextColumn}
           onChange={(v) => (embeddingTextColumn = v)}
           options={[
-            { value: undefined, label: "(none)" },
+            { value: undefined, label: "（无）" },
             ...stringColumns.map((x) => ({ value: x.column_name, label: `${x.column_name} (${x.column_type})` })),
           ]}
         />
       </div>
       <div class="w-full flex flex-row items-center">
-        <div class="w-[6rem] dark:text-slate-400">Model</div>
+        <div class="w-[6rem] dark:text-slate-400">模型</div>
         <ComboBox
           className="flex-1"
           value={embeddingTextModel}
-          placeholder="(default {textModels[0]})"
+          placeholder="（默认 {textModels[0]}）"
           onChange={(v) => (embeddingTextModel = v)}
           options={textModels}
         />
       </div>
       <p class="text-sm text-slate-400 dark:text-slate-600">
-        Computing the embedding and 2D projection in browser may take a while. The model will be loaded with
-        Transformers.js.
+        在浏览器中计算嵌入和二维投影可能需要一些时间。模型将通过 Transformers.js 加载。
       </p>
     {:else if embeddingMode == "from-image"}
       <div class="w-full flex flex-row items-center">
-        <div class="w-[6rem] dark:text-slate-400">Image</div>
+        <div class="w-[6rem] dark:text-slate-400">图片</div>
         <Select
           class="flex-1 min-w-0"
           value={embeddingImageColumn}
           onChange={(v) => (embeddingImageColumn = v)}
           options={[
-            { value: undefined, label: "(none)" },
+            { value: undefined, label: "（无）" },
             ...columns.map((x) => ({ value: x.column_name, label: `${x.column_name} (${x.column_type})` })),
           ]}
         />
       </div>
       <div class="w-full flex flex-row items-center">
-        <div class="w-[6rem] dark:text-slate-400">Model</div>
+        <div class="w-[6rem] dark:text-slate-400">模型</div>
         <ComboBox
           className="flex-1"
           value={embeddingImageModel}
-          placeholder="(default {imageModels[0]})"
+          placeholder="（默认 {imageModels[0]}）"
           onChange={(v) => (embeddingImageModel = v)}
           options={imageModels}
         />
       </div>
       <p class="text-sm text-slate-400 dark:text-slate-600">
-        Computing the embedding and 2D projection in browser may take a while. The model will be loaded with
-        Transformers.js.
+        在浏览器中计算嵌入和二维投影可能需要一些时间。模型将通过 Transformers.js 加载。
       </p>
     {/if}
     {#if embeddingMode == "from-text" || embeddingMode == "from-image"}
@@ -262,20 +257,20 @@
         onclick={() => (showUmapOptions = !showUmapOptions)}
       >
         <span class="text-[10px]">{showUmapOptions ? "\u25BC" : "\u25B6"}</span>
-        UMAP Options
+        UMAP 选项
       </button>
       {#if showUmapOptions}
         <div class="w-full flex flex-row items-center">
-          <div class="w-[6rem] dark:text-slate-400">Min Dist</div>
+          <div class="w-[6rem] dark:text-slate-400">最小距离</div>
           <NumberInput className="flex-1 min-w-0" bind:value={umapMinDist} min={0} max={1} step={0.01} />
         </div>
         <div class="w-full flex flex-row items-center">
-          <div class="w-[6rem] dark:text-slate-400">Neighbors</div>
+          <div class="w-[6rem] dark:text-slate-400">近邻数</div>
           <NumberInput className="flex-1 min-w-0" bind:value={umapNNeighbors} min={2} max={200} step={1} />
         </div>
         <div class="w-full flex flex-row items-center">
           <div class="w-[6rem] dark:text-slate-400">GPU</div>
-          <CheckBox bind:checked={umapGpu} label="Use WebGPU if available" />
+          <CheckBox bind:checked={umapGpu} label="可用时使用 WebGPU" />
         </div>
       {/if}
     {/if}
@@ -283,7 +278,7 @@
   <div class="w-full flex flex-row items-center mt-4">
     <div class="flex-1"></div>
     <Button
-      label="Confirm"
+      label="确认"
       class="w-40 justify-center"
       onClick={() => {
         confirm();

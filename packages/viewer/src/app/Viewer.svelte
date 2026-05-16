@@ -23,14 +23,14 @@
 
   let ready = $state(false);
   let error = $state(false);
-  let status = $state("Loading...");
+  let status = $state("加载中...");
   let initialState: any | null = $state.raw(null);
   let config: Partial<EmbeddingAtlasProps> | null = $state.raw(null);
 
   onMount(async () => {
     try {
       initialState = await getQueryPayload("state");
-      status = "Initializing database...";
+      status = "正在初始化数据库...";
       config = await dataSource.initializeCoordinator(coordinator, "dataset", (s) => {
         status = s;
       });

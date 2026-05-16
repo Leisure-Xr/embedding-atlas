@@ -1,8 +1,8 @@
-# Examples
+# 示例
 
-This folder contains examples showing how to use components from the npm package.
+此文件夹包含 npm 包中各组件的使用示例。
 
-To launch the dev server:
+启动开发服务器：
 
 ```bash
 npm run dev

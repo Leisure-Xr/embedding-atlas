@@ -36,127 +36,126 @@ export class ChartContextCache {
 export type RowID = any;
 
 export interface ChartContext {
-  /** The Mosaic coordinator. */
+  /** Mosaic 协调器。 */
   coordinator: Coordinator;
 
-  /** The data table. */
+  /** 数据表。 */
   table: string;
 
-  /** The row id column. */
+  /** 行 id 列。 */
   id: string;
 
-  /** A list of columns the table contains. */
+  /** 表包含的列列表。 */
   columns: ColumnDesc[];
 
-  /** The global cross filter selection. */
+  /** 全局交叉筛选选区。 */
   filter: Selection;
 
-  /** The current color scheme. */
+  /** 当前配色方案。 */
   colorScheme: Readable<"light" | "dark">;
 
-  /** The chart theme. */
+  /** 图表主题。 */
   theme: Readable<ChartThemeConfig | undefined>;
 
-  /** The column styles. */
+  /** 列样式。 */
   columnStyles: Readable<any>;
 
   /**
-   * A cache for shared intermediate results.
-   * Values in this cache is kept during the hosting component's lifecycle.
-   * You can store any value in this cache (including values that reference the coordinator or filter).
+   * 用于共享中间结果的缓存。
+   * 此缓存中的值会在宿主组件生命周期内保留。
+   * 可在此缓存中存储任意值（包括引用 coordinator 或 filter 的值）。
    */
   cache: ChartContextCache;
 
   /**
-   * A persistent cache for intermediate results.
-   * Values in this cache is kept by the backend (if available).
-   * Values in this cache must be JSON serializable.
+   * 用于中间结果的持久缓存。
+   * 此缓存中的值由后端保留（如果可用）。
+   * 此缓存中的值必须可 JSON 序列化。
    */
   persistentCache: {
     get(key: string): Promise<any | null>;
     set(key: string, value: any): Promise<void>;
   };
 
-  /** Tell the parent to show a search box. */
+  /** 通知父级显示搜索框。 */
   search?: (query: any, mode: string) => void;
 
-  /** A list of supported search modes. */
+  /** 支持的搜索模式列表。 */
   searchModes?: string[];
 
-  /** Current search result */
+  /** 当前搜索结果。 */
   searchResult: Readable<{ query: any; mode: string; ids: RowID[] } | null>;
 
   /**
-   * The current highlight point(s). When this changes, supported views will highlight the given point(s).
-   * When a new point is added to this list, views will animate to reveal the new point.
+   * 当前高亮点。此值变化时，支持的视图会高亮给定点。
+   * 向此列表添加新点时，视图会通过动画展示该点。
    */
   highlight: Writable<RowID[] | null>;
 
-  /** Configuration for the embedding view. See docs for the EmbeddingView. */
+  /** 嵌入视图配置。参见 EmbeddingView 文档。 */
   embeddingViewConfig?: EmbeddingViewConfig | null;
 
-  /** Labels for the embedding view. */
+  /** 嵌入视图标签。 */
   embeddingViewLabels?: Label[] | null;
 }
 
-/** Props passed into a chart view. */
+/** 传入图表视图的属性。 */
 export interface ChartViewProps<Spec = unknown, State = unknown> {
   /**
-   * The context of the chart. The context is constant during the chart view's lifecycle
-   * (i.e., if the coordinator or table changes, the chart view will be re-created)
+   * 图表上下文。上下文在图表视图生命周期内保持不变
+   * （即 coordinator 或 table 变化时，会重新创建图表视图）。
    */
   context: ChartContext;
 
   /**
-   * The chart width. If specified, the chart shall fit itself with the width.
-   * If not specified, the chart can decide its own width.
+   * 图表宽度。指定后，图表应适配该宽度。
+   * 未指定时，图表可自行决定宽度。
    */
   width?: number;
 
   /**
-   * The chart height. If specified, the chart shall fit itself with the height.
-   * If not specified, the chart can decide its own height.
+   * 图表高度。指定后，图表应适配该高度。
+   * 未指定时，图表可自行决定高度。
    */
   height?: number;
 
   /**
-   * A set of properties that defines the chart. The includes things like the data column for x and y,
-   * the title, the x and y axis labels, the color scale, etc.
-   * The chart can change its own spec, e.g., have a dropdown to change its own X scale type.
-   * The spec must be a JSON-serializable object.
+   * 定义图表的一组属性，包括 x 和 y 的数据列、标题、x 和 y 轴标签、颜色比例尺等。
+   * 图表可修改自己的 spec，例如通过下拉框切换自己的 X 比例尺类型。
+   * spec 必须是可 JSON 序列化的对象。
    */
   spec: Spec;
 
   /**
-   * The current user interaction state. This includes things like a brush filter's current value, a checkbox's checked state, etc.
-   * Sometimes the line between spec and state is blurry (e.g., the X scale type could be considered a state if there's a dropdown to change it.)
-   * The functional difference is that when we reset the chart or load it from scratch, the state will be set to `{}` and the spec is unchanged.
+   * 当前用户交互状态，包括刷选筛选器的当前值、复选框是否勾选等。
+   * 有时 spec 和 state 的边界并不清晰（例如，如果有下拉框可切换 X 比例尺类型，它也可被视为 state）。
+   * 功能上的区别是：重置图表或从头加载图表时，state 会被设为 `{}`，而 spec 保持不变。
    */
   state: State;
 
-  /** The mode of the chart view. The view can decide how to interpret this. */
+  /** 图表视图模式。视图可自行决定如何解释该值。 */
   mode: "view" | "edit";
 
   /**
-   * Callback for when the state changes.
-   * The default update mode is "merge", where the new state is recursively merged into the existing state.
-   * In "replace" mode, the new state completely replaces the existing state.
+   * 状态变化时的回调。
+   * 默认更新模式为 "merge"，会将新状态递归合并到现有状态。
+   * 在 "replace" 模式下，新状态会完全替换现有状态。
    */
   onStateChange: (state: Partial<State>, mode?: "merge" | "replace") => void;
 
   /**
-   * Callback for when the spec changes.
-   * The default update mode is "merge", where the new spec is recursively merged into the existing spec.
-   * In "replace" mode, the new spec completely replaces the existing spec.
+   * spec 变化时的回调。
+   * 默认更新模式为 "merge"，会将新 spec 递归合并到现有 spec。
+   * 在 "replace" 模式下，新 spec 会完全替换现有 spec。
    */
   onSpecChange: (spec: Partial<Spec>, mode?: "merge" | "replace") => void;
 
-  /** Register a chart delegate. */
+  /** 注册图表委托。 */
   registerDelegate?: (delegate: ChartDelegate) => () => void;
 }
 
 export interface ChartDelegate {
-  /** Returns a screenshot of the chart, result should be a data URL of the screenshot. */
+  /** 返回图表截图，结果应为截图的 data URL。 */
   screenshot?: (options?: ScreenshotOptions) => Promise<string>;
 }
 

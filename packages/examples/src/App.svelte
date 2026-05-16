@@ -30,7 +30,7 @@
 
   const links = [
     {
-      title: "Svelte Examples",
+      title: "Svelte 示例",
       items: [
         { title: "EmbeddingView", href: "/svelte/embedding-view" },
         { title: "EmbeddingViewMosaic", href: "/svelte/embedding-view-mosaic" },
@@ -39,7 +39,7 @@
       ],
     },
     {
-      title: "React Examples",
+      title: "React 示例",
       items: [
         { title: "EmbeddingView", href: "/react/embedding-view" },
         { title: "EmbeddingAtlas", href: "/react/embedding-atlas" },

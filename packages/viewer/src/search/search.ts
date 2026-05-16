@@ -116,9 +116,9 @@ export class FullTextSearcher implements Searcher {
   ): Promise<{ id: any }[]> {
     let limit = options.limit ?? 100;
     let predicate = options.predicate;
-    options?.onStatus?.("Indexing...");
+    options?.onStatus?.("正在建立索引...");
     await this.buildIndexIfNeeded(predicate);
-    options?.onStatus?.("Searching...");
+    options?.onStatus?.("正在搜索...");
     let resultIDs = await this.backend.query(query, limit);
     return resultIDs.map((id) => ({ id: id }));
   }
@@ -265,7 +265,7 @@ export async function performSearch({
   limit: number;
   onStatus: (status: string) => void;
 }): Promise<{ id: any; distance?: number }[]> {
-  onStatus("Searching...");
+  onStatus("正在搜索...");
 
   let searcherResult: { id: any; distance?: number }[] = [];
   let highlight: string = "";
@@ -288,7 +288,7 @@ export async function performSearch({
     });
     highlight = query;
   } else if (mode == "neighbors" && searcher.nearestNeighbors != null) {
-    label = "Neighbors of #" + query.toString();
+    label = "#" + query.toString() + " 的近邻";
     searcherResult = await searcher.nearestNeighbors(query, {
       limit: limit,
       predicate: predicate,

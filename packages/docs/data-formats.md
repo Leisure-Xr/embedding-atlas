@@ -1,47 +1,47 @@
-# Data Formats
+# 数据格式
 
-## Input Data
+## 输入数据
 
-Embedding Atlas supports loading data from the following file formats:
+Embedding Atlas 支持从以下文件格式加载数据：
 
 - **Parquet** (`.parquet`)
-- **JSONL** (`.jsonl`) — one JSON object per line
+- **JSONL** (`.jsonl`) — 每行一个 JSON 对象
 - **CSV** (`.csv`)
 
-When using the [Python Notebook Widget](./widget.md) or [Streamlit Component](./streamlit.md), you can pass a **pandas DataFrame** directly.
+使用 [Python Notebook 小组件](./widget.md) 或 [Streamlit 组件](./streamlit.md) 时，可以直接传入 **pandas DataFrame**。
 
-## Column Display Types
+## 列显示类型
 
-Embedding Atlas provides several built-in renderers for displaying column values in the tooltip, instances view, and search results:
+Embedding Atlas 提供了多个内置渲染器，用于在提示框、实例视图和搜索结果中显示列值：
 
-| Renderer          | Description                                                                                                                |
+| 渲染器            | 说明                                                                                                                       |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `markdown`        | Render the value as Markdown.                                                                                              |
-| `liquid-template` | Render the value with a [Liquid](https://liquidjs.com/) template. Options: `template` (string), defaults to `{{ value }}`. |
-| `image`           | Render the value as an image. Options: `size` (number), the max width/height in pixels.                                    |
-| `audio`           | Render the value as an audio player.                                                                                       |
-| `url`             | Render the value as a clickable link.                                                                                      |
-| `json`            | Render the value as formatted JSON.                                                                                        |
-| `messages`        | Render the value as chat messages (OpenAI format).                                                                         |
+| `markdown`        | 将值渲染为 Markdown。                                                                                                      |
+| `liquid-template` | 使用 [Liquid](https://liquidjs.com/) 模板渲染值。选项：`template`（字符串），默认值为 `{{ value }}`。                     |
+| `image`           | 将值渲染为图像。选项：`size`（数字），表示以像素为单位的最大宽度/高度。                                                    |
+| `audio`           | 将值渲染为音频播放器。                                                                                                     |
+| `url`             | 将值渲染为可点击链接。                                                                                                     |
+| `json`            | 将值渲染为格式化 JSON。                                                                                                    |
+| `messages`        | 将值渲染为聊天消息（OpenAI 格式）。                                                                                        |
 
-## Image Data
+## 图像数据
 
-Embedding Atlas can display images in tooltips and the instances view. Image column values can be provided in the following formats:
+Embedding Atlas 可以在提示框和实例视图中显示图像。图像列的值可以采用以下格式：
 
-- **URL**: A string starting with `http://` or `https://` pointing to the image.
-- **Data URL**: A string starting with `data:image/...` containing inline image data.
-- **Base64 string**: A raw base64-encoded string (without the `data:` prefix). The image type will be auto-detected from the binary content.
-- **Binary object**: An object with a `bytes` field containing a `Uint8Array` of image data, and an optional `path` field with the file name (used for type detection).
+- **URL**：以 `http://` 或 `https://` 开头、指向图像的字符串。
+- **数据 URL**：以 `data:image/...` 开头、包含内联图像数据的字符串。
+- **Base64 字符串**：原始 base64 编码字符串（不含 `data:` 前缀）。图像类型会根据二进制内容自动检测。
+- **二进制对象**：包含 `bytes` 字段的对象，其中 `bytes` 字段保存图像数据的 `Uint8Array`；还可以包含可选的 `path` 字段作为文件名（用于类型检测）。
 
-Supported image formats: **PNG**, **JPEG**, **TIFF**, **BMP**, **GIF**. The format must also be supported by the browser for display.
+支持的图像格式：**PNG**、**JPEG**、**TIFF**、**BMP**、**GIF**。该格式还必须被浏览器支持才能显示。
 
-## Audio Data
+## 音频数据
 
-Embedding Atlas can play audio in tooltips and the instances view. Audio column values can be provided in the following formats:
+Embedding Atlas 可以在提示框和实例视图中播放音频。音频列的值可以采用以下格式：
 
-- **URL**: A string starting with `http://` or `https://` pointing to the audio file.
-- **Data URL**: A string starting with `data:audio/...` containing inline audio data.
-- **Base64 string**: A raw base64-encoded string (without the `data:` prefix). The audio type will be auto-detected from the binary content.
-- **Binary object**: An object with a `bytes` field containing a `Uint8Array` of audio data, and an optional `path` field with the file name (used for type detection via file extension).
+- **URL**：以 `http://` 或 `https://` 开头、指向音频文件的字符串。
+- **数据 URL**：以 `data:audio/...` 开头、包含内联音频数据的字符串。
+- **Base64 字符串**：原始 base64 编码字符串（不含 `data:` 前缀）。音频类型会根据二进制内容自动检测。
+- **二进制对象**：包含 `bytes` 字段的对象，其中 `bytes` 字段保存音频数据的 `Uint8Array`；还可以包含可选的 `path` 字段作为文件名（用于通过文件扩展名检测类型）。
 
-Supported audio formats: **MP3**, **WAV**, **OGG**, **FLAC**, **AAC**, **M4A (MP4)**, **WebM**. The format must also be supported by the browser for playback.
+支持的音频格式：**MP3**、**WAV**、**OGG**、**FLAC**、**AAC**、**M4A (MP4)**、**WebM**。该格式还必须被浏览器支持才能播放。

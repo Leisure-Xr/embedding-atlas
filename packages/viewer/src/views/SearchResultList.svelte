@@ -28,12 +28,12 @@
 
   let resultCountText = $derived(
     items.length == 0
-      ? "No result found."
+      ? "未找到结果。"
       : items.length == 1
-        ? `${items.length.toLocaleString()} result.`
+        ? `${items.length.toLocaleString()} 条结果。`
         : items.length >= limit
-          ? `More than ${items.length.toLocaleString()} results, showing top ${limit.toLocaleString()}.`
-          : `${items.length.toLocaleString()} results.`,
+          ? `超过 ${items.length.toLocaleString()} 条结果，显示前 ${limit.toLocaleString()} 条。`
+          : `${items.length.toLocaleString()} 条结果。`,
   );
 </script>
 
@@ -70,7 +70,7 @@
                 <span
                   class="px-2 flex gap-2 bg-slate-200 text-slate-500 dark:bg-slate-600 dark:text-slate-300 rounded-md"
                 >
-                  <div class="text-slate-400 dark:text-slate-400 font-medium">Distance</div>
+                  <div class="text-slate-400 dark:text-slate-400 font-medium">距离</div>
                   <div class="text-ellipsis whitespace-nowrap overflow-hidden max-w-72">
                     {item.distance.toFixed(5)}
                   </div>

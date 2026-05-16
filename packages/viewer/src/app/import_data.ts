@@ -17,7 +17,7 @@ export async function importDataTable(
   for (let [index, input] of inputs.entries()) {
     if (input instanceof File) {
       // File
-      logger?.info("Loading data from file...");
+      logger?.info("正在从文件加载数据...");
       let filename = input.name;
       let data = new Uint8Array(await input.arrayBuffer());
       await importFileIntoTable(index, inputs.length, data, filename, table, db, connection);
@@ -51,7 +51,7 @@ export async function importDataTable(
           data = new Uint8Array(await fileContents.arrayBuffer());
           filename = result.filename ?? input.url;
         } else {
-          throw new Error("invalid result from loadDataFromUrl");
+          throw new Error("loadDataFromUrl 返回结果无效");
         }
       } else {
         let fileContents = await fetchWithProgress(input.url, { referrerPolicy: "no-referrer" }, logger);
@@ -60,7 +60,7 @@ export async function importDataTable(
       }
       await importFileIntoTable(index, inputs.length, data, filename, table, db, connection);
     } else {
-      throw new Error("invalid input type");
+      throw new Error("输入类型无效");
     }
   }
 }
@@ -100,26 +100,26 @@ async function importFileIntoTable(
 async function fetchWithProgress(url: string, init?: RequestInit, logger?: Logger): Promise<Blob> {
   let res: Response;
 
-  let msg = logger?.info("Loading data from URL...");
+  let msg = logger?.info("正在从 URL 加载数据...");
 
   try {
     res = await fetch(url, init);
   } catch (error) {
     throw new LoggableError(
-      `Failed to fetch data from URL: This may be due to a network issue or the server blocking [cross-origin requests (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS). Check that the URL is valid and configured to allow access from this site.`,
+      `无法从 URL 获取数据：可能是网络问题，或服务器阻止了[跨源请求（CORS）](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS)。请检查 URL 是否有效，并确认服务器允许本站访问。`,
       { markdown: true },
     );
   }
 
   if (!res.ok) {
     throw new Error(
-      `Failed to fetch data from URL: ${httpErrorStatusText(res.status)}. Please check if the URL is accessible and the server is responding correctly.`,
+      `无法从 URL 获取数据：${httpErrorStatusText(res.status)}。请检查 URL 是否可访问，以及服务器是否正常响应。`,
     );
   }
 
   if (!res.body) {
     throw new Error(
-      `Failed to fetch data from URL: Server response has no body content. This may indicate a server configuration issue or the resource may be empty.`,
+      `无法从 URL 获取数据：服务器响应没有正文内容。这可能表示服务器配置有问题，或资源为空。`,
     );
   }
 
@@ -152,7 +152,7 @@ async function fetchWithProgress(url: string, init?: RequestInit, logger?: Logge
 
     return new Blob(chunks);
   } catch (_) {
-    throw new Error(`Failed to fetch data from URL: Error while reading data.`);
+    throw new Error(`无法从 URL 获取数据：读取数据时出错。`);
   }
 }
 
@@ -229,17 +229,17 @@ function formatFileSize(bytes: number, decimals = 1): string {
 
 function httpErrorStatusText(code: number): string {
   let map: Record<string, string> = {
-    400: "Bad Request",
-    401: "Unauthorized",
-    403: "Forbidden",
-    404: "Not Found",
-    408: "Request Timeout",
-    409: "Conflict",
-    429: "Too Many Requests",
-    500: "Internal Server Error",
-    502: "Bad Gateway",
-    503: "Service Unavailable",
-    504: "Gateway Timeout",
+    400: "错误请求",
+    401: "未授权",
+    403: "禁止访问",
+    404: "未找到",
+    408: "请求超时",
+    409: "冲突",
+    429: "请求过多",
+    500: "服务器内部错误",
+    502: "网关错误",
+    503: "服务不可用",
+    504: "网关超时",
   };
   if (map[code]) {
     return `HTTP ${code} - ${map[code]}`;

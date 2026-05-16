@@ -36,7 +36,7 @@
         value={style.renderer ?? null}
         onChange={(v) => change({ renderer: v })}
         options={[
-          { value: null, label: "(default)" },
+          { value: null, label: "（默认）" },
           ...renderersList.map((x) => ({ value: x.renderer, label: x.label })),
         ]}
       />
@@ -63,9 +63,9 @@
           change({ display: v });
         }}
         options={[
-          { value: "full", label: "Full" },
-          { value: "badge", label: "Badge" },
-          { value: "hidden", label: "Hidden" },
+          { value: "full", label: "完整" },
+          { value: "badge", label: "标签" },
+          { value: "hidden", label: "隐藏" },
         ]}
       />
     </div>

@@ -100,7 +100,7 @@ export async function computeEmbedding(options: {
     options.callback?.(message, progress);
   }
 
-  progress(`Loading ${options.model}...`);
+  progress(`正在加载 ${options.model}...`);
 
   let embedder = await createEmbedder({ type: options.type, model: options.model });
 
@@ -114,7 +114,7 @@ export async function computeEmbedding(options: {
     options.dataColumn,
     options.type == "text" ? 64 : 16,
   )) {
-    progress("Processing Batches...", (idsCount / total) * 100);
+    progress("正在处理批次...", (idsCount / total) * 100);
 
     let ids = Array.from(data.getChild("id"));
     let values = Array.from(data.getChild("value"));

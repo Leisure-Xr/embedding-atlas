@@ -281,7 +281,7 @@
     >
       <Select
         class="max-w-64"
-        label="Color"
+        label="颜色"
         value={categoryColumn}
         onChange={(v) => onSpecChange({ data: { ...spec.data, category: v } })}
         options={[
@@ -291,17 +291,17 @@
             .map((c) => ({ value: c.name, label: `${c.name} (${c.type})` })),
         ]}
       />
-      <PopupButton icon={IconSettings} title="Options">
+      <PopupButton icon={IconSettings} title="选项">
         <div class="flex flex-col gap-2 w-64">
-          <div class="text-slate-500 dark:text-slate-400 select-none">Display Mode</div>
+          <div class="text-slate-500 dark:text-slate-400 select-none">显示模式</div>
           <div class="flex gap-2 items-center">
             <Select
               value={spec.mode ?? "points"}
               onChange={(v) => onSpecChange({ mode: v })}
               disabled={categoryLegend != null && categoryLegend.legend.length > maxCategories}
               options={[
-                { value: "points", label: "Points" },
-                { value: "density", label: "Density" },
+                { value: "points", label: "点" },
+                { value: "density", label: "密度" },
               ]}
             />
             {#if (spec.mode ?? "points") == "density"}
@@ -316,7 +316,7 @@
               />
             {/if}
           </div>
-          <div class="text-slate-500 dark:text-slate-400 select-none">Point Size</div>
+          <div class="text-slate-500 dark:text-slate-400 select-none">点大小</div>
           <div class="flex gap-2 items-center">
             <Slider
               bind:value={() => spec.pointSize ?? 1, (v) => onSpecChange({ pointSize: v })}
@@ -324,14 +324,14 @@
               max={10}
               step={0.05}
             />
-            <Button label="Auto" onClick={() => onSpecChange({ pointSize: undefined })} />
+            <Button label="自动" onClick={() => onSpecChange({ pointSize: undefined })} />
           </div>
           {#if totalPointCount != null && totalPointCount > minDownsampleMaxPoints}
             {@const effectiveLimit = spec.downsampleMaxPoints ?? Math.min(defaultDownsampleMaxPoints, totalPointCount)}
             {@const isMaxed = effectiveLimit >= totalPointCount}
             <div class="text-slate-500 dark:text-slate-400 select-none">
-              Max Points: {isMaxed
-                ? "All"
+              最大点数：{isMaxed
+                ? "全部"
                 : effectiveLimit >= 1000000
                   ? (effectiveLimit / 1000000).toFixed(1) + "M"
                   : (effectiveLimit / 1000).toFixed(0) + "K"}

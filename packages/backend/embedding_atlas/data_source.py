@@ -53,7 +53,7 @@ class DataSource:
     def _cache_index_add(self, name: str):
         if name not in self._cache_index:
             self._cache_index.add(name)
-            # Re-read from disk and merge to avoid losing entries from other processes
+            # 从磁盘重新读取并合并，避免丢失其他进程写入的条目。
             persisted = set(self._cache_index_load())
             merged = self._cache_index | persisted
             file_cache_set(self._cache_index_key(), sorted(merged), scope="DataSource")
@@ -66,7 +66,7 @@ class DataSource:
         return file_cache_get([self.identifier, name], scope="DataSource")
 
     def cache_items(self) -> dict[str, Any]:
-        """Return all cached entries as a dict of {name: value}."""
+        """以 {name: value} 字典形式返回所有缓存条目。"""
         result = {}
         for name in self._cache_index:
             value = self.cache_get(name)
@@ -111,7 +111,7 @@ class DataSource:
         folder = pathlib.Path(folder_path)
         folder.mkdir(parents=True, exist_ok=True)
 
-        # Write metadata and parquet data
+        # 写入 metadata 和 parquet 数据。
         data_dir = folder / "data"
         data_dir.mkdir(exist_ok=True)
         (data_dir / "metadata.json").write_text(
@@ -119,7 +119,7 @@ class DataSource:
         )
         (data_dir / "dataset.parquet").write_bytes(to_parquet_bytes(self.dataset))
 
-        # Copy static frontend files
+        # 复制静态前端文件。
         for root, _, files in os.walk(static_path):
             for fn in files:
                 src = os.path.join(root, fn)
@@ -128,7 +128,7 @@ class DataSource:
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(src, dst)
 
-        # Write cache files
+        # 写入缓存文件。
         cache_dir = data_dir / "cache"
         for name, value in self.cache_items().items():
             cache_file = cache_dir / name

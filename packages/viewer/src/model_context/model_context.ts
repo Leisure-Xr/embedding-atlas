@@ -32,7 +32,7 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
   let tools: MCPTool[] = [
     {
       name: "get_data_schema",
-      description: "Get the table name and columns",
+      description: "获取表名和列信息",
       inputSchema: { type: "object", additionalProperties: false },
       execute: async () => {
         return jsonResponse({
@@ -43,13 +43,13 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     },
     {
       name: "run_sql_query",
-      description: "Run a readonly SQL query in DuckDB.",
+      description: "在 DuckDB 中运行只读 SQL 查询。",
       inputSchema: {
         type: "object",
         properties: {
           query: {
             type: "string",
-            description: `The SQL query to run, must be readonly.`,
+            description: `要运行的 SQL 查询，必须是只读查询。`,
           },
         },
         additionalProperties: false,
@@ -62,7 +62,7 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     {
       name: "list_renderers",
       description:
-        "Get a list of value renderers to display values in the table, cards, or tooltip. Renderers can be set in ColumnStyle",
+        "获取用于在表格、卡片或提示框中显示值的 renderer 列表。可在 ColumnStyle 中设置 renderer。",
       inputSchema: { type: "object", additionalProperties: false },
       execute: async () => {
         return jsonResponse(renderersList);
@@ -70,7 +70,7 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     },
     {
       name: "get_column_styles",
-      description: "Get column styles for all columns.",
+      description: "获取所有列的样式。",
       inputSchema: { type: "object", additionalProperties: false },
       execute: async () => {
         return jsonResponse(delegate.columnStyles);
@@ -78,14 +78,14 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     },
     {
       name: "set_column_style",
-      description: `Set column style for a given column`,
+      description: `设置指定列的样式`,
       inputSchema: {
         type: "object",
         properties: {
           column: { type: "string" },
           style: {
             type: "object",
-            description: `The column style. Schema: ${JSON.stringify(schemaColumnStyle)}. Use the list_renderers tool to get the list of renderers.`,
+            description: `列样式。Schema：${JSON.stringify(schemaColumnStyle)}。使用 list_renderers 工具获取 renderer 列表。`,
           },
         },
         additionalProperties: false,
@@ -95,12 +95,12 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
           ...delegate.columnStyles,
           [params.column]: params.style,
         };
-        return textResponse("success");
+        return textResponse("成功");
       },
     },
     {
       name: "list_charts",
-      description: "List all charts in Embedding Atlas.",
+      description: "列出 Embedding Atlas 中的所有图表。",
       inputSchema: { type: "object", additionalProperties: false },
       execute: async () => {
         return jsonResponse(delegate.charts);
@@ -108,20 +108,20 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     },
     {
       name: "add_chart",
-      description: "Create a new chart with the specification, returns the id of the new chart.",
+      description: "使用给定 specification 创建新图表，并返回新图表的 id。",
       inputSchema: {
         type: "object",
         properties: {
           spec: {
             type: "object",
             description: `
-                The chart specification. Schema: ${JSON.stringify(schemaBuiltinChartSpec)}.
-                Notes:
-                - The data might be very large (>100k) points. Try not to create a chart that has no aggregation.
-                - Add "filter": "$filter" to appropriate layers to make the chart respond to filters from other charts. The filter is a cross-filter.
-                - When creating a chart, consider adding interactivity to it.
-                - The plot size is determined by the chart container by default. Refrain from setting it directly.
-                - Before adding a new chart, please list existing charts with list_charts at least once to ensure no duplication.
+                图表 specification。Schema：${JSON.stringify(schemaBuiltinChartSpec)}。
+                注意：
+                - 数据可能非常大（超过 100k 个点）。尽量不要创建没有聚合的图表。
+                - 向合适的图层添加 "filter": "$filter"，让图表响应其他图表的筛选。该 filter 是 cross-filter。
+                - 创建图表时，请考虑加入交互能力。
+                - 默认情况下，绘图尺寸由图表容器决定，尽量不要直接设置。
+                - 添加新图表前，请至少使用 list_charts 列出现有图表一次，避免重复。
               `,
           },
         },
@@ -135,13 +135,13 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
           delegate.charts = { ...delegate.charts, [id]: params.spec };
           return jsonResponse({ id: id });
         } else {
-          return jsonResponse({ error: "Spec is invalid", details: validateResult.errors });
+          return jsonResponse({ error: "Spec 无效", details: validateResult.errors });
         }
       },
     },
     {
       name: "get_chart_spec",
-      description: "Get the specification of a chart",
+      description: "获取图表 specification",
       inputSchema: {
         type: "object",
         properties: {
@@ -155,12 +155,12 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     },
     {
       name: "set_chart_spec",
-      description: "Update the specification of a chart",
+      description: "更新图表 specification",
       inputSchema: {
         type: "object",
         properties: {
           id: { type: "string" },
-          spec: { type: "object", description: "The new chart specification, replacing the existing one." },
+          spec: { type: "object", description: "新的图表 specification，将替换现有 specification。" },
         },
         additionalProperties: false,
       },
@@ -168,15 +168,15 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
         let validateResult = validate(params.spec, schemaBuiltinChartSpec);
         if (validateResult.valid) {
           delegate.charts = { ...delegate.charts, [params.id]: params.spec };
-          return textResponse("success");
+          return textResponse("成功");
         } else {
-          return jsonResponse({ error: "Spec is invalid", details: validateResult.errors });
+          return jsonResponse({ error: "Spec 无效", details: validateResult.errors });
         }
       },
     },
     {
       name: "get_chart_state",
-      description: "Get the state of a chart",
+      description: "获取图表状态",
       inputSchema: {
         type: "object",
         properties: {
@@ -191,24 +191,24 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     {
       name: "set_chart_state",
       description: `
-          Update the state of a chart. Schema: ${JSON.stringify(schemaBuiltinChartState)}.
+          更新图表状态。Schema：${JSON.stringify(schemaBuiltinChartState)}。
         `,
       inputSchema: {
         type: "object",
         properties: {
           id: { type: "string" },
-          state: { type: "object", description: "The new chart state, replacing the existing one." },
+          state: { type: "object", description: "新的图表状态，将替换现有状态。" },
         },
         additionalProperties: false,
       },
       execute: async (params: { id: string; state: any }) => {
         delegate.chartStates = { ...delegate.chartStates, [params.id]: params.state };
-        return textResponse("success");
+        return textResponse("成功");
       },
     },
     {
       name: "clear_chart_state",
-      description: "Clear the state of a chart",
+      description: "清除图表状态",
       inputSchema: {
         type: "object",
         properties: {
@@ -218,12 +218,12 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
       },
       execute: async (params: { id: string; state: any }) => {
         delegate.chartStates = { ...delegate.chartStates, [params.id]: {} };
-        return textResponse("success");
+        return textResponse("成功");
       },
     },
     {
       name: "delete_chart",
-      description: "Delete a chart",
+      description: "删除图表",
       inputSchema: {
         type: "object",
         properties: {
@@ -236,12 +236,12 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
         delegate.chartStates = Object.fromEntries(
           Object.entries(delegate.chartStates).filter((x) => x[0] != params.id),
         );
-        return textResponse("success");
+        return textResponse("成功");
       },
     },
     {
       name: "get_chart_screenshot",
-      description: "Get a screenshot of a chart",
+      description: "获取图表截图",
       inputSchema: {
         type: "object",
         properties: {
@@ -259,12 +259,12 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
             }
           }
         }
-        return textResponse("chart does not support taking screenshot");
+        return textResponse("该图表不支持截图");
       },
     },
     {
       name: "get_layout_type",
-      description: "Get the type of the current layout ('list' or 'dashboard')",
+      description: "获取当前布局类型（'list' 或 'dashboard'）",
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -275,7 +275,7 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     },
     {
       name: "set_layout_type",
-      description: "Set the type of the current layout ('list' or 'dashboard')",
+      description: "设置当前布局类型（'list' 或 'dashboard'）",
       inputSchema: {
         type: "object",
         properties: {
@@ -285,12 +285,12 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
       },
       execute: async (params: { type: string }) => {
         delegate.layout = params.type;
-        return textResponse("success");
+        return textResponse("成功");
       },
     },
     {
       name: "get_layout_state",
-      description: "Get the state of the current layout",
+      description: "获取当前布局状态",
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -301,17 +301,17 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
     },
     {
       name: "set_layout_state",
-      description: "Set the state of the current layout",
+      description: "设置当前布局状态",
       inputSchema: {
         type: "object",
         properties: {
           state: {
             type: "object",
             description: `
-                The new chart state, replacing the existing one.
-                Schema:
-                - dashboard layout state: ${JSON.stringify(schemaDashboardLayoutState)}
-                - list layout state: ${JSON.stringify(schemaListLayoutState)}
+                新的布局状态，将替换现有状态。
+                Schema：
+                - dashboard layout state：${JSON.stringify(schemaDashboardLayoutState)}
+                - list layout state：${JSON.stringify(schemaListLayoutState)}
               `,
           },
         },
@@ -319,12 +319,12 @@ export function provideModelContext(api: ModelContextAPI, delegate: ModelContext
       },
       execute: async (params: { state: any }) => {
         delegate.layoutStates = { ...delegate.layoutStates, [delegate.layout]: params.state };
-        return textResponse("success");
+        return textResponse("成功");
       },
     },
     {
       name: "get_full_screenshot",
-      description: "Get a full screenshot of the application",
+      description: "获取应用完整截图",
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -352,7 +352,7 @@ function imageResponse(dataUrl: string): ToolResponse {
   if (parsed) {
     return { content: [{ type: "image", data: parsed.data, mimeType: parsed.mimeType }] };
   }
-  return textResponse("failed to take screenshot");
+  return textResponse("截图失败");
 }
 
 function parseImageDataUrl(dataUrl: string): { mimeType: string; data: string } | null {

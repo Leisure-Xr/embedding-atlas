@@ -170,7 +170,7 @@
       <Select
         value={values[key]}
         onChange={(v) => (values[key] = v)}
-        placeholder="(select field)"
+        placeholder="（选择字段）"
         class="w-full"
         options={options}
       />
@@ -192,7 +192,7 @@
       <div class="w-full h-64">
         <SpecEditor
           class="w-full h-full"
-          initialValue={{ title: "Chart" }}
+          initialValue={{ title: "图表" }}
           onChange={(v) => (values[key] = v)}
           colorScheme={$colorScheme}
         />
@@ -221,7 +221,7 @@
     {/key}
   {/if}
   <div>
-    <ConfirmButton label="Confirm" disabled={validateResult !== true} onClick={confirm} />
+    <ConfirmButton label="确认" disabled={validateResult !== true} onClick={confirm} />
   </div>
   {#if typeof validateResult == "string" && validateResult.trim() != ""}
     <div>{validateResult}</div>

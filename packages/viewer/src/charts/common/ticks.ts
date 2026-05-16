@@ -5,56 +5,57 @@ import * as d3 from "d3";
 import { inferNumberFormatter } from "./formatter.js";
 
 export interface ContinuousTicksOptions {
-  /** Scale type */
+  /** 比例尺类型。 */
   type: "linear" | "log" | "symlog" | "time";
 
-  /** Symlog constant */
+  /** Symlog 常量。 */
   constant?: number;
 
-  /** Data domain min */
+  /** 数据定义域最小值。 */
   dataMin: number;
 
-  /** Data domain max */
+  /** 数据定义域最大值。 */
   dataMax: number;
 
-  /** Whether we will extend the scale domain to min/max of ticks (if true, may output ticks outside the data domain) */
+  /** 是否将比例尺定义域扩展到刻度的最小/最大值（为 true 时可能输出数据定义域外的刻度）。 */
   extendDomainToTicks?: boolean;
 
-  /** Desired number of ticks */
+  /** 期望的刻度数量。 */
   desiredCount?: number;
 
-  /** Pre-specified tick values, if specified, use values directly as ticks, but still infer a formatter */
+  /** 预先指定的刻度值；如果指定，则直接使用这些值作为刻度，但仍会推断格式化器。 */
   values?: number[];
 
   /**
-   * For "time" scale type, are the values timezone-aware (default false). If true, treat values as true UTC timestamps (ms since epoch), and use the current timezone to display them.
-   * If false, treat values as timestamps with unknown timezone, display them in UTC but do not include any timezone information.
+   * 对于 "time" 比例尺类型，值是否包含时区信息（默认 false）。
+   * 如果为 true，则将值视为真正的 UTC 时间戳（epoch 以来的毫秒数），并使用当前时区显示。
+   * 如果为 false，则将值视为未知时区的时间戳，以 UTC 显示但不包含任何时区信息。
    */
   hasTimezone?: boolean;
 }
 
 export interface ContinuousTicksResult {
-  /** Extended domain min */
+  /** 扩展后的定义域最小值。 */
   domainMin: number;
 
-  /** Extended domain max */
+  /** 扩展后的定义域最大值。 */
   domainMax: number;
 
-  /** Tick values */
+  /** 刻度值。 */
   values: number[];
 
-  /** A function to format the ticks */
+  /** 格式化刻度的函数。 */
   format: (value: number) => string;
 
   /**
-   * A function to return the tick level (0 is base level, 1 is lower level, etc.).
-   * Currently level 0 has gridlines and labels, level 1 has gridlines only
+   * 返回刻度层级的函数（0 为基础层级，1 为更低层级，依此类推）。
+   * 当前层级 0 有网格线和标签，层级 1 仅有网格线。
    */
   level: (value: number) => number;
 }
 
 export function continuousTicks(options: ContinuousTicksOptions): ContinuousTicksResult {
-  // Special treatment for time
+  // 对时间类型做特殊处理。
   if (options.type == "time") {
     return timeTicks(options);
   }
@@ -63,7 +64,7 @@ export function continuousTicks(options: ContinuousTicksOptions): ContinuousTick
 
   let scale: d3.ScaleContinuousNumeric<number, number>;
 
-  // Numerical types
+  // 数值类型。
   switch (options.type) {
     case "linear": {
       scale = d3.scaleLinear().domain([options.dataMin, options.dataMax]);
@@ -82,7 +83,7 @@ export function continuousTicks(options: ContinuousTicksOptions): ContinuousTick
       break;
     }
     default: {
-      throw new Error("invalid scale type");
+      throw new Error("比例尺类型无效");
     }
   }
 

@@ -42,7 +42,7 @@ export interface LayerOutputs {
 }
 
 export interface SelectionOutputs {
-  /** The key for storing the selection's value in the chart state */
+  /** 用于在图表状态中存储选区值的键。 */
   key: string;
   type: "x" | "y" | "xy";
 
@@ -63,7 +63,7 @@ export interface ChartOutputs {
 }
 
 export interface ChartState {
-  /** Selections */
+  /** 选区。 */
   [key: string]: any;
 }
 
@@ -115,16 +115,16 @@ export class ChartRuntime {
 
     let ctx = new BuildContext(this.context, this.spec);
 
-    // Compute stats
+    // 计算统计信息。
     ctx.stats = await computeAllFieldStats(ctx);
     if (this.spec !== spec) {
-      // The result is outdated (setSpec is called again while waiting), skip.
+      // 结果已过期（等待期间再次调用了 setSpec），跳过。
       return;
     }
 
     let clients = buildChart(ctx, this.outputs, this.selections);
 
-    // Sync the filter's selection
+    // 同步筛选器的选区。
     let currentClause: { selection: SelectionOutputs; value: any } | undefined = undefined;
 
     let unsub = derived([this.selections, this.state], (x) => x).subscribe(([selections, state]) => {
@@ -159,7 +159,7 @@ export class ChartRuntime {
     });
 
     this.cleanupFn = () => {
-      // Set current state to empty to clear existing selections.
+      // 将当前状态设为空以清除现有选区。
       this.source.reset();
       this.state.set(undefined);
       unsub();
@@ -215,7 +215,7 @@ function fieldStatsKey(from: SQL.FromExpr, field: SQLField): string {
   return JSON.stringify([from.toString(), field]);
 }
 
-/** Compute distribution stats for all fields used in a chart. */
+/** 计算图表使用的所有字段的分布统计信息。 */
 async function computeAllFieldStats(ctx: BuildContext) {
   let result: Record<string, Promise<FieldStats | undefined>> = {};
   (ctx.spec.layers ?? []).forEach((layer) => {
@@ -433,12 +433,12 @@ function buildEncoding(
     }
   | undefined {
   if ("aggregate" in encoding) {
-    // Aggregate, generate SQL expression node for the aggregation operation.
+    // 聚合：为聚合操作生成 SQL 表达式节点。
     switch (encoding.aggregate) {
       case "count": {
         return {
           select: SQL.count(),
-          scale: { title: "Count", kind: "quantitative", includeZero: true },
+          scale: { title: "计数", kind: "quantitative", includeZero: true },
           normalize: encoding.normalize,
         };
       }
@@ -456,7 +456,7 @@ function buildEncoding(
             normalize: encoding.normalize,
           };
         } else {
-          console.warn(`Invalid spec: aggregate '${encoding.aggregate}' require a field`);
+          console.warn(`无效 spec：聚合 '${encoding.aggregate}' 需要字段`);
           return;
         }
       }
@@ -464,7 +464,7 @@ function buildEncoding(
         let qs = quantilesExpr();
         return {
           select: SQL.sql`unnest(${qs})`,
-          scale: { kind: "quantitative", domain: [0, 1], title: "Quantile" },
+          scale: { kind: "quantitative", domain: [0, 1], title: "分位数" },
           normalize: encoding.normalize,
         };
       }
@@ -483,7 +483,7 @@ function buildEncoding(
               normalize: encoding.normalize,
             };
           } else {
-            console.warn(`Invalid spec: aggregate '${encoding.aggregate}' require a field`);
+            console.warn(`无效 spec：聚合 '${encoding.aggregate}' 需要字段`);
             return;
           }
         }
@@ -494,7 +494,7 @@ function buildEncoding(
             normalize: encoding.normalize,
           };
         } else {
-          console.warn(`Invalid spec: unknown aggregate '${encoding.aggregate}'`);
+          console.warn(`无效 spec：未知聚合 '${encoding.aggregate}'`);
           return;
         }
       }
@@ -515,7 +515,7 @@ function buildEncoding(
         binCount: bin.desiredCount ?? (channel == "x" || channel == "y" ? 20 : 5),
       });
       if (aggregate == undefined) {
-        console.warn(`Invalid spec: unsupported data type`);
+        console.warn(`无效 spec：不支持的数据类型`);
         return;
       }
       return {
@@ -535,7 +535,7 @@ function buildEncoding(
     } else {
       let select = ctx.fieldExpr(encoding.field);
       if (stats.kind == "temporal") {
-        // Convert to milliseconds since epoch for temporal data
+        // 对时间数据转换为 epoch 以来的毫秒数。
         select = SQL.epoch_ms(select);
       }
       return {
@@ -550,7 +550,7 @@ function buildEncoding(
       };
     }
   } else if ("value" in encoding) {
-    // Plain values are passed through.
+    // 普通值直接传递。
     return {
       mapper: () => encoding.value,
       scale:
@@ -635,12 +635,12 @@ function inferScale(spec: Scale, hints: ScaleHints, data: DataValue[][], channel
     case "quantitative": {
       let parts = [hints.domain ?? [], ...data].map((vals) => finiteExtent(vals.flat())).flat();
       let [min, max] = finiteExtent(parts);
-      // Placeholder for no data
+      // 无数据时的占位定义域。
       if (min == undefined || max == undefined || !isFinite(min) || !isFinite(max)) {
         min = 0;
         max = 1;
       }
-      // Single point, we extend to zero
+      // 单点时，扩展到零。
       if (min == max) {
         if (min > 0) {
           min = 0;
@@ -650,7 +650,7 @@ function inferScale(spec: Scale, hints: ScaleHints, data: DataValue[][], channel
           max = 1;
         }
       }
-      // Include zero logic
+      // 包含零的逻辑。
       let includeZero = channel == "size" || hints.includeZero === true;
       if (includeZero) {
         if (min > 0) {
@@ -672,12 +672,12 @@ function inferScale(spec: Scale, hints: ScaleHints, data: DataValue[][], channel
     case "temporal": {
       let parts = [hints.domain ?? [], ...data].map((vals) => finiteExtent(vals.flat())).flat();
       let [min, max] = finiteExtent(parts);
-      // Placeholder for no data
+      // 无数据时的占位定义域。
       if (min == undefined || max == undefined || !isFinite(min) || !isFinite(max)) {
         min = 0;
         max = 1;
       }
-      // Single point, extend one second each side.
+      // 单点时，两侧各扩展一秒。
       if (min == max) {
         min -= 1000;
         max += 1000;
@@ -771,7 +771,7 @@ function stack(data: DataTable, by: "x" | "y", orders: Record<string, (a: any, b
   let newFieldColumn = data.columns[field].slice();
 
   for (let entry of map.values()) {
-    // Sort the items within each stack column by the given orders
+    // 按给定顺序对每个堆叠列中的项目排序。
     entry.sort((i1, i2) => {
       for (let key in orders) {
         let colump = data.columns[key];
@@ -785,7 +785,7 @@ function stack(data: DataTable, by: "x" | "y", orders: Record<string, (a: any, b
       }
       return i1 - i2;
     });
-    // Stack
+    // 堆叠。
     let csum = 0;
     for (let i of entry) {
       let value = newFieldColumn[i];
@@ -842,7 +842,7 @@ function layerOutputs(
           common.orientation = "vertical";
           break;
         default:
-          console.warn(`Invalid orientation: '${layer.orientation}'`);
+          console.warn(`无效方向：'${layer.orientation}'`);
           return;
       }
       return {
@@ -886,7 +886,7 @@ function layerOutputs(
           common.orientation = "vertical";
           break;
         default:
-          console.warn(`Invalid orientation: '${layer.orientation}'`);
+          console.warn(`无效方向：'${layer.orientation}'`);
           return;
       }
       return {
@@ -906,7 +906,7 @@ function layerOutputs(
         style: { strokeColor: "$encoding", strokeWidth: 2, ...layer.style },
       };
     default:
-      console.warn(`Invalid mark: '${layer.mark}'`);
+      console.warn(`无效标记：'${layer.mark}'`);
       return;
   }
 }
@@ -920,7 +920,7 @@ function chartOutputs(
 
   let scaleData: Record<string, DataValue[][]> = {};
 
-  // Collect data for scale inference.
+  // 收集用于比例尺推断的数据。
   (spec.layers ?? []).forEach((layer, layerIndex) => {
     Object.entries(layer.encoding ?? {}).forEach(([attribute, encoding]) => {
       if (layerOutputs[layerIndex] == undefined) {

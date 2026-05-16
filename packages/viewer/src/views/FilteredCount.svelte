@@ -40,5 +40,5 @@
 </script>
 
 <div>
-  {count?.toLocaleString() ?? ""} <span class="text-slate-500">/ {totalCount?.toLocaleString() ?? ""} points</span>
+  {count?.toLocaleString() ?? ""} <span class="text-slate-500">/ {totalCount?.toLocaleString() ?? ""} 个点</span>
 </div>

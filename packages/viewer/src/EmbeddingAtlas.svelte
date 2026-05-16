@@ -124,9 +124,9 @@
   ];
 
   const searchModeOptions: Record<string, { value: string; label: string }> = {
-    "full-text": { value: "full-text", label: "Full Text" },
-    vector: { value: "vector", label: "Vector" },
-    neighbors: { value: "neighbors", label: "Neighbors" },
+    "full-text": { value: "full-text", label: "全文" },
+    vector: { value: "vector", label: "向量" },
+    neighbors: { value: "neighbors", label: "近邻" },
   };
 
   let searchMode = $state<"full-text" | "vector">("full-text");
@@ -174,7 +174,7 @@
       let highlight = query.toString().trim();
 
       if (mode == "neighbors") {
-        label = "Neighbors of #" + query.toString();
+        label = "#" + query.toString() + " 的近邻";
         highlight = "";
       }
 
@@ -405,7 +405,7 @@
         <div class="flex flex-row flex-1 justify-between min-w-[180px]">
           {#if searchMode.length > 0}
             <div class="relative w-full">
-              <Input type="search" placeholder="Search..." className="w-full max-w-[400px] " bind:value={searchQuery} />
+              <Input type="search" placeholder="搜索..." className="w-full max-w-[400px] " bind:value={searchQuery} />
               {#if searchModes.filter((x) => x != "neighbors").length > 1}
                 <Select
                   options={searchModes.filter((x) => x != "neighbors").map((x) => searchModeOptions[x])}
@@ -428,7 +428,7 @@
                         highlight={searchResult.highlight}
                         limit={searchLimit}
                         onClick={async (item) => {
-                          chartContext.highlight.set(item.id);
+                          chartContext.highlight.set([item.id]);
                         }}
                         onClose={clearSearch}
                         columnStyles={$resolvedColumnStyles}
@@ -453,7 +453,7 @@
           <FilteredCount coordinator={coordinator} filter={crossFilter} table={data.table} />
           <div class="flex flex-row items-center">
             <button
-              title="Clear filters"
+              title="清除筛选"
               onclick={resetFilter}
               class="rounded-md flex select-none items-center p-1.5 text-slate-400 dark:text-slate-500 focus-visible:outline-2 outline-blue-600 -outline-offset-1"
             >
@@ -461,10 +461,10 @@
             </button>
 
             {#if onExportSelection}
-              <PopupButton title="Export Selection">
+              <PopupButton title="导出选中项">
                 {#snippet button({ visible, toggle })}
                   <button
-                    title="Export Selection"
+                    title="导出选中项"
                     onclick={toggle}
                     class="rounded-md px-1.5 py-1.5 flex select-none items-center focus-visible:outline-2 outline-blue-600 -outline-offset-1"
                     class:text-slate-400={!visible}
@@ -477,13 +477,13 @@
                   <div class="flex flex-row gap-2">
                     <ActionButton
                       icon={IconExport}
-                      label="Export Selection"
-                      title="Export the selected points"
+                      label="导出选中项"
+                      title="导出当前选中的点"
                       class="w-48"
                       onClick={() => onExportSelection(currentPredicate(), exportFormat)}
                     />
                     <Select
-                      label="Format"
+                      label="格式"
                       value={exportFormat}
                       onChange={(v) => (exportFormat = v)}
                       options={[
@@ -520,24 +520,24 @@
             value={layout}
             onChange={(v) => (layout = v)}
             options={[
-              { value: "list", icon: IconListLayout, title: "List layout" },
-              { value: "dashboard", icon: IconDashboardLayout, title: "Dashboard layout" },
+              { value: "list", icon: IconListLayout, title: "列表布局" },
+              { value: "dashboard", icon: IconDashboardLayout, title: "仪表板布局" },
             ]}
           />
           {#if colorSchemeProp == null}
             <Button
               icon={$colorScheme == "dark" ? IconLightMode : IconDarkMode}
-              title="Toggle light / dark mode"
+              title="切换浅色/深色模式"
               onClick={() => {
                 $userColorScheme = $colorScheme == "light" ? "dark" : "light";
               }}
             />
           {/if}
-          <PopupButton icon={IconSettings} title="Options">
+          <PopupButton icon={IconSettings} title="选项">
             <div class="min-w-[420px] flex flex-col gap-2">
               <!-- Text style settings -->
               {#if columns.length > 0}
-                <h4 class="text-slate-500 dark:text-slate-400 select-none">Column Styles</h4>
+                <h4 class="text-slate-500 dark:text-slate-400 select-none">列样式</h4>
                 <ColumnStylePicker
                   columns={columns}
                   styles={$resolvedColumnStyles}
@@ -547,12 +547,12 @@
                 />
               {/if}
               <!-- Export -->
-              <h4 class="text-slate-500 dark:text-slate-400 select-none">Export</h4>
+              <h4 class="text-slate-500 dark:text-slate-400 select-none">导出</h4>
               <div class="flex flex-col gap-2">
                 <ActionButton
                   icon={IconBraces}
-                  label="Copy State"
-                  title="Copy the current Embedding Atlas state as JSON to clipboard."
+                  label="复制状态"
+                  title="将当前 Embedding Atlas 状态以 JSON 复制到剪贴板。"
                   class="w-48"
                   onClick={onCopyState}
                 />
@@ -561,8 +561,8 @@
                 <div class="flex flex-col gap-2">
                   <ActionButton
                     icon={IconDownload}
-                    label="Export Application"
-                    title="Download a self-contained static web application"
+                    label="导出应用"
+                    title="下载自包含的静态 Web 应用"
                     class="w-48"
                     onClick={onExportApplication}
                   />
@@ -573,17 +573,17 @@
                 <div class="flex flex-none gap-2 select-none items-center">
                   {#if mcpStatus == "connecting"}
                     <div class="w-3 h-3 rounded-full bg-orange-500 animate-pulse"></div>
-                    Connecting...
+                    连接中...
                   {:else if mcpStatus == "connected"}
                     <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    Connected
+                    已连接
                   {:else if mcpStatus == "closed" || mcpStatus == "error"}
                     <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                    Error or server closed connection
+                    出错或服务器已关闭连接
                   {/if}
                 </div>
               {/if}
-              <h4 class="text-slate-500 dark:text-slate-400 select-none">About</h4>
+              <h4 class="text-slate-500 dark:text-slate-400 select-none">关于</h4>
               <div>Embedding Atlas, {EMBEDDING_ATLAS_VERSION}</div>
             </div>
           </PopupButton>

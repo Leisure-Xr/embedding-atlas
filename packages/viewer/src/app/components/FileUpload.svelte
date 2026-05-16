@@ -66,9 +66,9 @@
 >
   <div class="text-center space-y-2">
     <p class="text-slate-500 dark:text-slate-500">
-      {isDragging ? "Drop your files here" : "Drag & drop files here or click to select"}
+      {isDragging ? "将文件拖放到这里" : "将文件拖到这里，或点击选择文件"}
     </p>
-    <p class="text-sm text-slate-400 dark:text-slate-600">Accepted file types: JSON, CSV, Parquet</p>
+    <p class="text-sm text-slate-400 dark:text-slate-600">支持的文件类型：JSON、CSV、Parquet</p>
   </div>
   <input
     bind:this={fileInput}

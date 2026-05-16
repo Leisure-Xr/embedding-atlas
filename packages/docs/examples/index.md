@@ -2,11 +2,11 @@
 import { data } from "./examples.data";
 </script>
 
-# Examples
+# 示例
 
-> **Note:** Opening an example will load the dataset directly into your browser from the external provider indicated. Dataset sources and references are listed at the bottom of this page.
+> **注意：** 打开示例会从标明的外部提供方将数据集直接加载到你的浏览器中。数据集来源和参考资料列在本页底部。
 
-Explore these interactive examples showcasing how Embedding Atlas visualizes and analyzes various datasets with pre-computed embeddings.
+浏览这些交互式示例，了解 Embedding Atlas 如何可视化和分析带有预计算嵌入的各类数据集。
 
 <div class="example-grid">
   <ExampleItem
@@ -20,7 +20,7 @@ Explore these interactive examples showcasing how Embedding Atlas visualizes and
   />
 </div>
 
-While Embedding Atlas is primarily designed for visualizing and exploring embeddings, it also provides powerful capabilities for analyzing and visualizing tabular datasets.
+虽然 Embedding Atlas 主要面向嵌入的可视化和探索，但它也提供了强大的表格数据集分析与可视化能力。
 
 <div class="example-grid">
   <ExampleItem
@@ -34,7 +34,7 @@ While Embedding Atlas is primarily designed for visualizing and exploring embedd
   />
 </div>
 
-### Dataset References
+### 数据集参考
 
 <ul>
   <li v-for="dataset of data.datasets.sort((a, b) => a.title.toUpperCase() < b.title.toUpperCase() ? -1 : 1)" style="line-height: 1.2em; margin: 1em 0;">

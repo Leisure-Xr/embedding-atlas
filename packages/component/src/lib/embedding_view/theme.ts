@@ -1,28 +1,28 @@
 // Copyright (c) 2025 Apple Inc. Licensed under MIT License.
 
 export interface EmbeddingViewTheme {
-  /** The font family for texts. */
+  /** 文本使用的字体族。 */
   fontFamily: string;
-  /** Color for cluster labels. */
+  /** 聚类标签颜色。 */
   clusterLabelColor: string;
-  /** Color for cluster labels' outline. */
+  /** 聚类标签描边颜色。 */
   clusterLabelOutlineColor: string;
-  /** Opacity for cluster labels. */
+  /** 聚类标签透明度。 */
   clusterLabelOpacity: number;
-  /** Whether to show the status bar at the bottom. */
+  /** 是否显示底部状态栏。 */
   statusBar: boolean;
-  /** Color for status bar text. */
+  /** 状态栏文本颜色。 */
   statusBarTextColor: string;
-  /** Color for status bar background. */
+  /** 状态栏背景颜色。 */
   statusBarBackgroundColor: string;
-  /** Branding link. */
+  /** 品牌链接。 */
   brandingLink: { text: string; href: string } | null;
 }
 
 export type ThemeConfig = Partial<EmbeddingViewTheme> & {
-  /** Overrides for light mode. */
+  /** 深色模式覆盖项。 */
   dark?: Partial<EmbeddingViewTheme>;
-  /** Overrides for dark mode. */
+  /** 浅色模式覆盖项。 */
   light?: Partial<EmbeddingViewTheme>;
 };
 

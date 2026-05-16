@@ -66,7 +66,7 @@
     {#if onSpecChange}
       <CornerButton
         icon={chartMode == "edit" ? IconCheck : IconEdit}
-        title="Edit"
+        title="编辑"
         onClick={() => {
           isEditing = !isEditing;
           if (isEditing) {
@@ -77,13 +77,13 @@
       />
     {/if}
     {#if onUp}
-      <CornerButton icon={IconUp} title="Move up" onClick={onUp} />
+      <CornerButton icon={IconUp} title="上移" onClick={onUp} />
     {/if}
     {#if onDown}
-      <CornerButton icon={IconDown} title="Move down" onClick={onDown} />
+      <CornerButton icon={IconDown} title="下移" onClick={onDown} />
     {/if}
     {#if onRemove}
-      <CornerButton icon={IconClose} title="Close" onClick={() => onRemove()} />
+      <CornerButton icon={IconClose} title="关闭" onClick={() => onRemove()} />
     {/if}
   </div>
 </div>
@@ -106,7 +106,7 @@
             }}
           />
           <ConfirmButton
-            label="Confirm"
+            label="确认"
             disabled={editingSpec == undefined}
             onClick={() => {
               if (editingSpec != undefined) {

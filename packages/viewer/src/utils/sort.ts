@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Apple Inc. Licensed under MIT License.
 
 /**
- * Sort items by the given order. If item not in the given order, sort by appearance.
- * Items with a given order should appear before items without.
+ * 按给定顺序对项目排序。如果项目不在给定顺序中，则按出现顺序排序。
+ * 指定了顺序的项目应排在未指定顺序的项目之前。
  */
 export function reorder(items: string[], order?: string[] | undefined): string[] {
   if (!order || order.length === 0) {

@@ -34,44 +34,42 @@ def compute_projection(
     cache_root: str | Path | None = None,
 ) -> IntoDataFrameT:
     """
-    Compute embeddings and generate 2D projections for a DataFrame column.
+    为 DataFrame 中的一列计算嵌入，并生成 2D 投影。
 
-    This is a unified entry point that auto-detects the modality of the input
-    data (text, image, audio, or vector) and delegates to the appropriate
-    projection function.
+    这是统一入口，会自动检测输入数据的模态（文本、图像、音频或向量），
+    并委派给相应的投影流程。
 
-    Note: This function cannot be called from within a running async event loop
-    (e.g. Jupyter notebooks). Use ``async_compute_projection`` instead.
+    注意：该函数不能在正在运行的 async event loop（例如 Jupyter notebook）中调用。
+    请改用 ``async_compute_projection``。
 
     Args:
-        data_frame: DataFrame containing the data to process. Accepts any
-            narwhals-compatible frame (pandas, Polars, cuDF, Modin, etc.).
-        inputs: str, column name containing the data to embed/project.
-        modality: str, the type of data in the inputs column. One of
-            'text', 'image', 'audio', 'vector', or 'auto' (auto-detect).
-        x: str, column name where the UMAP X coordinates will be stored.
-        y: str, column name where the UMAP Y coordinates will be stored.
-        neighbors: str or None, column name where nearest neighbor indices
-            will be stored. Set to None to skip.
-        embedder: the embedding backend to use. Can be:
-            - A string: 'sentence-transformers', 'transformers', or 'litellm'
-              to use a built-in embedder.
-            - An async callable with signature
+        data_frame: 包含待处理数据的 DataFrame。接受任何兼容 narwhals 的表，
+            例如 pandas、Polars、cuDF、Modin 等。
+        inputs: 包含待嵌入/投影数据的列名。
+        modality: ``inputs`` 列中的数据类型。可为 'text'、'image'、'audio'、
+            'vector' 或 'auto'（自动检测）。
+        x: 存储 UMAP X 坐标的列名。
+        y: 存储 UMAP Y 坐标的列名。
+        neighbors: 存储最近邻索引的列名。设置为 None 可跳过。
+        embedder: 要使用的 embedding 后端。可以是：
+            - 字符串：'sentence-transformers'、'transformers' 或 'litellm'，
+              用于选择内置 embedder。
+            - 具有以下签名的 async callable：
               ``async def(batch: list[Any], *, model, embedder_args) -> np.ndarray``
-              to use a custom embedder. The function receives a list of canonical
-              items (strings for text, ``{"bytes": bytes}`` dicts for image/audio)
-              and must return an ndarray of shape ``(batch_size, embedding_dim)``.
-            - None (default): auto-selects 'sentence-transformers' for text,
-              'transformers' for image/audio.
-        model: str or None, name of the embedding model.
-        batch_size: int or None, batch size for processing.
-        max_concurrency: int or None, maximum number of concurrent batches.
-        embedder_args: dict, embedder-specific arguments (e.g., api_key, api_base).
-        umap_args: dict, arguments for the UMAP algorithm.
-        cache_root: str or Path or None, root directory for caching results.
+              用于自定义 embedder。该函数接收规范化后的条目列表（文本为字符串，
+              图像/音频为 ``{"bytes": bytes}`` 字典），并必须返回形状为
+              ``(batch_size, embedding_dim)`` 的 ndarray。
+            - None（默认）：文本自动选择 'sentence-transformers'，
+              图像/音频自动选择 'transformers'。
+        model: embedding 模型名称。
+        batch_size: 处理时的 batch size。
+        max_concurrency: 并发 batch 的最大数量。
+        embedder_args: 传给 embedder 的参数（例如 api_key、api_base）。
+        umap_args: 传给 UMAP 算法的参数。
+        cache_root: 缓存结果的根目录。
 
     Returns:
-        A new DataFrame (same type as input) with projection columns added.
+        新 DataFrame，类型与输入相同，并新增投影列。
     """
     return asyncio.run(
         async_compute_projection(
@@ -109,26 +107,25 @@ async def async_compute_projection(
     cache_root: str | Path | None = None,
 ) -> IntoDataFrameT:
     """
-    Async version of ``compute_projection``.
+    ``compute_projection`` 的 async 版本。
 
-    Use this when calling from within a running async event loop (e.g. Jupyter
-    notebooks)::
+    在正在运行的 async event loop（例如 Jupyter notebook）中调用时请使用它::
 
         df = await async_compute_projection(df, inputs="text")
 
-    See ``compute_projection`` for full argument documentation.
+    完整参数说明见 ``compute_projection``。
     """
     nw_frame = nw.from_native(data_frame, eager_only=True)
     series = nw_frame[inputs]
     embedder_args = embedder_args or {}
     umap_args = umap_args or {}
 
-    # 1. Infer modality
+    # 1. 推断模态。
     if modality == "auto":
         modality = _infer_modality(series)
-        logger.info("Auto-detected modality: %s", modality)
+        logger.info("自动检测到 modality：%s", modality)
 
-    # 2. Convert inputs to canonical format
+    # 2. 将输入转换为规范格式。
     if modality == "text":
         canonical = _to_canonical_text(series)
     elif modality in ("image", "audio"):
@@ -137,10 +134,11 @@ async def async_compute_projection(
         canonical = _to_canonical_vector(series)
     else:
         raise ValueError(
-            f"Unknown modality: {modality}. Must be one of: text, image, audio, vector, auto"
+            f"未知 modality：{modality}。必须是以下之一：text、image、audio、vector、auto。"
+            f"（Unknown modality: {modality}）"
         )
 
-    # 3. Resolve embedder (not needed for vector modality)
+    # 3. 解析 embedder（向量模态不需要）。
     embedder_max_concurrency: int | None = None
     if modality == "vector":
         embedder_name = None
@@ -206,12 +204,12 @@ async def async_compute_projection(
         serializer=Projection.serialize,
         deserializer=Projection.deserialize,
         callback=lambda cache_path: print(
-            "Using cached projection from " + str(cache_path)
+            "正在使用缓存的 projection：" + str(cache_path)
         ),
         cache_root=cache_root,
     )
 
-    # Create a new data frame with the columns from the original, and add proj columns to it.
+    # 创建包含原始列的新 data frame，并添加投影列。
     backend = nw.get_native_namespace(nw_frame)
     new_columns = [
         nw.new_series(x, proj.projection[:, 0].tolist(), nw.Float64, backend=backend),
@@ -232,8 +230,8 @@ async def async_compute_projection(
 
 
 def _detect_binary_modality(data: bytes) -> str:
-    """Detect whether binary data is an image or audio based on magic bytes."""
-    # Image formats
+    """根据 magic bytes 检测二进制数据是图像还是音频。"""
+    # 图像格式。
     if data[:8] == b"\x89PNG\r\n\x1a\n":  # PNG
         return "image"
     if data[:2] == b"\xff\xd8":  # JPEG
@@ -249,7 +247,7 @@ def _detect_binary_modality(data: bytes) -> str:
     if data[:4] in (b"II\x2a\x00", b"MM\x00\x2a"):  # TIFF
         return "image"
 
-    # Audio formats
+    # 音频格式。
     if data[:4] == b"RIFF" and data[8:12] == b"WAVE":  # WAV
         return "audio"
     if data[:4] == b"fLaC":  # FLAC
@@ -265,18 +263,18 @@ def _detect_binary_modality(data: bytes) -> str:
     if data[:4] in (b"FORM",) and data[8:12] == b"AIFF":  # AIFF
         return "audio"
 
-    # Default to image for unrecognized binary data
+    # 无法识别的二进制数据默认按图像处理。
     return "image"
 
 
 def _infer_modality(series: nw.Series) -> str:
-    """Infer the modality by inspecting the first non-null value in the series."""
+    """通过检查 series 中第一个非 null 值推断模态。"""
     non_null = series.drop_nulls()
     if len(non_null) == 0:
         return "text"
     sample = non_null[0]
 
-    # Check for vector: list[float] or 1-dimensional ndarray
+    # 检查向量：list[float] 或一维 ndarray。
     if isinstance(sample, np.ndarray) and sample.ndim == 1:
         return "vector"
     if (
@@ -286,7 +284,7 @@ def _infer_modality(series: nw.Series) -> str:
     ):
         return "vector"
 
-    # Check for image/audio: bytes or {"bytes": ...}
+    # 检查图像/音频：bytes 或 {"bytes": ...}。
     if isinstance(sample, bytes):
         return _detect_binary_modality(sample)
     if isinstance(sample, dict) and "bytes" in sample:
@@ -295,17 +293,17 @@ def _infer_modality(series: nw.Series) -> str:
             raw = bytes(raw)
         return _detect_binary_modality(raw)
 
-    # Default to text
+    # 默认按文本处理。
     return "text"
 
 
 def _to_canonical_text(series: nw.Series) -> list[str]:
-    """Convert series to canonical text format: list[str] with nulls as 'null'."""
+    """将 series 转换为规范文本格式：list[str]，null 值转为 'null'。"""
     return series.fill_null("null").cast(nw.String).to_list()
 
 
 def _to_canonical_binary(series: nw.Series) -> list[dict]:
-    """Convert series to canonical image format: list[{"bytes": bytes}]."""
+    """将 series 转换为规范图像/音频格式：list[{"bytes": bytes}]。"""
     result = []
     for value in series.to_list():
         if isinstance(value, bytes):
@@ -317,13 +315,14 @@ def _to_canonical_binary(series: nw.Series) -> list[dict]:
             result.append({"bytes": raw})
         else:
             raise ValueError(
-                f"Cannot convert value of type {type(value)} to image/audio format"
+                f"无法将类型为 {type(value)} 的值转换为 image/audio 格式。"
+                f"（Cannot convert value of type {type(value)} to image/audio format）"
             )
     return result
 
 
 def _to_canonical_vector(series: nw.Series) -> list[np.ndarray]:
-    """Convert series to canonical vector format: list[ndarray[float32]]."""
+    """将 series 转换为规范向量格式：list[ndarray[float32]]。"""
     result = []
     for value in series.to_list():
         if isinstance(value, np.ndarray):
@@ -335,7 +334,7 @@ def _to_canonical_vector(series: nw.Series) -> list[np.ndarray]:
 
 @dataclass
 class Projection:
-    # Array with shape (N, embedding_dim), the high-dimensional embedding
+    # 形状为 (N, embedding_dim) 的数组，表示高维嵌入。
     projection: np.ndarray
 
     knn_indices: np.ndarray
@@ -368,7 +367,7 @@ def _run_umap(
     if umap_args is None:
         umap_args = {}
 
-    logger.info("Running UMAP for input with shape %s...", str(hidden_vectors.shape))  # type: ignore
+    logger.info("正在为形状为 %s 的输入运行 UMAP...", str(hidden_vectors.shape))  # type: ignore
 
     import umap
     from umap.umap_ import nearest_neighbors
@@ -401,12 +400,12 @@ async def _run_embedding(
     batch_size: int | None,
     max_concurrency: int | None,
 ) -> np.ndarray:
-    """Run an embedder function over *data* in batches, return concatenated result."""
+    """按 batch 在 *data* 上运行 embedder 函数，并返回拼接后的结果。"""
     batch_size = batch_size or 32
     batches = [data[i : i + batch_size] for i in range(0, len(data), batch_size)]
 
     logger.info(
-        "Running embedding for %d items in %d batches (batch_size=%d)...",
+        "正在为 %d 个条目运行 embedding，共 %d 个 batch（batch_size=%d）...",
         len(data),
         len(batches),
         batch_size,
@@ -419,7 +418,7 @@ async def _run_embedding(
         lambda b: fn(b, model=model, embedder_args=embedder_args),
         concurrency=max_concurrency or 1,
         max_retry=10,
-        description="Embedding",
+        description="正在 embedding",
     )
     return np.concatenate(results, axis=0)
 

@@ -1,26 +1,26 @@
-# Streamlit Component
+# Streamlit 组件
 
-The Python package also provides a Streamlit component to use Embedding Atlas in your Streamlit apps.
+Python 包还提供了一个 Streamlit 组件，可用于在 Streamlit 应用中使用 Embedding Atlas。
 
-## Installation
+## 安装
 
 ```bash
 pip install embedding-atlas
 ```
 
-## Example
+## 示例
 
 ```python
 from embedding_atlas.streamlit import embedding_atlas
 from embedding_atlas.projection import compute_projection
 
-# Compute text embedding and projection of the embedding
-# Note: In async environments (e.g. Jupyter notebooks), use async_compute_projection instead.
+# 计算文本嵌入以及嵌入投影
+# 注意：在异步环境中（例如 Jupyter 笔记本），请改用 async_compute_projection。
 df = compute_projection(df, inputs="description", modality="text",
     x="projection_x", y="projection_y", neighbors="neighbors"
 )
 
-# Create an Embedding Atlas component for a given data frame
+# 为给定数据框创建 Embedding Atlas 组件
 value = embedding_atlas(
     df, text="description",
     x="projection_x", y="projection_y", neighbors="neighbors",
@@ -28,37 +28,37 @@ value = embedding_atlas(
 )
 ```
 
-The returned value is a `dict` with a `predicate` string.
-The `predicate` is a SQL expression for the current selection in the component.
-You may use DuckDB to query the data frame with the predicate:
+返回值是一个包含 `predicate` 字符串的 `dict`。
+`predicate` 是组件当前选区对应的 SQL 表达式。
+你可以使用 DuckDB 通过该谓词查询数据框：
 
 ```python
 import duckdb
 
 predicate = value.get("predicate")
 if predicate is not None:
-    # Query the data frame with the SQL predicate
+    # 使用 SQL 谓词查询数据框
     selection = duckdb.query_df(
         df, "dataframe", "SELECT * FROM dataframe WHERE " + predicate
     )
-    # Show the selection
+    # 显示选区
     st.dataframe(selection)
 ```
 
-Note that it's also possible to use the component without projection:
+请注意，也可以在没有投影的情况下使用该组件：
 
 ```python
 value = embedding_atlas(df)
 ```
 
-Without `x` and `y` the widget will fall back to a table and charts only mode.
+没有 `x` 和 `y` 时，组件会回退到仅包含表格和图表的模式。
 
-## Reference
+## 参考
 
 ```python
 from embedding_atlas.streamlit import embedding_atlas
 ```
 
-Below are the options and return value of the `embedding_atlas` function:
+下面是 `embedding_atlas` 函数的选项和返回值：
 
 <!-- @doc(python-docstring): embedding_atlas.streamlit:embedding_atlas -->

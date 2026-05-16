@@ -1,9 +1,9 @@
 # EmbeddingViewMosaic
 
-The `embedding-atlas` package contains a component for displaying up to a few millions of points from an embedding with x and y coordinates.
-The component connects to a [Mosaic](https://idl.uw.edu/mosaic/) coordinator and can display data for specified table and x, y coordinate columns.
+`embedding-atlas` 包包含一个组件，可显示带 x 和 y 坐标的嵌入中的最多数百万个点。
+该组件连接到 [Mosaic](https://idl.uw.edu/mosaic/) 协调器，并可以显示指定表以及 x、y 坐标列的数据。
 
-We also provide React and Svelte wrappers of the component to easily include it in your own application.
+我们还提供该组件的 React 和 Svelte 封装组件，便于你将其加入自己的应用。
 
 <p class="light-only"><img style="margin: 0 auto;" src="./public/assets/component-light.png" /></p>
 <p class="dark-only"><img style="margin: 0 auto;" src="./public/assets/component-dark.png" /></p>
@@ -12,7 +12,7 @@ We also provide React and Svelte wrappers of the component to easily include it 
 npm install embedding-atlas
 ```
 
-To use the React wrapper:
+使用 React 封装组件：
 
 ```js
 import { EmbeddingViewMosaic } from "embedding-atlas/react";
@@ -29,7 +29,7 @@ import { EmbeddingViewMosaic } from "embedding-atlas/react";
 />
 ```
 
-To use the Svelte wrapper:
+使用 Svelte 封装组件：
 
 ```js
 import { EmbeddingViewMosaic } from "embedding-atlas/svelte";
@@ -46,7 +46,7 @@ import { EmbeddingViewMosaic } from "embedding-atlas/svelte";
 />
 ```
 
-If your application does not use React or Svelte, you may directly construct the component:
+如果你的应用不使用 React 或 Svelte，可以直接构造该组件：
 
 ```js
 import { EmbeddingViewMosaic } from "embedding-atlas";
@@ -65,32 +65,32 @@ let props = {
   },
 };
 
-// Create and mount the component
+// 创建并挂载组件
 let component = new EmbeddingViewMosaic(target, props);
 
-// Update with new props
+// 使用新属性更新
 component.update(newProps);
 
-// Destroy the component
+// 销毁组件
 component.destroy();
 ```
 
-## Properties
+## 属性
 
-The view can be configured with the following properties (props):
+可以使用以下属性（props）配置该视图：
 
 <!-- @doc(ts): EmbeddingViewMosaicProps -->
 
-## Config
+## 配置
 
-You can pass in an object with the following properties to the `config` property of the embedding view:
+可以向嵌入视图的 `config` 属性传入包含以下属性的对象：
 
 <!-- @doc(ts): EmbeddingViewConfig -->
 
-## Theme
+## 主题
 
-You can pass in an object with the following properties to the `theme` property of the embedding view.
-You can also provide these options as `light` and/or `dark` properties, which will control the appearance of the view depending on its `colorScheme`. For example:
+可以向嵌入视图的 `theme` 属性传入包含以下属性的对象。
+也可以将这些选项作为 `light` 和/或 `dark` 属性提供，这会根据视图的 `colorScheme` 控制外观。例如：
 
 ```ts
 {
@@ -105,69 +105,69 @@ You can also provide these options as `light` and/or `dark` properties, which wi
 
 <!-- @doc(ts,no-required): EmbeddingViewTheme -->
 
-## Custom Tooltip
+## 自定义提示框
 
-You may use the `customTooltip` property to change how tooltips are displayed.
+可以使用 `customTooltip` 属性更改提示框的显示方式。
 
-First create a class for the custom tooltip component:
+首先为自定义提示框组件创建一个类：
 
 ```js
 class CustomTooltip {
   constructor(target, props) {
-    // Create the tooltip component and mount it to the target element.
-    // props will contain a `tooltip` field, plus any custom prop you specified.
+    // 创建提示框组件并挂载到目标元素。
+    // props 会包含 `tooltip` 字段，以及你指定的任何自定义属性。
   }
   update(props) {
-    // Update the component with new props.
+    // 使用新 props 更新组件。
   }
   destroy() {
-    // Destroy the component.
+    // 销毁组件。
   }
 }
 ```
 
-Then specify the `customTooltip` property to the component:
+然后为组件指定 `customTooltip` 属性：
 
 ```js
 <EmbeddingViewMosaic
   ...
   customTooltip={{
     class: CustomTooltip,
-    props: { customProp: 10 } // Pass additional props to the tooltip component.
+    props: { customProp: 10 } // 向提示框组件传入额外属性。
   }}
 />
 ```
 
-## Custom Overlay
+## 自定义叠加层
 
-You may use the `customOverlay` property to add an overlay to the embedding view.
+可以使用 `customOverlay` 属性向嵌入视图添加叠加层。
 
-First create a class for the custom overlay:
+首先为自定义叠加层创建一个类：
 
 ```js
 class CustomOverlay {
   constructor(target, props) {
-    // Create the tooltip component and mount it to the target element.
-    // props will contain a `proxy` field, plus any custom prop you specified.
-    // You can use proxy.location(x, y) to get the pixel location of a data point at (x, y).
+    // 创建叠加层组件并挂载到目标元素。
+    // props 会包含 `proxy` 字段，以及你指定的任何自定义属性。
+    // 可以使用 proxy.location(x, y) 获取数据点 (x, y) 的像素位置。
   }
   update(props) {
-    // Update the component with new props.
+    // 使用新 props 更新组件。
   }
   destroy() {
-    // Destroy the component.
+    // 销毁组件。
   }
 }
 ```
 
-Then specify the `customOverlay` property to the component:
+然后为组件指定 `customOverlay` 属性：
 
 ```js
 <EmbeddingViewMosaic
   ...
   customOverlay={{
     class: CustomOverlay,
-    props: { customProp: 10 } // Pass additional props to the overlay component.
+    props: { customProp: 10 } // 向叠加层组件传入额外属性。
   }}
 />
 ```

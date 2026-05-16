@@ -36,7 +36,7 @@
     <IconLeft class="w-5 h-5" />
   </button>
   <div class="flex items-center gap-2">
-    <div>Page</div>
+    <div>第</div>
     <input
       bind:this={inputElement}
       value={currentPage + 1}
@@ -52,7 +52,7 @@
         }
       }}
     />
-    <div>of {pageCount}</div>
+    <div>页，共 {pageCount} 页</div>
   </div>
   <button
     class="border border-slate-300 bg-white/50 dark:border-slate-700 dark:bg-black/50 px-3 py-1 rounded-md"

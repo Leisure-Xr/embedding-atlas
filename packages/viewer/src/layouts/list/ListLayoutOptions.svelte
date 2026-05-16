@@ -17,7 +17,7 @@
   {#if sections.embedding.length > 0}
     <ToggleButton
       icon={IconEmbeddingView}
-      title="Show / hide embedding"
+      title="显示/隐藏嵌入视图"
       bind:checked={
         () => state.showEmbedding ?? true,
         (v) => {
@@ -29,7 +29,7 @@
   {#if sections.table.length > 0}
     <ToggleButton
       icon={IconTable}
-      title="Show / hide table"
+      title="显示/隐藏表格"
       bind:checked={
         () => state.showTable ?? true,
         (v) => {
@@ -40,7 +40,7 @@
   {/if}
   <ToggleButton
     icon={IconMenu}
-    title="Show / hide charts"
+    title="显示/隐藏图表"
     bind:checked={
       () => state.showCharts ?? true,
       (v) => {

@@ -9,53 +9,53 @@ import type { ScaleConfig, ScaleType } from "./types.js";
 export interface FieldStats {
   field: SQL.ExprNode;
   kind: "quantitative" | "temporal" | "nominal";
-  /** Available if the data is quantitative */
+  /** 数据为定量类型时可用。 */
   quantitative?: {
-    /** Number of finite values */
+    /** 有限值数量。 */
     count: number;
-    /** The minimum finite value */
+    /** 最小有限值。 */
     min: number;
-    /** The maximum finite value */
+    /** 最大有限值。 */
     max: number;
-    /** The mean of finite values */
+    /** 有限值均值。 */
     mean: number;
-    /** The median finite values */
+    /** 有限值中位数。 */
     median: number;
-    /** The minimum positive finite value */
+    /** 最小正有限值。 */
     minPositive: number;
 
-    /** Number of non-finite values (inf, nan, null) */
+    /** 非有限值数量（inf、nan、null）。 */
     countNonFinite: number;
   };
   temporal?: {
-    /** Number of finite values */
+    /** 有限值数量。 */
     count: number;
-    /** The minimum finite value in seconds since epoch */
+    /** epoch 以来的最小有限值（秒）。 */
     min: number;
-    /** The maximum finite value in seconds since epoch */
+    /** epoch 以来的最大有限值（秒）。 */
     max: number;
 
-    /** Number of non-finite values (inf, nan, null) */
+    /** 非有限值数量（inf、nan、null）。 */
     countNonFinite: number;
 
     /**
-     * Whether the data includes timezone information.
-     * The field is always casted to milliseconds since epoch (1970-01-01 00:00:00+00).
-     * If true, the result is a true UTC time. We'll display the timestamp in the current timezone.
-     * If false, the result may or may not be a true UTC time because timezone information is missing.
-     * We will display the timestamp in the UTC timezone, but without any timezone indicator.
+     * 数据是否包含时区信息。
+     * 字段始终会转换为 epoch（1970-01-01 00:00:00+00）以来的毫秒数。
+     * 如果为 true，结果是真正的 UTC 时间，并会按当前时区显示时间戳。
+     * 如果为 false，由于缺少时区信息，结果可能是真正的 UTC 时间，也可能不是。
+     * 将以 UTC 时区显示时间戳，但不带任何时区标识。
      */
     hasTimezone: boolean;
   };
-  /** Available if the data is nominal */
+  /** 数据为名义类型时可用。 */
   nominal?: {
-    // Top k levels
+    // 前 k 个层级。
     levels: { value: string; count: number }[];
-    // Number of other levels
+    // 其他层级数量。
     numOtherLevels: number;
-    // Number of points in "other"
+    // "other" 中的点数量。
     otherCount: number;
-    // Number of null points
+    // null 点数量。
     nullCount: number;
   };
 }
@@ -99,10 +99,10 @@ const temporalTypesWithTimezone = new Set(["TIMESTAMPTZ", "TIMESTAMP WITH TIME Z
 
 const nominalTypes = new Set(["BOOLEAN", "DATE", "VARCHAR", "CHAR", "BPCHAR", "TEXT", "STRING"]);
 
-/** Collect stats for distribution visualization.
- * For quantitative data, returns min, max, mean, median, and minPositive.
- * For nominal data, returns top-k levels and the corresponding count.
- * For non-supported data type, returns null. */
+/** 收集用于分布可视化的统计信息。
+ * 对定量数据，返回 min、max、mean、median 和 minPositive。
+ * 对名义数据，返回 top-k 层级及对应计数。
+ * 对不支持的数据类型，返回 null。 */
 export async function computeFieldStats(
   coordinator: Coordinator,
   table: SQL.FromExpr,
@@ -116,7 +116,7 @@ export async function computeFieldStats(
     return;
   }
 
-  // Quantitative types
+  // 定量类型。
   if (quantitativeTypes.has(columnType)) {
     let fieldExpr = SQL.cast(field, "DOUBLE");
     let r1 = await query(
@@ -264,12 +264,12 @@ export function inferAggregate({
       hasNA = stats.temporal.countNonFinite > 0;
       inputExpr = SQL.epoch_ms(stats.field);
     } else {
-      throw new Error("invalid stats");
+      throw new Error("统计信息无效");
     }
 
     let select = binning.binIndexExpr(inputExpr);
 
-    // For log scale, if we have <= values, we have n/a.
+    // 对数比例尺下，如果存在 <= 0 的值，则存在 n/a。
     if (stats.quantitative && binning.scale.type == "log" && stats.quantitative.min <= 0) {
       hasNA = true;
     }

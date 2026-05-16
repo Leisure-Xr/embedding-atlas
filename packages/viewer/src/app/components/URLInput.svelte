@@ -23,6 +23,6 @@
 </script>
 
 <div class="flex gap-1">
-  <Input className="flex-1" bind:value={inputValue} placeholder="Enter data URL" onEnter={confirm} />
+  <Input className="flex-1" bind:value={inputValue} placeholder="输入数据 URL" onEnter={confirm} />
   <Button onClick={confirm} icon={IconImport} />
 </div>

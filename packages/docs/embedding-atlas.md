@@ -1,17 +1,17 @@
 # EmbeddingAtlas
 
-The `embedding-atlas` package contains a component for the entire frontend user interface of Embedding Atlas.
+`embedding-atlas` 包包含一个用于 Embedding Atlas 整体前端用户界面的组件。
 
 ```bash
 npm install embedding-atlas
 ```
 
-To use the React wrapper:
+使用 React 封装组件：
 
 ```js
 import { EmbeddingAtlas } from "embedding-atlas/react";
 
-let coordinator: Coordinator; // The Mosaic coordinator.
+let coordinator: Coordinator; // Mosaic 协调器。
 
 <EmbeddingAtlas
   coordinator={coordinator}
@@ -25,12 +25,12 @@ let coordinator: Coordinator; // The Mosaic coordinator.
 />
 ```
 
-To use the Svelte wrapper:
+使用 Svelte 封装组件：
 
 ```js
 import { EmbeddingAtlas } from "embedding-atlas/svelte";
 
-let coordinator: Coordinator; // The Mosaic coordinator.
+let coordinator: Coordinator; // Mosaic 协调器。
 
 <EmbeddingAtlas
   coordinator={coordinator}
@@ -44,12 +44,12 @@ let coordinator: Coordinator; // The Mosaic coordinator.
 />
 ```
 
-If your application does not use React or Svelte, you may directly construct the component:
+如果你的应用不使用 React 或 Svelte，可以直接构造该组件：
 
 ```js
 import { EmbeddingAtlas } from "embedding-atlas";
 
-let coordinator: Coordinator; // The Mosaic coordinator.
+let coordinator: Coordinator; // Mosaic 协调器。
 
 let target = document.getElementById("container");
 let props = {
@@ -63,36 +63,36 @@ let props = {
   // ...
 };
 
-// Create and mount the component
+// 创建并挂载组件
 let component = new EmbeddingAtlas(target, props);
 
-// Update with new props
+// 使用新属性更新
 component.update(newProps);
 
-// Destroy the component
+// 销毁组件
 component.destroy();
 ```
 
-## Properties
+## 属性
 
-The view can be configured with the following properties (props):
+可以使用以下属性（props）配置该视图：
 
 <!-- @doc(ts): EmbeddingAtlasProps -->
 
-## State
+## 状态
 
-The `EmbeddingAtlasState` interface describes the state of the Embedding Atlas UI.
+`EmbeddingAtlasState` 接口描述 Embedding Atlas UI 的状态。
 
-You may set `initialState` to a previously-saved state value to reload the UI to its previous state.
+可以将 `initialState` 设置为之前保存的状态值，以便将 UI 重新加载到先前状态。
 
-Properties of the state:
+状态属性：
 
 <!-- @doc(ts): EmbeddingAtlasState -->
 
-## Chart Theme
+## 图表主题
 
-You can pass in an object with the following properties to the `chartTheme` property of the component to style the charts.
-You can also provide these options as `light` and/or `dark` properties, which will control the appearance of the view depending on its `colorScheme`. For example:
+可以向组件的 `chartTheme` 属性传入包含以下属性的对象，用于设置图表样式。
+也可以将这些选项作为 `light` 和/或 `dark` 属性提供，这会根据视图的 `colorScheme` 控制外观。例如：
 
 ```ts
 {

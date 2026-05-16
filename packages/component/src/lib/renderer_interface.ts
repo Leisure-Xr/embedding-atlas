@@ -33,9 +33,9 @@ export interface EmbeddingRendererProps {
   width: number;
   height: number;
 
-  /** Approximate maximum points to render. null/Infinity = no limit. Default: 4,000,000 */
+  /** 近似渲染点数上限。null/Infinity 表示不限制。默认：4,000,000。 */
   downsampleMaxPoints: number | null;
-  /** Density weight for downsampling (0-10). Default: 5 */
+  /** 降采样时的密度权重（0-10）。默认：5。 */
   downsampleDensityWeight: number;
 }
 
@@ -49,15 +49,15 @@ export interface DensityMap {
 export interface EmbeddingRenderer {
   readonly props: EmbeddingRendererProps;
 
-  /** Set renderer props. Returns true if a render is needed. */
+  /** 设置 renderer props。需要重新渲染时返回 true。 */
   setProps(newProps: Partial<EmbeddingRendererProps>): boolean;
 
-  /** Render */
+  /** 渲染。 */
   render(): void;
 
-  /** Destroy the renderer and free any resource */
+  /** 销毁 renderer 并释放资源。 */
   destroy(): void;
 
-  /** Produce a density map */
+  /** 生成密度图。 */
   densityMap(width: number, height: number, radius: number, viewportState: ViewportState): Promise<DensityMap>;
 }

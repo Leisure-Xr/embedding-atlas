@@ -123,7 +123,7 @@ function registerSvelteRenderer(options: {
 registerSimpleRenderer({
   name: "markdown",
   label: "Markdown",
-  description: "Render the value as Markdown",
+  description: "将值渲染为 Markdown",
   renderer: (node, props) => {
     node.innerHTML = `<div class="markdown-content">` + renderMarkdown(props.value?.toString() ?? "(null)") + `</div>`;
   },
@@ -131,8 +131,8 @@ registerSimpleRenderer({
 
 registerSimpleRenderer({
   name: "liquid-template",
-  label: "Liquid Template",
-  description: "Render the value with a Liquid template (with liquidjs)",
+  label: "Liquid 模板",
+  description: "使用 Liquid 模板（liquidjs）渲染值",
   renderer: (node, props) => {
     node.innerHTML =
       `<div>` + compileLiquidTemplate(props.options?.template ?? "{{value}}")({ value: props.value }) + `</div>`;
@@ -142,8 +142,8 @@ registerSimpleRenderer({
 
 registerSimpleRenderer({
   name: "image",
-  label: "Image",
-  description: "Render the value as an image. Expect image data.",
+  label: "图片",
+  description: "将值渲染为图片。需要图片数据。",
   renderer: (node, props) => {
     if (props.value == null) {
       node.innerText = "(null)";
@@ -167,15 +167,15 @@ registerSimpleRenderer({
 
 registerSvelteRenderer({
   name: "audio",
-  label: "Audio",
-  description: "Render the value as an audio player.",
+  label: "音频",
+  description: "将值渲染为音频播放器。",
   renderer: AudioContent,
 });
 
 registerSimpleRenderer({
   name: "url",
-  label: "Link",
-  description: "Render the value as a link. Expect a URL.",
+  label: "链接",
+  description: "将值渲染为链接。需要 URL。",
   renderer: (node, props) => {
     if (props.value != null) {
       let a = document.createElement("a");
@@ -195,7 +195,7 @@ registerSimpleRenderer({
 registerSimpleRenderer({
   name: "json",
   label: "JSON",
-  description: "Render the value as JSON",
+  description: "将值渲染为 JSON",
   renderer: (node, props) => {
     let pre = document.createElement("pre");
     pre.className = "text-sm";
@@ -208,7 +208,7 @@ registerSimpleRenderer({
 
 registerSimpleRenderer({
   name: "messages",
-  label: "Messages",
-  description: "Render the value as chat messages (OpenAI format)",
+  label: "消息",
+  description: "将值渲染为聊天消息（OpenAI 格式）",
   renderer: renderMessages,
 });

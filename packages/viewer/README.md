@@ -1,17 +1,17 @@
 # viewer
 
-The frontend application for the embedding atlas.
+embedding atlas 的前端应用。
 
-Build:
+构建：
 
 ```bash
 npm run build
 ```
 
-Start development server:
+启动开发服务器：
 
 ```bash
 npm run dev
 ```
 
-This will serve Embedding Atlas UI at http://localhost:5173. Note that the UI requires a backend server to provide data to it. You can start one via the `./start.sh` mentioned above. Without a backend server, you can still go to http://localhost:5173/#/test to view a test dataset. http://localhost:5173/#/file shows the file loader.
+这会在 http://localhost:5173 提供 Embedding Atlas UI。请注意，UI 需要后端服务器为其提供数据。你可以通过上面提到的 `./start.sh` 启动一个后端服务器。没有后端服务器时，你仍然可以访问 http://localhost:5173/#/test 查看测试数据集；http://localhost:5173/#/file 会显示文件加载器。

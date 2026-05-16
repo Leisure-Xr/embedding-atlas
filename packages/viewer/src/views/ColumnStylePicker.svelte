@@ -18,9 +18,9 @@
   <table>
     <thead>
       <tr class="select-none">
-        <th class="pb-2 text-slate-500 dark:text-slate-400 text-left font-normal text-sm">Column</th>
-        <th class="pb-2 text-slate-500 dark:text-slate-400 text-left font-normal text-sm">Format</th>
-        <th class="pb-2 text-slate-500 dark:text-slate-400 text-left font-normal text-sm">Style</th>
+        <th class="pb-2 text-slate-500 dark:text-slate-400 text-left font-normal text-sm">列</th>
+        <th class="pb-2 text-slate-500 dark:text-slate-400 text-left font-normal text-sm">格式</th>
+        <th class="pb-2 text-slate-500 dark:text-slate-400 text-left font-normal text-sm">样式</th>
       </tr>
     </thead>
     <tbody>

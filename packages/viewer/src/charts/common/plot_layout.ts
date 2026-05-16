@@ -74,24 +74,24 @@ export function resolvePlotLayout(
       plotHeight = height - top - bottom;
     }
   } else {
-    // Constraint: plotWidth / plotHeight == plotAspectRatio.
+    // 约束：plotWidth / plotHeight == plotAspectRatio。
     if (plotWidth != undefined || plotHeight != undefined) {
-      // If one of plotWidth or plotHeight is specified, we can compute the other with aspect ratio.
+      // 如果指定了 plotWidth 或 plotHeight 之一，则可按宽高比计算另一个。
       if (plotWidth != undefined) {
         plotHeight = plotWidth / plotAspectRatio;
       } else if (plotHeight != undefined) {
         plotWidth = plotHeight! * plotAspectRatio;
       } else {
-        throw new Error("unreachable");
+        throw new Error("不可达");
       }
       let [left, right] = solveExtents(xs, plotWidth, "inner");
       let [top, bottom] = solveExtents(ys, plotHeight, "inner");
-      // Still respect the original width / height if specified. Place the plot area at (left, top)
+      // 如已指定原始宽度 / 高度，则仍尊重它们。将绘图区放在 (left, top)。
       width = width ?? plotWidth + left + right;
       height = height ?? plotHeight + top + bottom;
       return { width, height, plotRect: { x: left, y: top, width: plotWidth, height: plotHeight } };
     } else if (height == undefined) {
-      // If height is not specified (aka., flexible), then we compute height from width.
+      // 如果未指定高度（即可变高度），则根据宽度计算高度。
       width = width ?? 400;
       [left, right] = solveExtents(xs, width, "outer");
       let plotWidth = width - left - right;

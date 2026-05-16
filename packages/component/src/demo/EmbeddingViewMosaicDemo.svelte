@@ -30,11 +30,11 @@
   })();
 
   async function initialize() {
-    loadingStatus = "Loading DuckDB...";
+    loadingStatus = "正在加载 DuckDB...";
     let db = await initDatabase;
     ready = false;
 
-    loadingStatus = "Loading Data (may take some time depending on network speed and data size)...";
+    loadingStatus = "正在加载数据（耗时取决于网络速度和数据大小）...";
 
     vgPlotContainer.replaceChildren();
 
@@ -119,18 +119,18 @@
 <div>
   <div style="margin-bottom:5px;display:flex;align-items:center;gap:8px">
     <label style="display:flex;align-items:center;gap:4px">
-      Mode:
+      模式：
       <select bind:value={mode}>
-        <option value="points">Points</option>
-        <option value="density">Density</option>
+        <option value="points">点</option>
+        <option value="density">密度</option>
       </select>
     </label>
 
     <label style="display:flex;align-items:center;gap:4px">
-      Color Scheme:
+      配色：
       <select bind:value={colorScheme}>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
+        <option value="light">浅色</option>
+        <option value="dark">深色</option>
       </select>
     </label>
 
@@ -164,8 +164,8 @@
       <div bind:this={vgPlotContainer}></div>
       {#if ready}
         <div>
-          Total: {pointCount} points.<br />
-          Viewport:<br />
+          总计：{pointCount} 个点。<br />
+          视口：<br />
           <pre>{JSON.stringify(viewportState, null, 2)}</pre>
         </div>
       {/if}

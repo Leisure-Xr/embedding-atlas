@@ -1,13 +1,13 @@
 // Copyright (c) 2025 Apple Inc. Licensed under MIT License.
 
-/** A point with x and y coordinates. */
+/** 带 x、y 坐标的点。 */
 export interface Point {
   x: number;
   y: number;
 }
 
-/** A rectangle with min, max coordinate for each dimension.
- * It is required that xMin <= xMax and yMin <= yMax. */
+/** 每个维度都有最小/最大坐标的矩形。
+ * 要求 xMin <= xMax 且 yMin <= yMax。 */
 export interface Rectangle {
   xMin: number;
   yMin: number;
@@ -15,23 +15,23 @@ export interface Rectangle {
   yMax: number;
 }
 
-/** A state describing the viewport's pan and zoom state.
- * The screen coordinate of a point is calculated as follows:
+/** 描述 viewport 平移和缩放状态的状态。
+ * 点的屏幕坐标按以下方式计算：
  * px = ((x - viewport.x) * viewport.scale + 1) / 2 * width
  * py = ((y - viewport.y) * viewport.scale + 1) / 2 * height
  */
 export interface ViewportState {
-  /** The x coordinate of the center of the viewport in data units. */
+  /** viewport 中心的 x 坐标，以数据单位表示。 */
   x: number;
-  /** The y coordinate of the center of the viewport in data units. */
+  /** viewport 中心的 y 坐标，以数据单位表示。 */
   y: number;
-  /** The scale of the viewport. This scales data units to [-1, 1]. */
+  /** viewport 的 scale。它会将数据单位缩放到 [-1, 1]。 */
   scale: number;
 }
 
-/** Throttle the given async tooltip function, make it such that only one is running at a given time.
- * If more inputs are provided in the mean time, only the last input will be run.
- * At the same time, we make the tooltip appear after delayMS time if the tooltip is not recently shown.
+/** 节流给定的 async tooltip 函数，确保同一时间只有一个调用在运行。
+ * 如果期间提供了更多输入，只会运行最后一个输入。
+ * 同时，如果 tooltip 最近没有显示过，会在 delayMS 后显示。
  */
 export function throttleTooltip<T, U>(func: (input: T) => Promise<U>, isVisible: () => boolean): (input: T) => void {
   let running = false;
@@ -82,12 +82,12 @@ export function throttleTooltip<T, U>(func: (input: T) => Promise<U>, isVisible:
   return perform;
 }
 
-/** Returns the value of a piecewise linear function defined by an array of [x, y] points.
- * The function is expected to be constant beyond the defined values.
- * For instance, if the points are [[0, 1], [2, 5], [3, -1]], then we will have
+/** 返回由 [x, y] 点数组定义的分段线性函数值。
+ * 在已定义值范围外，该函数应保持常量。
+ * 例如，如果点为 [[0, 1], [2, 5], [3, -1]]，则有：
  * f(0) = 1, f(1) = 3, f(-1) = 1, f(4) = -1.
- * The points are expected to be sorted by ascending x coordinates.
- * If no point is provided, the function returns zero.
+ * 点应按 x 坐标升序排序。
+ * 如果没有提供点，函数返回 0。
  */
 export function piecewiseLinear(x: number, ...points: [number, number][]): number {
   if (points.length == 0) {

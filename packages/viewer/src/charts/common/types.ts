@@ -5,55 +5,54 @@ import type { ScaleType } from "../spec/spec.js";
 export { type ScaleType };
 
 export interface ScaleConfig {
-  /** Scale type. */
+  /** 比例尺类型。 */
   type: ScaleType;
 
-  /** The data domain. */
+  /** 数据定义域。 */
   domain: any[];
 
-  /** Special values. All represented as strings. */
+  /** 特殊值。全部以字符串表示。 */
   specialValues?: string[];
 
-  /** symlog function constant. */
+  /** symlog 函数常量。 */
   constant?: number;
 
   /**
-   * Scale range. Currently do not apply for x and y scales.
-   * For size scales, this should be [min, max] size.
-   * For nominal color scales, this should be a list of colors.
-   * For quantitative color scales, this should be a predefined interpolate scheme, or a list of colors to interpolate.
+   * 比例尺值域。目前不适用于 x 和 y 比例尺。
+   * 对于大小比例尺，应为 [min, max] 大小。
+   * 对于名义颜色比例尺，应为颜色列表。
+   * 对于定量颜色比例尺，应为预定义插值方案，或用于插值的颜色列表。
    */
   range?: (string | number)[] | string;
 
   /**
-   * If true, introduces a discontinuity at 0: value 0 maps to the natural bottom of the
-   * color ramp (near-white or near-black depending on the scheme), while positive values
-   * are remapped to start at a slightly elevated position so the smallest count is clearly
-   * distinguishable from the empty-cell background. Used for count-based color encodings.
+   * 如果为 true，会在 0 处引入不连续性：值 0 映射到色带的自然底部
+   * （根据方案接近白色或黑色），而正值会重新映射到稍高的位置，
+   * 使最小计数也能与空单元背景清晰区分。用于基于计数的颜色编码。
    */
   discontinuityAtZero?: boolean;
 }
 
 export interface AxisConfig {
-  /** Values for ticks, grid lines, and labels */
+  /** 刻度、网格线和标签使用的值。 */
   values?: any[];
 
-  /** Desired number of ticks. Default 5. */
+  /** 期望的刻度数量。默认为 5。 */
   desiredTickCount?: number;
 
-  /** Extend scale to ticks. Default true. */
+  /** 将比例尺扩展到刻度范围。默认为 true。 */
   extendScaleToTicks?: boolean;
 
-  /** Padding to label */
+  /** 标签间距。 */
   labelPadding?: number;
 
-  /** Label font family */
+  /** 标签字体族。 */
   labelFontFamily?: string;
 
-  /** Label font size */
+  /** 标签字号。 */
   labelFontSize?: number;
 
-  /** Label max width */
+  /** 标签最大宽度。 */
   labelMaxWidth?: number;
 }
 

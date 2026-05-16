@@ -185,11 +185,11 @@
             class="bg-white dark:bg-black rounded-md flex flex-col justify-center items-center gap-2 p-2 w-full text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 select-none"
             onclick={() => {
               let id = findUnusedId(charts);
-              onChartsChange({ [id]: { type: "builder", title: "New" } });
+              onChartsChange({ [id]: { type: "builder", title: "新建" } });
               onStateChange({ chartsOrder: [id, ...chartsOrder.filter((x) => x != id)] });
             }}
           >
-            + Add
+            + 添加
           </button>
           {#each chartsOrder as id, index (id)}
             {@const spec = charts[id]}

@@ -48,7 +48,7 @@
     />
     {#snippet failed(error, reset)}
       <button onclick={reset} use:logError={{ spec: props.spec, error: error }}>
-        An occured with this chart. Click to retry.
+        此图表发生错误。点击重试。
       </button>
     {/snippet}
   </svelte:boundary>

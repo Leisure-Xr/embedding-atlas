@@ -7,30 +7,30 @@ import type { ChartContext } from "../charts/chart.js";
 export interface LayoutProps<State = unknown> {
   context: ChartContext;
 
-  /** A dictionary of charts to layout. The key is the chart id, and the value is the chart spec. */
+  /** 要布局的图表字典。键为图表 id，值为图表 spec。 */
   charts: Record<string, any>;
 
-  /** The state of the layout. */
+  /** 布局状态。 */
   state: State;
 
   /**
-   * Callback for when the state changes.
-   * The default update mode is "merge", where the new state is recursively merged into the existing state.
-   * In "replace" mode, the new state completely replaces the existing state.
+   * 状态变化时的回调。
+   * 默认更新模式为 "merge"，会将新状态递归合并到现有状态。
+   * 在 "replace" 模式下，新状态会完全替换现有状态。
    */
   onStateChange: (state: Partial<State>, mode?: "merge" | "replace") => void;
 
   /**
-   * Callback for when charts change.
-   * The default update mode is "merge", where the new charts is recursively merged into the existing charts.
-   * In "replace" mode, the new charts completely replaces the existing charts.
+   * 图表变化时的回调。
+   * 默认更新模式为 "merge"，会将新图表递归合并到现有图表。
+   * 在 "replace" 模式下，新图表会完全替换现有图表。
    */
   onChartsChange: (charts: Record<string, any>, mode?: "merge" | "replace") => void;
 
-  /** Callback for when chart states change. */
+  /** 图表状态变化时的回调。 */
   onChartStatesChange: (states: Record<string, any>, mode?: "merge" | "replace") => void;
 
-  /** A snippet that renders a given chart. */
+  /** 渲染给定图表的 snippet。 */
   chartView: Snippet<
     [{ id: string; width?: number | "container"; height?: number | "container"; mode?: "view" | "edit" }]
   >;

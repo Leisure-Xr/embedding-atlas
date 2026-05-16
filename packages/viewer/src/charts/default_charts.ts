@@ -9,23 +9,23 @@ import type { InstancesSpec } from "./instances/types.js";
 import type { ChartSpec } from "./spec/spec.js";
 
 export interface DefaultChartsConfig {
-  /** If specified, only include the given columns */
+  /** 如果指定，则只包含给定列。 */
   include?: string[];
 
-  /** Columns to exclude, applicable if `include` is not specified */
+  /** 要排除的列，仅在未指定 `include` 时适用。 */
   exclude?: string[];
 
-  /** Override the chart spec for certain columns. If the override is set to `null` the column will be skipped */
+  /** 覆盖特定列的图表 spec。如果覆盖值设为 `null`，则跳过该列。 */
   override?: Record<string, BuiltinChartSpec | null>;
 
-  /** Set to false to disable the instances table, or an object to override spec properties */
+  /** 设为 false 可禁用实例表格；也可传入对象来覆盖 spec 属性。 */
   table?: boolean | Partial<InstancesSpec>;
 
-  /** Set to false to disable the embedding view, or an object to override spec properties */
+  /** 设为 false 可禁用嵌入视图；也可传入对象来覆盖 spec 属性。 */
   embedding?: boolean | Partial<EmbeddingSpec>;
 }
 
-/** Returns a list of default charts for a given data table. */
+/** 返回给定数据表的默认图表列表。 */
 export async function defaultCharts(options: {
   coordinator: Coordinator;
   table: string;
@@ -44,7 +44,7 @@ export async function defaultCharts(options: {
   if (projection != null && config.embedding !== false) {
     let spec: EmbeddingSpec = {
       type: "embedding",
-      title: "Embedding",
+      title: "嵌入视图",
       data: {
         x: projection.x,
         y: projection.y,
@@ -64,12 +64,12 @@ export async function defaultCharts(options: {
     }
   }
 
-  charts.push({ type: "predicates", title: "SQL Predicates" });
+  charts.push({ type: "predicates", title: "SQL 谓词" });
 
   if (config.table !== false) {
     let spec: InstancesSpec = {
       type: "instances",
-      title: "Instances",
+      title: "数据实例",
     };
     if (typeof config.table == "object") {
       spec = { ...spec, ...config.table };

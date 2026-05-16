@@ -370,20 +370,20 @@
       title = hasSelection
         ? [
             `${item.countSelected.toLocaleString()} / ${item.count.toLocaleString()} (${formatPercentage(item.countSelected, item.count)})`,
-            `${formatPercentage(item.countSelected, chartData.sumSelected)} of selection`,
+            `占选中项 ${formatPercentage(item.countSelected, chartData.sumSelected)}`,
           ]
-        : [`${item.count.toLocaleString()}`, `${formatPercentage(item.count, chartData.sumTotal)} of all rows`];
+        : [`${item.count.toLocaleString()}`, `占全部行 ${formatPercentage(item.count, chartData.sumTotal)}`];
     } else {
       title = hasSelection
         ? [
             `${item.countSelected.toLocaleString()} / ${item.count.toLocaleString()} (${formatPercentage(item.countSelected, item.count)})`,
-            `${formatPercentage(item.countSelected, chartData.sumSelected)} of selection`,
-            `(Occurrences in the list values)`,
+            `占选中项 ${formatPercentage(item.countSelected, chartData.sumSelected)}`,
+            `（列表值中的出现次数）`,
           ]
         : [
             `${item.count.toLocaleString()}`,
-            `${formatPercentage(item.count, chartData.sumTotal)} of all occurrences`,
-            `(Occurrences in the list values)`,
+            `占全部出现次数 ${formatPercentage(item.count, chartData.sumTotal)}`,
+            `（列表值中的出现次数）`,
           ];
     }
 
@@ -466,9 +466,9 @@
               }}
             >
               {#if limit < 50}
-                ↓ Up to 100 values
+                ↓ 最多 100 个值
               {:else}
-                ↑ Up to 10 values
+                ↑ 最多 10 个值
               {/if}
             </button>
           {/if}
@@ -476,7 +476,7 @@
             <div
               class="flex-1 py-0.5 text-slate-400 dark:text-slate-500 whitespace-nowrap text-ellipsis overflow-hidden"
             >
-              (Occurrences in lists)
+              （列表中的出现次数）
             </div>
           {/if}
         </div>
@@ -485,13 +485,13 @@
           {#if typeof order == "string"}
             <InlineSelect
               options={[
-                { value: "total-descending", label: "↓ Total" },
-                { value: "selected-descending", label: "↓ Selected" },
-                { value: "total-ascending", label: "↑ Total" },
-                { value: "selected-ascending", label: "↑ Selected" },
+                { value: "total-descending", label: "↓ 总数" },
+                { value: "selected-descending", label: "↓ 选中" },
+                { value: "total-ascending", label: "↑ 总数" },
+                { value: "selected-ascending", label: "↑ 选中" },
                 { value: "alphabetical", label: "↓ A-Z" },
               ]}
-              title="Sort order"
+              title="排序方式"
               value={order ?? "total-descending"}
               onChange={(v) => onSpecChange({ order: v })}
             />
@@ -502,7 +502,7 @@
               { value: "#", label: "#" },
               { value: "#/#", label: "#/#" },
             ]}
-            title={`#/#: count in selection / total count\n#: count in selection\n%: percentage in selection`}
+            title={`#/#：选中数量 / 总数量\n#：选中数量\n%：选中占比`}
             value={labels ?? "#/#"}
             onChange={(v) => onSpecChange({ labels: v })}
           />

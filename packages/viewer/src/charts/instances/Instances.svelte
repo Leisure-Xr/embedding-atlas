@@ -339,8 +339,8 @@
         value={viewMode}
         onChange={(v) => onSpecChange({ viewMode: v as "table" | "cards" })}
         options={[
-          { value: "table", icon: IconTableView, title: "Table view" },
-          { value: "cards", icon: IconCardView, title: "Card view" },
+          { value: "table", icon: IconTableView, title: "表格视图" },
+          { value: "cards", icon: IconCardView, title: "卡片视图" },
         ]}
       />
       <PaginatorControls currentPage={currentPage} pageCount={pageCount} onChange={handlePageChange} />
@@ -367,7 +367,7 @@
         {#if offset + pageSize < totalCount}
           <div class="p-3 flex justify-center">
             <button class="px-4 py-2 text-sm flex items-center gap-1" onclick={handleLoadNext}>
-              Next Page
+              下一页
               <IconRight />
             </button>
           </div>
@@ -386,7 +386,7 @@
         {#if offset + pageSize < totalCount}
           <div class="p-3 flex justify-center">
             <button class="px-4 py-2 text-sm flex items-center gap-1" onclick={handleLoadNext}>
-              Next Page
+              下一页
               <IconRight />
             </button>
           </div>
@@ -394,7 +394,7 @@
       {/if}
     {:else}
       <div class="flex items-center justify-center h-full">
-        <div class="text-slate-500 dark:text-slate-400">Loading...</div>
+        <div class="text-slate-500 dark:text-slate-400">加载中...</div>
       </div>
     {/if}
   </div>

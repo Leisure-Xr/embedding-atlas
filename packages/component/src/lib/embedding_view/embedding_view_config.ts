@@ -1,43 +1,42 @@
 // Copyright (c) 2025 Apple Inc. Licensed under MIT License.
 
 export interface EmbeddingViewConfig {
-  /** Color scheme. */
+  /** 配色方案。 */
   colorScheme?: "light" | "dark" | null;
 
-  /** View mode. */
+  /** 视图模式。 */
   mode?: "points" | "density" | null;
 
-  /** Minimum average density for density contours to show up.
-   * The density is measured as number of points per square points (aka., px in CSS units). */
+  /** 显示密度等高线所需的最小平均密度。
+   * 密度以每平方点（即 CSS 像素单位）中的点数衡量。 */
   minimumDensity?: number | null;
 
-  /** Override the automatically calculated point size.
-   * If not specified, point size is calculated based on density. */
+  /** 覆盖自动计算的点大小。
+   * 未指定时会基于密度计算点大小。 */
   pointSize?: number | null;
 
-  /** Generate labels automatically.
-   * By default labels are generated automatically if the `labels` prop is not specified,
-   * and a `text` column is specified in the Mosaic view,
-   * or a `queryClusterLabels` callback is specified in the non-Mosaic view.
-   * Set this to `false` to disable automatic labels. */
+  /** 自动生成标签。
+   * 默认情况下，如果未指定 `labels` prop，并且 Mosaic 视图中指定了 `text` 列，
+   * 或非 Mosaic 视图中指定了 `queryClusterLabels` 回调，则会自动生成标签。
+   * 设置为 `false` 可禁用自动标签。 */
   autoLabelEnabled?: boolean | null;
 
-  /** The density threshold to filter the clusters before generating automatic labels.
-   * The value is relative to the max density. */
+  /** 生成自动标签前用于筛选聚类的密度阈值。
+   * 该值相对于最大密度。 */
   autoLabelDensityThreshold?: number | null;
 
-  /** The stop words for automatic label generation. By default use NLTK stop words. */
+  /** 自动标签生成使用的停用词。默认使用 NLTK 停用词。 */
   autoLabelStopWords?: string[] | null;
 
-  /** Approximate maximum number of points to render when downsampling is active.
-   * Points are sampled with bias toward sparse regions (fewer points kept in dense areas).
-   * The sampling probability is given by this formula:
+  /** 启用降采样时近似渲染的最大点数。
+   * 采样会偏向稀疏区域（密集区域保留的点更少）。
+   * 采样概率由以下公式给出：
    * P(i) = (downsampleMaxPoints / numPointsInViewport) * (2 / (1 + density(p_i) / maxDensity * downsampleDensityWeight))
-   * Default: 4,000,000. Set to null or Infinity to disable downsampling. */
+   * 默认值：4,000,000。设置为 null 或 Infinity 可禁用降采样。 */
   downsampleMaxPoints?: number | null;
 
-  /** Density weight for downsampling (0-10).
-   * Higher values mean more aggressive culling in dense areas.
-   * Default: 5 */
+  /** 降采样的密度权重（0-10）。
+   * 值越高，密集区域剔除越激进。
+   * 默认值：5。 */
   downsampleDensityWeight?: number | null;
 }

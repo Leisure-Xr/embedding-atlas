@@ -1,71 +1,74 @@
 # Embedding Atlas
 
-A Python package that provides a command line tool to visualize a dataset with embeddings. It also includes a Python Notebook (e.g., Jupyter) widget and a Streamlit widget.
+一个 Python 包，提供用于可视化带嵌入数据集的命令行工具。它还包含 Python Notebook（例如 Jupyter）小组件和 Streamlit 小组件。
 
-- Documentation: https://apple.github.io/embedding-atlas
+- 文档： https://apple.github.io/embedding-atlas
 - GitHub: https://github.com/apple/embedding-atlas
 
-## Installation
+## 安装
 
 ```bash
 pip install embedding-atlas
 ```
 
-and then launch the command line tool:
+然后启动命令行工具：
 
 ```bash
 embedding-atlas [OPTIONS] INPUTS...
 ```
 
-## Loading Data
+## 加载数据
 
-You can load your data in two ways: locally or from Hugging Face.
+你可以通过两种方式加载数据：本地加载或从 Hugging Face 加载。
 
-### Loading Local Data
+### 加载本地数据
 
-To get started with your own data, run:
+要开始使用自己的数据，请运行：
 
 ```bash
 embedding-atlas path_to_dataset.parquet
 ```
 
-### Loading Hugging Face Data
+### 加载 Hugging Face 数据
 
-You can instead load datasets from Hugging Face:
+你也可以改为从 Hugging Face 加载数据集：
 
 ```bash
 embedding-atlas huggingface_org/dataset_name
 ```
 
-## Visualizing Embedding Projections
+## 可视化嵌入投影
 
-To visual embedding projections, pre-compute the X and Y coordinates, and specify the column names with `--x` and `--y`, such as:
+要可视化嵌入投影，请预先计算 X 和 Y 坐标，并使用 `--x` 和 `--y` 指定列名，例如：
 
 ```bash
 embedding-atlas path_to_dataset.parquet --x projection_x --y projection_y
 ```
 
-You may use the [SentenceTransformers](https://sbert.net/) package to compute high-dimensional embeddings from text data, and then use the [UMAP](https://umap-learn.readthedocs.io/en/latest/index.html) package to compute 2D projections.
+你可以使用 [SentenceTransformers](https://sbert.net/) 库从文本数据计算高维嵌入，然后使用 [UMAP](https://umap-learn.readthedocs.io/en/latest/index.html) 库计算 2D 投影。
 
-### Using Pre-computed Vectors
+### 使用预计算向量
 
-If you already have pre-computed embedding vectors (but not the 2D projections), you can specify the column containing the vectors with `--vector`:
+如果你已经有预计算的嵌入向量（但没有 2D 投影），可以使用 `--vector` 指定包含向量的列：
 
 ```bash
 embedding-atlas path_to_dataset.parquet --vector embedding_vectors
 ```
 
-This will apply UMAP dimensionality reduction to your pre-existing vectors without recomputing embeddings. The vectors should be stored as lists or numpy arrays in your dataset.
+这会对已有向量应用 UMAP 降维，而不会重新计算嵌入。向量应在数据集中以列表或 numpy 数组形式存储。
 
-You may also specify a column for pre-computed nearest neighbors:
+你还可以为预计算的最近邻指定一列：
 
 ```bash
 embedding-atlas path_to_dataset.parquet --x projection_x --y projection_y --neighbors neighbors
 ```
 
-The `neighbors` column should have values in the following format: `{"ids": [id1, id2, ...], "distances": [d1, d2, ...]}`.
-If this column is specified, you'll be able to see nearest neighbors for a selected point in the tool.
+`neighbors` 列的值应采用以下格式：`{"ids": [id1, id2, ...], "distances": [d1, d2, ...]}`。
+如果指定了此列，你就可以在工具中查看所选点的最近邻。
 
-## Local Development
+## 本地开发
 
-Launch Embedding Altas with a wine reviews dataset with `./start.sh` and the MNIST dataset with `./start_image.sh`.
+使用 `./start.sh` 启动带葡萄酒评论数据集的 Embedding Atlas，使用 `./start_image.sh` 启动 MNIST 数据集。
+
+如果你已经有包含 `projection_x`、`projection_y` 和 `neighbors` 的本地 Parquet 数据，
+可以参考 [`examples/local_parquet`](examples/local_parquet/) 中的两个 Hugging Face 示例数据集和启动命令。

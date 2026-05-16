@@ -2,22 +2,22 @@
 
 import type { XYSelectionValue } from "../common/types.js";
 
-/** Mark type */
+/** 标记类型。 */
 export type MarkType = "bar" | "rect" | "line" | "area" | "point" | "rule";
 
-/** Field from the data table, can be a column name or a SQL expression */
+/** 数据表中的字段，可以是列名或 SQL 表达式。 */
 export type SQLField = string | { sql: string };
 
-/** Table name or SQL expression that produces a table */
+/** 表名，或生成表的 SQL 表达式。 */
 export type SQLTable = string | { sql: string };
 
-/** Data value (a value in the data domain, which can be mapped to the visual domain through a scale) */
+/** 数据值（数据域中的值，可通过比例尺映射到视觉域）。 */
 export type DataValue = string | number | [number, number];
 
-/** Encoding channel */
+/** 编码通道。 */
 export type Channel = "x" | "y" | "color" | "size";
 
-/** Mark attribute */
+/** 标记属性。 */
 export type Attribute = "x" | "y" | "x1" | "x2" | "y1" | "y2" | "color" | "size" | "group";
 
 export type AggregateFn =
@@ -38,7 +38,7 @@ export type AggregateFn =
   | "ecdf-value"
   | "ecdf-rank";
 
-/** Interpolate method for line or area */
+/** 线或面积图的插值方法。 */
 export type Interpolate =
   | "linear"
   | "cardinal"
@@ -50,167 +50,166 @@ export type Interpolate =
   | "step-before"
   | "step-after";
 
-/** Encoding */
+/** 编码。 */
 export type Encoding =
   | {
-      /** The data field to encode */
+      /** 要编码的数据字段。 */
       field: SQLField;
 
       bin?: {
-        /** Desired bin count */
+        /** 期望的分箱数量。 */
         desiredCount?: number;
       };
     }
   | {
-      /** Aggregate type */
+      /** 聚合类型。 */
       aggregate: AggregateFn | { sql: string };
 
-      /** The data field for the aggregate */
+      /** 用于聚合的数据字段。 */
       field?: SQLField;
 
-      /** For "quantile" aggregate, the quantile value (0-1) */
+      /** 用于 "quantile" 聚合的分位数值（0-1）。 */
       quantile?: number;
 
-      /** Normalize the value by x or y */
+      /** 按 x 或 y 归一化数值。 */
       normalize?: "x" | "y";
     }
   | {
-      /** The data value to encode */
+      /** 要编码的数据值。 */
       value: DataValue;
     };
 
-/** Mark dimension for width and height */
+/** 标记宽度和高度使用的尺寸。 */
 export type Dimension = { gap: number; clampToRatio?: number } | { ratio: number } | number;
 
-/** Mark style */
+/** 标记样式。 */
 export interface MarkStyle {
-  /** Fill color. If `null`, disable fill. Default is based on mark type. */
+  /** 填充颜色。如果为 `null`，则禁用填充。默认值基于标记类型。 */
   fillColor?: string | null;
-  /** Fill opacity */
+  /** 填充不透明度。 */
   fillOpacity?: number;
 
-  /** Stroke color. If `null`, disable stroke. Default is based on mark type. */
+  /** 描边颜色。如果为 `null`，则禁用描边。默认值基于标记类型。 */
   strokeColor?: string | null;
-  /** Stroke width */
+  /** 描边宽度。 */
   strokeWidth?: number;
-  /** Stroke opacity */
+  /** 描边不透明度。 */
   strokeOpacity?: number;
-  /** Stroke cap */
+  /** 描边端点样式。 */
   strokeCap?: "butt" | "round" | "square";
-  /** Stroke join */
+  /** 描边连接样式。 */
   strokeJoin?: "round" | "miter" | "bevel";
 
-  /** Paint order, default is `fill stroke`, fill first, then stroke. */
+  /** 绘制顺序，默认为 `fill stroke`，即先填充后描边。 */
   paintOrder?: "fill stroke" | "stroke fill";
 
-  /** Opacity */
+  /** 不透明度。 */
   opacity?: number;
 }
 
 export interface Layer {
-  /** Data source, default to the main data table */
+  /** 数据源，默认使用主数据表。 */
   from?: SQLTable;
 
-  /** Filter the data. Use $filter to refer to the shared filter (a cross-filter) */
+  /** 筛选数据。使用 $filter 引用共享筛选器（交叉筛选）。 */
   filter?: "$filter";
 
-  /** Mark type */
+  /** 标记类型。 */
   mark: MarkType;
 
-  /** Mark style */
+  /** 标记样式。 */
   style?: MarkStyle;
 
   /**
-   * z-index indicating the layer order. Default value is 0.
-   * If the value is negative, the mark will be drawn below grid lines.
+   * 表示图层顺序的 z-index。默认值为 0。
+   * 如果值为负数，标记会绘制在网格线下方。
    */
   zIndex?: number;
 
-  /** Orientation of bar marks */
+  /** 条形标记的方向。 */
   orientation?: "vertical" | "horizontal";
 
-  /** Interpolate method for line and area marks */
+  /** 线和面积标记的插值方法。 */
   interpolate?: Interpolate;
 
-  /** Width of bar / rect marks */
+  /** 条形 / 矩形标记的宽度。 */
   width?: Dimension;
 
-  /** Height of bar / rect marks */
+  /** 条形 / 矩形标记的高度。 */
   height?: Dimension;
 
-  /** Size (area) of point marks, default 100. */
+  /** 点标记的大小（面积），默认为 100。 */
   size?: number;
 
-  /** Encoding */
+  /** 编码。 */
   encoding?: Partial<Record<Attribute, Encoding>>;
 }
 
-/** Scale type */
+/** 比例尺类型。 */
 export type ScaleType = "linear" | "log" | "symlog" | "band" | "time";
 
-/** Scale */
+/** 比例尺。 */
 export interface Scale {
-  /** Scale type for quantitative scales */
+  /** 定量比例尺的比例尺类型。 */
   type?: ScaleType;
 
-  /** Scale domain */
+  /** 比例尺定义域。 */
   domain?: DataValue[];
 
-  /** Special values. All represented as strings. */
+  /** 特殊值。全部以字符串表示。 */
   specialValues?: string[];
 
-  /** symlog constant. */
+  /** symlog 常量。 */
   constant?: number;
 
   /**
-   * Scale range. Currently do not apply for x and y scales.
-   * For size scales, this should be [min, max] size.
-   * For nominal color scales, this should be a list of colors.
-   * For quantitative color scales, this should be a predefined interpolate scheme, or a list of colors to interpolate.
+   * 比例尺值域。目前不适用于 x 和 y 比例尺。
+   * 对于大小比例尺，应为 [min, max] 大小。
+   * 对于名义颜色比例尺，应为颜色列表。
+   * 对于定量颜色比例尺，应为预定义插值方案，或用于插值的颜色列表。
    */
   range?: (string | number)[] | string;
 
   /**
-   * Use when zero means "no data" and should be visually distinct from small positive values.
-   * When true, zero is rendered separately from the continuous scale so that even the smallest
-   * non-zero values are clearly distinguishable.
-   * Defaults to true for color scales whose domain includes zero.
+   * 当 0 表示“无数据”且需要与较小正值在视觉上区分时使用。
+   * 为 true 时，0 会与连续比例尺分开渲染，使最小的非零值也清晰可辨。
+   * 对于定义域包含 0 的颜色比例尺，默认值为 true。
    */
   discontinuityAtZero?: boolean;
 }
 
 export interface Axis {
-  /** Axis title */
+  /** 坐标轴标题。 */
   title?: string;
 
-  /** Values for ticks, grid lines, and labels */
+  /** 刻度、网格线和标签使用的值。 */
   values?: any[];
 
-  /** Desired number of ticks. Default 5. */
+  /** 期望的刻度数量。默认为 5。 */
   desiredTickCount?: number;
 
-  /** Extend scale to ticks. Default true. */
+  /** 将比例尺扩展到刻度范围。默认为 true。 */
   extendScaleToTicks?: boolean;
 
-  /** Padding to label */
+  /** 标签间距。 */
   labelPadding?: number;
 
-  /** Label font family */
+  /** 标签字体族。 */
   labelFontFamily?: string;
 
-  /** Label font size */
+  /** 标签字号。 */
   labelFontSize?: number;
 
-  /** Label max width */
+  /** 标签最大宽度。 */
   labelMaxWidth?: number;
 }
 
-/** Chart selection */
+/** 图表选区。 */
 export interface Selection {
   encoding: "x" | "y" | "xy";
 }
 
-/** Widget for editing a chart */
+/** 用于编辑图表的控件。 */
 export type Widget =
   | {
       type: "scale.type";
@@ -223,45 +222,45 @@ export type Widget =
       options: ("x" | "y")[];
     };
 
-/** Chart specification */
+/** 图表 specification。 */
 export interface ChartSpec {
-  /** The title of the chart */
+  /** 图表标题。 */
   title?: string;
 
-  /** Size configuration */
+  /** 尺寸配置。 */
   plotSize?: {
-    /** Width of the plot area */
+    /** 绘图区宽度。 */
     width?: number;
 
-    /** Height of the plot area */
+    /** 绘图区高度。 */
     height?: number;
 
-    /** Aspect ratio of the plot area */
+    /** 绘图区宽高比。 */
     aspectRatio?: number;
   };
 
-  /** Layers */
+  /** 图层。 */
   layers?: Layer[];
 
-  /** Scale configurations */
+  /** 比例尺配置。 */
   scale?: Partial<Record<Channel, Scale>>;
 
-  /** Axis configurations */
+  /** 坐标轴配置。 */
   axis?: Partial<Record<"x" | "y", Axis>>;
 
-  /** Selections */
+  /** 选区。 */
   selection?: Record<string, Selection>;
 
-  /** Widgets */
+  /** 控件。 */
   widgets?: Widget[];
 }
 
-/** Chart state. A dictionary mapping selection keys to selection states. */
+/** 图表状态。将选区键映射到选区状态的字典。 */
 export interface ChartState {
   [key: string]: {
-    /** The x value for the selection. */
+    /** 选区的 x 值。 */
     x?: XYSelectionValue;
-    /** The y value for the selection. */
+    /** 选区的 y 值。 */
     y?: XYSelectionValue;
   };
 }

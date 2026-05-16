@@ -31,10 +31,10 @@
     {:else if widget.type == "encoding.normalize"}
       {@const layers = typeof widget.layer == "number" ? [widget.layer] : widget.layer}
       <span class="flex gap-1 select-none">
-        <span class="text-slate-400 dark:text-slate-500 text-sm">Normalize:</span>
+        <span class="text-slate-400 dark:text-slate-500 text-sm">归一化：</span>
         <InlineSelect
           options={[
-            { value: null, label: "off" },
+            { value: null, label: "关闭" },
             ...(widget.options ?? ["x", "y"]).map((x) => ({ value: x, label: x.toUpperCase() })),
           ]}
           value={(spec.layers?.[layers[0]]?.encoding?.[widget.attribute] as any)?.normalize ?? null}

@@ -1,58 +1,58 @@
-# Python Notebook Widget
+# Python Notebook 小组件
 
-The Python package also provides a Python notebook widget to use Embedding Atlas in your notebooks. The widget uses [AnyWidget](https://anywidget.dev) and supports Jupyter, Marimo, Colab, VSCode, and more.
+Python 包还提供了一个 Python 笔记本小组件，可用于在笔记本中使用 Embedding Atlas。该小组件使用 [AnyWidget](https://anywidget.dev)，并支持 Jupyter、Marimo、Colab、VSCode 等环境。
 
-## Installation
+## 安装
 
 ```bash
 pip install embedding-atlas
 ```
 
-## Example
+## 示例
 
 ```python
 from embedding_atlas.widget import EmbeddingAtlasWidget
 
-# Create an Embedding Atlas widget without projection
-# This widget will show table and charts only, not the embedding view.
+# 创建不带投影的 Embedding Atlas 小组件
+# 该小组件只显示表格和图表，不显示嵌入视图。
 EmbeddingAtlasWidget(df)
 
-# Compute text embedding and projection of the embedding
+# 计算文本嵌入以及嵌入投影
 from embedding_atlas.projection import compute_projection
 
 df = compute_projection(df, inputs="description", modality="text",
     x="projection_x", y="projection_y", neighbors="neighbors"
 )
 
-# In async environments (e.g. Jupyter notebooks), use async_compute_projection instead:
+# 在异步环境中（例如 Jupyter 笔记本），请改用 async_compute_projection：
 # from embedding_atlas.projection import async_compute_projection
 # df = await async_compute_projection(df, inputs="description", modality="text",
 #     x="projection_x", y="projection_y", neighbors="neighbors"
 # )
 
-# Create an Embedding Atlas widget with the pre-computed projection
+# 使用预计算投影创建 Embedding Atlas 小组件
 widget = EmbeddingAtlasWidget(df, text="description",
     x="projection_x", y="projection_y", neighbors="neighbors"
 )
 
-# Display the widget
+# 显示小组件
 widget
 ```
 
-The widget embeds the Embedding Atlas UI into your notebook. You can make selections in the widget, and then use:
+该小组件会将 Embedding Atlas UI 嵌入到你的笔记本中。你可以在小组件中进行选择，然后使用：
 
 ```python
 df = widget.selection()
 ```
 
-to get the selection back as a data frame.
+将选区取回为数据框。
 
-## Reference
+## 参考
 
 ```python
 from embedding_atlas.widget import EmbeddingAtlasWidget
 ```
 
-Below are the constructor options of the widget:
+下面是该小组件的构造函数选项：
 
 <!-- @doc(python-docstring): embedding_atlas.widget:EmbeddingAtlasWidget.__init__ -->

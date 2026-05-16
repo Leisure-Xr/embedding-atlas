@@ -23,7 +23,7 @@
     }
   }
 
-  registerRenderer({ name: "custom_renderer", label: "Custom Renderer", renderer: TagsRenderer });
+  registerRenderer({ name: "custom_renderer", label: "自定义渲染器", renderer: TagsRenderer });
 
   let initialized = (async () => {
     const wasm = await wasmConnector();
@@ -33,7 +33,7 @@
 </script>
 
 {#await initialized}
-  Initializing dataset...
+  正在初始化数据集...
 {:then}
   <div class="w-full h-full">
     <EmbeddingAtlas

@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex gap-2 items-center">
-  <div class="text-slate-500 dark:text-slate-400 select-none">Size</div>
+  <div class="text-slate-500 dark:text-slate-400 select-none">大小</div>
   <Slider
     bind:value={
       () => options?.size ?? 100,

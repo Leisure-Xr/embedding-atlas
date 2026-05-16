@@ -166,7 +166,7 @@ async function makeBinnedNumericColumn(
     let hasTimezone = stats.temporal.hasTimezone;
     inferFormatter = (v) => inferTimeFormatter(v, hasTimezone);
   } else {
-    throw new Error("invalid data type");
+    throw new Error("数据类型无效");
   }
 
   let indexColumnName = `__ev_${column}_id`;

@@ -27,7 +27,7 @@ export default function Component() {
     }
   }
 
-  registerRenderer({ name: "custom_renderer", label: "Custom Renderer", renderer: TagsRenderer });
+  registerRenderer({ name: "custom_renderer", label: "自定义渲染器", renderer: TagsRenderer });
 
   useEffect(() => {
     async function initialize() {
@@ -59,6 +59,6 @@ export default function Component() {
       </div>
     );
   } else {
-    return <p>Initializing dataset...</p>;
+    return <p>正在初始化数据集...</p>;
   }
 }

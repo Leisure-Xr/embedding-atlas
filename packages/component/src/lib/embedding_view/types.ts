@@ -18,19 +18,19 @@ export interface Cache {
   set: (key: string, value: any) => Promise<void>;
 }
 
-/** The content of a label: either a text string or an image with display dimensions (and optionally x, y coordinates). */
+/** 标签内容：可以是文本字符串，也可以是带显示尺寸（并可选带 x、y 坐标）的图像。 */
 export type LabelContent = string | { x?: number; y?: number; image: string; width: number; height: number };
 
 export interface Label {
-  /** X coordinate. */
+  /** X 坐标。 */
   x: number;
-  /** Y coordinate. */
+  /** Y 坐标。 */
   y: number;
-  /** Label content: a text string or an image reference. */
+  /** 标签内容：文本字符串或图像引用。 */
   content: LabelContent;
-  /** Label level. The label will be shown around 2^level zoom factor. */
+  /** 标签层级。标签会在大约 2^level 的缩放倍率附近显示。 */
   level?: number | null;
-  /** Placement priority. */
+  /** 放置优先级。 */
   priority?: number | null;
 }
 

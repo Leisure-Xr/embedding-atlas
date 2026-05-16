@@ -1,16 +1,16 @@
 <!-- Copyright (c) 2025 Apple Inc. Licensed under MIT License. -->
 <script lang="ts" module>
   interface Props<Tooltip> {
-    /** Location in pixels */
+    /** 像素位置。 */
     location: Point;
-    /** Height of the point target */
+    /** 点目标的高度。 */
     targetHeight: number;
-    /** Whether to allow pointer interaction */
+    /** 是否允许指针交互。 */
     allowInteraction: boolean;
 
     tooltip: Tooltip;
     customTooltip: CustomComponent<HTMLDivElement, { tooltip: Tooltip }>;
-    /** Y margin */
+    /** Y 方向边距。 */
     margin?: number;
   }
 </script>
@@ -71,7 +71,7 @@
         let { width, height } = container.getBoundingClientRect();
         updatePosition(width, height, 2, parentRect.width - 2);
 
-        // Sometimes the size may change in the next animation frame, add this to double check.
+        // 有时尺寸会在下一帧变化，因此再检查一次。
         let req: number | null = requestAnimationFrame(() => {
           req = null;
 

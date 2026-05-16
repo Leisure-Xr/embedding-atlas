@@ -88,7 +88,7 @@
 
   function newChart(placement: Placement) {
     let id = findUnusedId(charts);
-    onChartsChange({ [id]: { type: "builder", title: "New" } });
+    onChartsChange({ [id]: { type: "builder", title: "新建" } });
     onStateChange({ grids: { [gridKey]: { placements: { [id]: placement } } } });
   }
 

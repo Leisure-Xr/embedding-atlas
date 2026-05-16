@@ -4,16 +4,16 @@ import type { AsyncDuckDB, AsyncDuckDBConnection } from "@duckdb/duckdb-wasm";
 
 import type { Logger } from "./logging.js";
 
-/** Type for window.EMBEDDING_ATLAS_CONFIG. Set this in index.html to configure the application. */
+/** window.EMBEDDING_ATLAS_CONFIG 的类型。可在 index.html 中设置它来配置应用。 */
 export interface AppConfig {
   home: "file-viewer" | "backend-viewer";
 
   /**
-   * Load data from a given URL. Return types:
-   * - { data, filename }: Loaded binary data and file name with extension (e.g., data.parquet)
-   * - { url }: A new URL to load with regular fetch()
-   * - `undefined`: Load the existing URL with regular fetch()
-   * - `true`: The data has been imported into the given table.
+   * 从给定 URL 加载数据。返回类型：
+   * - { data, filename }：已加载的二进制数据，以及带扩展名的文件名（例如 data.parquet）
+   * - { url }：要通过常规 fetch() 加载的新 URL
+   * - `undefined`：通过常规 fetch() 加载现有 URL
+   * - `true`：数据已导入给定表
    */
   loadDataFromUrl?: (
     url: string,

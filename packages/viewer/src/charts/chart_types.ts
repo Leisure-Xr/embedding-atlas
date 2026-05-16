@@ -31,9 +31,9 @@ export type ChartComponent = Component<ChartViewProps<any, any>, {}, "">;
 
 interface ChartTypeOptions {
   /**
-   * The chart component supports edit mode.
-   * If set to true, the chart component is responsible for editing the chart.
-   * Otherwise, a JSON spec editor will be used.
+   * 图表组件支持编辑模式。
+   * 如果设为 true，图表组件负责编辑图表。
+   * 否则会使用 JSON spec 编辑器。
    */
   supportsEditMode?: boolean;
 }
@@ -83,10 +83,10 @@ export function chartBuilderDescriptions(): ChartBuilderDescription<any, any>[] 
   return chartBuilders;
 }
 
-// Chart builder is a special chart type.
+// 图表构建器是一种特殊图表类型。
 registerChartType("builder", Builder);
 
-// Builtin chart types
+// 内置图表类型
 registerChartType("count-plot", CountPlot);
 registerChartType("embedding", Embedding);
 registerChartType("instances", Instances);
@@ -94,7 +94,7 @@ registerChartType("predicates", Predicates);
 registerChartType("markdown", Markdown, { supportsEditMode: true });
 registerChartType("content-viewer", ContentViewer);
 
-// Spec type for all builtin chart types
+// 所有内置图表类型的 spec 类型
 export type BuiltinChartSpec =
   | ChartSpec
   | ContentViewerSpec
@@ -104,16 +104,16 @@ export type BuiltinChartSpec =
   | MarkdownSpec
   | PredicatesSpec;
 
-// State type for all builtin chart types
+// 所有内置图表类型的状态类型
 export type BuiltinChartState = ChartState | EmbeddingState | CountPlotState | PredicatesState;
 
-// Chart builders
+// 图表构建器
 
 registerChartBuilder({
   icon: "chart-h-bar",
-  description: "Create a count plot of a field",
+  description: "创建字段计数图",
   ui: [
-    { label: "Field", field: { key: "x", required: true } }, //
+    { label: "字段", field: { key: "x", required: true } }, //
   ] as const,
   create: ({ x }): CountPlotSpec | undefined => {
     if (x.type == "discrete[]") {
@@ -134,21 +134,21 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-stacked",
-  description: "Create a histogram of a field",
+  description: "创建字段直方图",
   ui: [
-    { label: "Field", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
-    { label: "Group Field", field: { key: "color", types: ["number", "string", "Date"] } },
+    { label: "字段", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
+    { label: "分组字段", field: { key: "color", types: ["number", "string", "Date"] } },
   ] as const,
   create: ({ x, color }): ChartSpec | undefined => histogramSpec(x.name, color?.name),
 });
 
 registerChartBuilder({
   icon: "chart-line",
-  description: "Create a line chart of two fields",
+  description: "创建两个字段的折线图",
   ui: [
-    { label: "X Field", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
-    { label: "Y Field", field: { key: "y", types: ["number"], required: true } }, //
-    { label: "Group Field", field: { key: "color", types: ["number", "string", "Date"] } },
+    { label: "X 字段", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
+    { label: "Y 字段", field: { key: "y", types: ["number"], required: true } }, //
+    { label: "分组字段", field: { key: "color", types: ["number", "string", "Date"] } },
   ] as const,
   create: ({ x, y, color }): ChartSpec | undefined => ({
     title: y.name,
@@ -173,10 +173,10 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-ecdf",
-  description: "Create a chart showing the empirical cumulative distribution (eCDF) of a field",
+  description: "创建显示字段经验累积分布（eCDF）的图表",
   ui: [
-    { label: "Field", field: { key: "x", types: ["number"], required: true } }, //
-    { label: "Group Field", field: { key: "color", types: ["number", "string", "Date"] } },
+    { label: "字段", field: { key: "x", types: ["number"], required: true } }, //
+    { label: "分组字段", field: { key: "color", types: ["number", "string", "Date"] } },
   ] as const,
   create: ({ x, color }): ChartSpec | undefined => ({
     title: x.name,
@@ -198,10 +198,10 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-heatmap",
-  description: "Create a 2D heatmap of two fields",
+  description: "创建两个字段的二维热力图",
   ui: [
-    { label: "X Field", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
-    { label: "Y Field", field: { key: "y", types: ["number", "string", "Date"], required: true } }, //
+    { label: "X 字段", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
+    { label: "Y 字段", field: { key: "y", types: ["number", "string", "Date"], required: true } }, //
   ] as const,
   create: ({ x, y }): ChartSpec | undefined => ({
     title: `${x.name}, ${y.name}`,
@@ -237,10 +237,10 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-boxplot",
-  description: "Create a box plot",
+  description: "创建箱线图",
   ui: [
-    { label: "X Field", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
-    { label: "Y Field", field: { key: "y", types: ["number"], required: true } }, //
+    { label: "X 字段", field: { key: "x", types: ["number", "string", "Date"], required: true } }, //
+    { label: "Y 字段", field: { key: "y", types: ["number"], required: true } }, //
   ] as const,
   create: ({ x, y }): ChartSpec | undefined => ({
     title: x.name,
@@ -291,12 +291,12 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-bubble",
-  description: "Create a bubble chart",
+  description: "创建气泡图",
   ui: [
-    { label: "X Field", field: { key: "x", types: ["number"], required: true } }, //
-    { label: "Y Field", field: { key: "y", types: ["number"], required: true } }, //
-    { label: "Color Field", field: { key: "color", types: ["number", "string", "Date"] } }, //
-    { label: "Group Field", field: { key: "group", types: ["number", "string", "Date"] } }, //
+    { label: "X 字段", field: { key: "x", types: ["number"], required: true } }, //
+    { label: "Y 字段", field: { key: "y", types: ["number"], required: true } }, //
+    { label: "颜色字段", field: { key: "color", types: ["number", "string", "Date"] } }, //
+    { label: "分组字段", field: { key: "group", types: ["number", "string", "Date"] } }, //
   ] as const,
   create: ({ x, y, color, group }): ChartSpec | undefined => ({
     title: x.name,
@@ -328,17 +328,17 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-embedding",
-  description: "Create an embedding view",
+  description: "创建嵌入视图",
   ui: [
-    { label: "X Field", field: { key: "x", types: ["number"], required: true } }, //
-    { label: "Y Field", field: { key: "y", types: ["number"], required: true } }, //
-    { label: "Text Field", field: { key: "text", types: ["string"] } }, //
-    { label: "Category Field", field: { key: "category", types: ["string", "number", "Date"] } }, //
+    { label: "X 字段", field: { key: "x", types: ["number"], required: true } }, //
+    { label: "Y 字段", field: { key: "y", types: ["number"], required: true } }, //
+    { label: "文本字段", field: { key: "text", types: ["string"] } }, //
+    { label: "类别字段", field: { key: "category", types: ["string", "number", "Date"] } }, //
   ] as const,
   preview: false,
   create: ({ x, y, text, category }, context): EmbeddingSpec | undefined => ({
     type: "embedding",
-    title: "Embedding",
+    title: "嵌入视图",
     data: {
       x: x.name,
       y: y.name,
@@ -350,17 +350,17 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-predicates",
-  description: "Create a filter with custom SQL predicates",
+  description: "创建自定义 SQL 谓词筛选器",
   ui: [] as const,
   create: (): PredicatesSpec | undefined => ({
     type: "predicates",
-    title: "SQL Predicates",
+    title: "SQL 谓词",
   }),
 });
 
 registerChartBuilder({
   icon: "chart-markdown",
-  description: "Create a view with markdown content",
+  description: "创建 Markdown 内容视图",
   preview: false,
   ui: [{ code: { key: "content", language: "markdown" } }] as const,
   create: ({ content }): any | undefined => ({
@@ -372,9 +372,9 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-content-viewer",
-  description: "Create a view that displays a given field's content for the last selected point",
+  description: "创建显示最后选中点指定字段内容的视图",
   preview: false,
-  ui: [{ label: "Field", field: { key: "field", required: true } }] as const,
+  ui: [{ label: "字段", field: { key: "field", required: true } }] as const,
   create: ({ field }): ContentViewerSpec | undefined => ({
     type: "content-viewer",
     title: field.name,
@@ -384,7 +384,7 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-spec",
-  description: "Create a chart with custom spec",
+  description: "使用自定义 spec 创建图表",
   preview: false,
   ui: [{ spec: { key: "spec" } }] as const,
   create: ({ spec }): ChartSpec | undefined => spec,
@@ -392,20 +392,20 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-table",
-  description: "Create a table view with pagination",
+  description: "创建带分页的表格视图",
   preview: false,
   ui: [
     {
-      label: "SQL query for the table (optional)",
+      label: "表格的 SQL 查询（可选）",
       details:
-        "Leave empty to show the (filtered) dataset, use $table and $filter to refer to the data table and filter predicate respectively.",
+        "留空将显示（筛选后的）数据集。可用 $table 和 $filter 分别引用数据表和筛选谓词。",
       code: { key: "query", language: "sql" },
     },
   ] as const,
   create: ({ query }): InstancesSpec | undefined => {
     return {
       type: "instances",
-      title: "Table",
+      title: "表格",
       viewMode: "table",
       query: query != null && query.trim() != "" ? query : undefined,
     };
@@ -414,24 +414,24 @@ registerChartBuilder({
 
 registerChartBuilder({
   icon: "chart-cards",
-  description: "Create a card view with pagination",
+  description: "创建带分页的卡片视图",
   preview: false,
   ui: [
     {
-      label: "SQL query for the card view (optional)",
+      label: "卡片视图的 SQL 查询（可选）",
       details:
-        "Leave empty to show the (filtered) dataset, use $table and $filter to refer to the data table and filter predicate respectively.",
+        "留空将显示（筛选后的）数据集。可用 $table 和 $filter 分别引用数据表和筛选谓词。",
       code: { key: "query", language: "sql" },
     },
     {
-      label: "HTML template for the cards (optional)",
+      label: "卡片 HTML 模板（可选）",
       code: { key: "template", language: "" },
     },
   ] as const,
   create: ({ query, template }): InstancesSpec | undefined => {
     return {
       type: "instances",
-      title: "Cards",
+      title: "卡片",
       viewMode: "cards",
       query: query != null && query.trim() != "" ? query : undefined,
       cardTemplate: template != null && template.trim() != "" ? template : undefined,

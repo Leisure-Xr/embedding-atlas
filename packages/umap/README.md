@@ -1,36 +1,36 @@
 # UMAP (Rust)
 
-A pure Rust implementation of UMAP (Uniform Manifold Approximation and Projection) and NNDescent (approximate nearest neighbor search), with WebAssembly bindings for browser use.
+UMAP（Uniform Manifold Approximation and Projection）和 NNDescent（近似最近邻搜索）的纯 Rust 实现，并提供用于浏览器的 WebAssembly 绑定。
 
-This implementation is based on the original Python libraries:
+此实现基于原始 Python 库：
 
-- **[umap-learn](https://github.com/lmcinnes/umap)** — UMAP algorithm by Leland McInnes
-- **[pynndescent](https://github.com/lmcinnes/pynndescent)** — Nearest neighbor descent by Leland McInnes
+- **[umap-learn](https://github.com/lmcinnes/umap)** — Leland McInnes 编写的 UMAP 算法
+- **[pynndescent](https://github.com/lmcinnes/pynndescent)** — Leland McInnes 编写的最近邻下降算法
 
-## Structure
+## 结构
 
-This workspace contains three crates:
+此 workspace 包含三个 crate：
 
 ### `nndescent/`
 
-Approximate k-nearest neighbor graph construction, ported from PyNNDescent.
+近似 k 最近邻图构建，从 PyNNDescent 移植而来。
 
-- `distance.rs` — Distance metrics (euclidean, cosine, manhattan, chebyshev, minkowski) with SIMD acceleration via `wide`
-- `nn_descent.rs` — Core NN-descent algorithm for iterative neighbor graph refinement
-- `rp_trees.rs` — Random projection trees for initialization and search
-- `heap.rs` — Max-heap for efficient k-NN tracking
-- `search.rs` — Query functionality over constructed indices
-- `rng.rs` — Tau RNG matching the Python implementation for reproducibility
+- `distance.rs` — 距离度量（euclidean、cosine、manhattan、chebyshev、minkowski），通过 `wide` 使用 SIMD 加速
+- `nn_descent.rs` — 用于迭代优化邻居图的核心 NN-descent 算法
+- `rp_trees.rs` — 用于初始化和搜索的随机投影树
+- `heap.rs` — 用于高效跟踪 k-NN 的最大堆
+- `search.rs` — 基于已构建索引的查询功能
+- `rng.rs` — 与 Python 实现匹配的 Tau RNG，用于可复现性
 
 ### `umap/`
 
-UMAP dimensionality reduction, ported from umap-learn.
+UMAP 降维，从 umap-learn 移植而来。
 
-- `lib.rs` — Public API with `UmapBuilder` pattern. Orchestrates the full pipeline: neighbor finding, graph construction, initialization, and optimization
-- `graph.rs` — Sparse matrix operations, fuzzy simplicial set construction, and symmetrization
-- `spectral.rs` — Spectral initialization via LOBPCG eigendecomposition, with Jacobi and Cholesky solvers
-- `optimize.rs` — Layout optimization using SGD with Hogwild parallelism and negative sampling
+- `lib.rs` — 使用 `UmapBuilder` 模式的公共 API。编排完整流水线：邻居查找、图构建、初始化和优化
+- `graph.rs` — 稀疏矩阵操作、模糊单纯复形构建和对称化
+- `spectral.rs` — 通过 LOBPCG 特征分解进行谱初始化，并包含 Jacobi 和 Cholesky 求解器
+- `optimize.rs` — 使用带 Hogwild 并行和负采样的 SGD 进行布局优化
 
 ### `umap-wasm/`
 
-WebAssembly bindings via `wasm-bindgen`, exposing both UMAP and NNDescent to JavaScript/TypeScript.
+通过 `wasm-bindgen` 提供 WebAssembly 绑定，将 UMAP 和 NNDescent 暴露给 JavaScript/TypeScript。

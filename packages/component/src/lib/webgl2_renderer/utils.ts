@@ -30,7 +30,7 @@ export function webglProgram(
     let linkStatus = gl.getProgramParameter(program, gl.LINK_STATUS);
     if (!linkStatus) {
       var log = gl.getProgramInfoLog(program);
-      throw new Error(`failed to link program: ${log}, vertex source: ${vsSource}, fragment source: ${fsSource}`);
+      throw new Error(`链接 program 失败：${log}，vertex source：${vsSource}，fragment source：${fsSource}`);
     }
     state.program = program;
     state.vsSource = vsSource;
@@ -56,7 +56,7 @@ function compileShader(gl: WebGL2RenderingContext, type: number, source: string)
   let compileStatus = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
   if (!compileStatus) {
     var log = gl.getShaderInfoLog(shader);
-    throw new Error(`failed to compile shader: ${log}, source: ${source}`);
+    throw new Error(`编译 shader 失败：${log}，source：${source}`);
   }
   return shader;
 }
@@ -105,7 +105,7 @@ export function webglBuffer(
           gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(data), gl.STATIC_DRAW);
           break;
         default:
-          throw new Error("invalid type");
+          throw new Error("类型无效");
       }
     } else {
       gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);

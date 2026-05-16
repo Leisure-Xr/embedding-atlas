@@ -33,7 +33,7 @@
             onNearestNeighborSearch?.(tooltip.identifier);
           }}
         >
-          <IconSearch /> Nearest Neighbors
+          <IconSearch /> 最近邻
         </button>
       </div>
     {/if}

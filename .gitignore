@@ -5,6 +5,8 @@ node_modules/
 .pytest_cache/
 .ruff_cache/
 .claude/
+.idea/
+.playwright-cli/
 
 build/
 dist/

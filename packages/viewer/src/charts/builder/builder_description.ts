@@ -35,7 +35,7 @@ export type UIElement =
       details?: string;
     };
 
-// Helpers to infer the type of values from the UI description.
+// 用于从 UI 描述推断值类型的辅助类型。
 type UIValue<E> = E extends { field: { key: infer K extends string; required: true } }
   ? { [P in K]: Field }
   : E extends { field: { key: infer K extends string } }
@@ -50,18 +50,18 @@ type UnionToIntersection<U> = (U extends any ? (x: U) => void : never) extends (
 type UIValues<A extends readonly UIElement[]> = UnionToIntersection<UIValue<A[number]>>;
 
 export interface ChartBuilderDescription<Spec, UI extends readonly UIElement[]> {
-  /** An icon for the chart type */
+  /** 图表类型的图标。 */
   icon: string;
 
-  /** Description of the chart type  */
+  /** 图表类型描述。 */
   description: string;
 
-  /** UI elements */
+  /** UI 元素。 */
   ui: UI;
 
-  /** Whether to show a preview chart (default true) */
+  /** 是否显示预览图表（默认为 true）。 */
   preview?: boolean;
 
-  /** A function to create a chart spec from the given values */
+  /** 根据给定值创建图表 spec 的函数。 */
   create: (values: UIValues<UI>, context: { table: string; id: string }) => Spec | undefined;
 }

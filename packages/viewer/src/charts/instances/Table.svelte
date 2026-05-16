@@ -146,7 +146,7 @@
             use:interactionHandler={{ drag: handleResizeStart(column) }}
             role="separator"
             aria-orientation="vertical"
-            aria-label="Resize column"
+            aria-label="调整列宽"
           >
             <div class="w-[2px] h-5 bg-slate-400 dark:bg-slate-500 opacity-20 rounded-sm"></div>
           </div>

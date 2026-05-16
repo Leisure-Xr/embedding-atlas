@@ -1,35 +1,35 @@
 // Copyright (c) 2025 Apple Inc. Licensed under MIT License.
 
-// The algorithm is based on the following research paper:
+// 该算法基于以下论文：
 // Been, Ken, Eli Daiches, and Chee Yap. "Dynamic Map Labeling." IEEE Transactions on Visualization and Computer Graphics 12, no. 5 (2006): 773–80. https://doi.org/10.1109/TVCG.2006.136.
 
 import type { Point, Rectangle } from "../utils.js";
 import { PriorityQueue } from "./priority_queue.js";
 
-/** Description of a label for placement. */
+/** 用于放置计算的标签描述。 */
 export interface Label {
-  /** The bounds of the label at scale = 1. */
+  /** scale = 1 时的标签边界。 */
   bounds: Rectangle;
-  /** The location of the label at scale = 0. Usually you can set this to the center of `bounds`. */
+  /** scale = 0 时的标签位置。通常可以设为 `bounds` 的中心。 */
   locationAtZero: Point;
-  /** The minimum scale this label can appear in. */
+  /** 该标签可出现的最小 scale。 */
   minScale?: number;
-  /** The maximum scale this label can appear in. */
+  /** 该标签可出现的最大 scale。 */
   maxScale?: number;
-  /** The label's priority. */
+  /** 标签优先级。 */
   priority?: number;
 }
 
-/** The placement of a label. */
+/** 标签放置结果。 */
 export interface Placement {
-  /** The minimum scale. */
+  /** 最小 scale。 */
   minScale: number;
-  /** The maximum scale. */
+  /** 最大 scale。 */
   maxScale: number;
 }
 
 export interface Options {
-  /** The global max scale for all labels. */
+  /** 所有标签共用的全局最大 scale。 */
   globalMaxScale: number;
 }
 
@@ -43,7 +43,7 @@ export function dynamicLabelPlacement(labels: Label[], options: Partial<Options>
   }
   let allLevels = new Set<number>();
   allLevels.add(0);
-  // For each pair of label, compute the scale at which they will touch (transition between overlap and no overlap).
+  // 为每对标签计算它们刚好接触的 scale（重叠与不重叠之间的转折点）。
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       let { x: xi, y: yi } = labels[i].locationAtZero;
@@ -62,7 +62,7 @@ export function dynamicLabelPlacement(labels: Label[], options: Partial<Options>
       } else if (scale <= 0) {
         scale = Infinity;
       } else {
-        // Discretize the scale levels, so we don't end up with too many levels.
+        // 离散化 scale 层级，避免层级过多。
         scale = Math.exp(Math.floor(Math.log(scale) * 100) / 100);
       }
       edgeLists[i].push([j, scale]);

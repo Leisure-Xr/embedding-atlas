@@ -1,21 +1,21 @@
-# Overview
+# 概览
 
-Embedding Atlas is a tool that provides interactive visualizations for large embeddings. It allows you to visualize, cross-filter, and search embeddings and metadata.
+Embedding Atlas 是一个为大型嵌入数据提供交互式可视化的工具。它支持可视化、交叉筛选以及搜索嵌入和元数据。
 
 ::: tip
-You can use Embedding Atlas directly from this website by [loading your own data](https://apple.github.io/embedding-atlas/app/). In this online version, Embedding Atlas will compute the embedding and projection in your browser. Your data does not leave your machine.
+你可以直接在此网站上[加载自己的数据](https://apple.github.io/embedding-atlas/app/)来使用 Embedding Atlas。在这个在线版本中，Embedding Atlas 会在浏览器内计算嵌入和投影。你的数据不会离开本机。
 :::
 
-Embedding Atlas is released as two packages:
+Embedding Atlas 以两个包发布：
 
-- A Python package `embedding-atlas` that provides:
-  - A [command line utility](./tool.md) for launching Embedding Atlas from command line.
-  - A [Python Notebook widget](./widget.md) for using Embedding Atlas in interactive Python notebooks.
-  - A [Streamlit component](./streamlit.md) for using Embedding Atlas in Streamlit apps.
-  - All of these approaches allow you to compute embeddings (with custom models) and projections.
+- 一个 Python 包 `embedding-atlas`，提供：
+  - 用于从命令行启动 Embedding Atlas 的[命令行工具](./tool.md)。
+  - 用于在交互式 Python 笔记本中使用 Embedding Atlas 的 [Python Notebook 小组件](./widget.md)。
+  - 用于在 Streamlit 应用中使用 Embedding Atlas 的 [Streamlit 组件](./streamlit.md)。
+  - 所有这些方式都允许你计算嵌入（可使用自定义模型）和投影。
 
-- An npm package `embedding-atlas` that exposes the user interface components as API so you can use them in your own applications. Below are the exposed components:
+- 一个 npm 包 `embedding-atlas`，将用户界面组件作为 API 暴露，便于你在自己的应用中使用。暴露的组件如下：
   - [EmbeddingView](./embedding-view.md)
   - [EmbeddingViewMosaic](./embedding-view-mosaic.md)
   - [EmbeddingAtlas](./embedding-atlas.md)
-  - [Algorithms](./algorithms.md)
+  - [算法](./algorithms.md)

@@ -13,16 +13,16 @@ def load_data():
 
 
 def main():
-    # Embedding Atlas looks better in wide mode
+    # Embedding Atlas 在宽屏模式下显示效果更好
     st.set_page_config(layout="wide")
 
     st.title("Embedding Atlas + Streamlit")
 
-    # Load some data
-    st.write("Load an example dataset")
+    # 加载示例数据
+    st.write("加载示例数据集")
     df = load_data()
 
-    # Compute text embedding and projection of the embedding
+    # 计算文本 embedding 及其投影
     df = compute_projection(
         df,
         inputs="description",
@@ -32,7 +32,7 @@ def main():
         neighbors="neighbors",
     )
 
-    # Create the Embedding Atlas widget in Streamlit
+    # 在 Streamlit 中创建 Embedding Atlas widget
     value = embedding_atlas(
         df,
         text="description",
@@ -42,8 +42,8 @@ def main():
         show_table=True,
     )
 
-    # Show selected rows in a Streamlit data frame
-    st.write("Selected rows:")
+    # 在 Streamlit data frame 中显示选中的行
+    st.write("选中的行：")
     predicate = value.get("predicate")
     if value is not None and predicate is not None:
         subset = duckdb.query_df(
@@ -51,7 +51,7 @@ def main():
         )
         st.dataframe(subset)
     else:
-        st.write("No selection")
+        st.write("没有选择")
 
 
 if __name__ == "__main__":

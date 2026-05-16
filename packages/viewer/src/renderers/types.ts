@@ -15,28 +15,28 @@ export interface RendererOptionsProps {
   onChange?: (value?: Record<string, any>) => void;
 }
 
-/** Component for a custom value renderer */
+/** 自定义值渲染器组件。 */
 export type RendererComponent = CustomComponentClass<HTMLElement, RendererProps>;
 
-/** Component for a custom value renderer's options config panel */
+/** 自定义值渲染器的选项配置面板组件。 */
 export type RendererOptionsComponent = CustomComponentClass<HTMLElement, RendererOptionsProps>;
 
-/** A type describing how to display a column in the table, tooltip, and search results */
+/** 描述列在表格、工具提示和搜索结果中如何显示的类型。 */
 export interface ColumnStyle {
   /**
-   * The renderer name. Builtin options:
-   * - "markdown": Render the value as Markdown
-   * - "liquid-template": Render the value with a Liquid template (rendered with liquidjs). Options: template (string): the template, default to "{{ value }}".
-   * - "image": Render an image. Options: size (number): the max width/height of the image.
-   * - "url": Render the value as a link
-   * - "json": Render the value as a JSON string
-   * - "messages": Render chat messages (OpenAI format)
+   * 渲染器名称。内置选项：
+   * - "markdown"：将值渲染为 Markdown
+   * - "liquid-template"：使用 Liquid 模板渲染值（由 liquidjs 渲染）。选项：template（string）：模板，默认为 "{{ value }}"。
+   * - "image"：渲染图像。选项：size（number）：图像最大宽度/高度。
+   * - "url"：将值渲染为链接
+   * - "json"：将值渲染为 JSON 字符串
+   * - "messages"：渲染聊天消息（OpenAI 格式）
    */
   renderer?: string;
 
-  /** Options passed to the renderer class as props */
+  /** 作为 props 传给渲染器类的选项。 */
   options?: Record<string, any>;
 
-  /** Display style in the tooltip */
+  /** 在工具提示中的显示样式。 */
   display?: "full" | "badge" | "hidden";
 }

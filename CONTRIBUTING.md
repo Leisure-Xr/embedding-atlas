@@ -1,25 +1,25 @@
-# Contributing to Embedding Atlas
+# 为 Embedding Atlas 贡献
 
-Thank you for your interest in contributing to Embedding Atlas!
+感谢你有兴趣为 Embedding Atlas 做贡献！
 
-## Submitting an Issue
+## 提交议题
 
-If you find a bug or have a feature request, please open a GitHub issue. Try to include:
+如果你发现缺陷或有功能请求，请创建一个 GitHub 议题。请尽量包含：
 
-- A clear and descriptive title
-- Steps to reproduce the problem, expected, and actual behavior, and sample data (if applicable)
-- Any relevant logs, screenshots, or code snippets
+- 清晰且描述性强的标题
+- 复现问题的步骤、预期行为和实际行为，以及示例数据（如适用）
+- 任何相关日志、截图或代码片段
 
-Well-documented issues help us understand and address problems more effectively.
+记录充分的议题有助于我们更有效地理解并解决问题。
 
-## Opening a Pull Request
+## 创建拉取请求
 
-Pull requests (PRs) are greatly appreciated. For minor changes, feel free to open a PR directly. For larger feature development and any changes that may require more discussion, we recommend that you post your ideas in an issue first before starting development.
+我们非常欢迎拉取请求（PR）。对于小改动，可以直接创建 PR。对于较大的功能开发以及任何可能需要更多讨论的改动，建议你先在议题中发布想法，再开始开发。
 
-Please note that while contributions are warmly welcomed, maintainers may not be able to respond immediately. We appreciate your patience and understanding. Forks and out-of-tree improvements are encouraged.
+请注意，虽然我们欢迎贡献，维护者也可能无法立即回复。感谢你的耐心和理解。也欢迎派生仓库和仓库外的改进。
 
-## Project Licensing
+## 项目许可
 
-By submitting a pull request, you represent that you have the right to license your contribution to Apple and the community, and agree by submitting the patch that your contributions are licensed under the [MIT license](LICENSE).
+提交拉取请求即表示你声明自己有权将贡献授权给 Apple 和社区，并同意你提交的补丁基于 [MIT 许可证](LICENSE) 授权。
 
-We ask that all community members read and observe our [Code of Conduct](CODE_OF_CONDUCT.md).
+我们要求所有社区成员阅读并遵守我们的 [行为准则](CODE_OF_CONDUCT.md)。

@@ -12,8 +12,8 @@
 
   function newChart() {
     let id = findUnusedId(charts);
-    onChartsChange({ [id]: { type: "builder", title: "New" } });
+    onChartsChange({ [id]: { type: "builder", title: "新建" } });
   }
 </script>
 
-<Button icon={IconPlus} onClick={newChart} title="Add" />
+<Button icon={IconPlus} onClick={newChart} title="添加" />

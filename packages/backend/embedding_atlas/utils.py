@@ -33,7 +33,7 @@ def load_huggingface_data(filename: str, splits: list[str] | None) -> pd.DataFra
         from datasets import load_dataset
     except ImportError:
         print(
-            "⚠️ Loading Hugging Face datasets requires the `datasets` package to be installed. Please run `pip install datasets`, then try again."
+            "⚠️ 加载 Hugging Face datasets 需要安装 `datasets` 包。请运行 `pip install datasets` 后重试。"
         )
         exit(-1)
 
@@ -47,14 +47,14 @@ def load_huggingface_data(filename: str, splits: list[str] | None) -> pd.DataFra
         split_question = [
             inquirer.Checkbox(
                 "split",
-                message=f"Select which data splits you want to load for dataset [{filename}]",
+                message=f"请选择要为数据集 [{filename}] 加载哪些 data splits",
                 choices=sorted(ds_split_options),
             ),
         ]
         splits = inquirer.prompt(split_question)["split"]  # type: ignore
 
     if splits is None or len(splits) == 0:
-        raise ValueError("must select at least one split")
+        raise ValueError("必须至少选择一个 split")
 
     dfs = []
     for split in splits:

@@ -6,38 +6,40 @@
 ![Build](https://github.com/apple/embedding-atlas/actions/workflows/ci.yml/badge.svg)
 [![GitHub License](https://img.shields.io/github/license/apple/embedding-atlas)](./LICENSE)
 
-Embedding Atlas is a tool that provides interactive visualizations for large embeddings. It allows you to visualize, cross-filter, and search embeddings and metadata.
+> 本仓库是基于 Apple Embedding Atlas 的二次开发版本，已增加中文界面、本地 Parquet 示例和二次开发启动脚本。说明见 [OPEN_SOURCE.md](./OPEN_SOURCE.md)，本地示例见 [packages/backend/examples/local_parquet](./packages/backend/examples/local_parquet/)。
 
-**Features**
+Embedding Atlas 是一个为大型嵌入数据提供交互式可视化的工具。它支持可视化、交叉筛选以及搜索嵌入和元数据。
 
-- 🏷️ **Automatic data clustering & labeling:**
-  Interactively visualize and navigate overall data structure.
+**功能**
 
-- 🫧 **Kernel density estimation & density contours:**
-  Easily explore and distinguish between dense regions of data and outliers.
+- 🏷️ **自动数据聚类与标注：**
+  以交互方式可视化并浏览整体数据结构。
 
-- 🧊 **Order-independent transparency:**
-  Ensure clear, accurate rendering of overlapping points.
+- 🫧 **核密度估计与密度等高线：**
+  轻松探索并区分数据密集区域和离群点。
 
-- 🔍 **Real-time search & nearest neighbors:**
-  Find similar data to a given query or existing data point.
+- 🧊 **顺序无关透明度：**
+  确保重叠点能够清晰、准确地渲染。
 
-- 🚀 **WebGPU implementation (with WebGL 2 fallback):**
-  Fast, smooth performance (up to few million points) with modern rendering stack.
+- 🔍 **实时搜索与最近邻：**
+  查找与给定查询或现有数据点相似的数据。
 
-- 📊 **Multi-coordinated views for metadata exploration:**
-  Interactively link and filter data across metadata columns.
+- 🚀 **WebGPU 实现（带 WebGL 2 回退）：**
+  使用现代渲染栈实现快速、流畅的性能（最多可达数百万个点）。
 
-Please visit <https://apple.github.io/embedding-atlas> for a demo and documentation.
+- 📊 **用于元数据探索的多协调视图：**
+  在多个元数据列之间交互式联动和筛选数据。
+
+请访问 <https://apple.github.io/embedding-atlas> 查看演示和文档。
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./packages/docs/public/assets/embedding-atlas-dark.png">
-  <img alt="screenshot of Embedding Atlas" src="./packages/docs/public/assets/embedding-atlas-light.png">
+  <img alt="Embedding Atlas 截图" src="./packages/docs/public/assets/embedding-atlas-light.png">
 </picture>
 
-## Get started
+## 开始使用
 
-To use Embedding Atlas with Python:
+通过 Python 使用 Embedding Atlas：
 
 ```bash
 pip install embedding-atlas
@@ -45,16 +47,16 @@ pip install embedding-atlas
 embedding-atlas <your-dataset.parquet>
 ```
 
-In addition to the command line tool, Embedding Atlas is also available as a Python Notebook (e.g., Jupyter) widget:
+除了命令行工具，Embedding Atlas 也可以作为 Python Notebook（例如 Jupyter）小组件使用：
 
 ```python
 from embedding_atlas.widget import EmbeddingAtlasWidget
 
-# Show the Embedding Atlas widget for your data frame:
+# 为你的数据框显示 Embedding Atlas 小组件：
 EmbeddingAtlasWidget(df)
 ```
 
-Finally, components from Embedding Atlas are also available in an npm package:
+此外，Embedding Atlas 的组件也通过 npm 包提供：
 
 ```bash
 npm install embedding-atlas
@@ -63,18 +65,18 @@ npm install embedding-atlas
 ```js
 import { EmbeddingAtlas, EmbeddingView } from "embedding-atlas";
 
-// or with React:
+// 或使用 React：
 import { EmbeddingAtlas, EmbeddingView } from "embedding-atlas/react";
 
-// or Svelte:
+// 或使用 Svelte：
 import { EmbeddingAtlas, EmbeddingView } from "embedding-atlas/svelte";
 ```
 
-For more information, please visit <https://apple.github.io/embedding-atlas/overview.html>.
+更多信息请访问 <https://apple.github.io/embedding-atlas/overview.html>。
 
 ## BibTeX
 
-For the Embedding Atlas tool:
+Embedding Atlas 工具：
 
 ```bibtex
 @misc{ren2025embedding,
@@ -88,7 +90,7 @@ For the Embedding Atlas tool:
 }
 ```
 
-For the algorithm that automatically produces clusters and labels in the embedding view:
+用于在嵌入视图中自动生成聚类和标签的算法：
 
 ```bibtex
 @misc{ren2025scalable,
@@ -102,10 +104,10 @@ For the algorithm that automatically produces clusters and labels in the embeddi
 }
 ```
 
-## Development
+## 开发
 
-For development instructions, please visit <https://apple.github.io/embedding-atlas/develop.html>, or checkout `packages/docs/develop.md`.
+开发说明请访问 <https://apple.github.io/embedding-atlas/develop.html>，或查看 `packages/docs/develop.md`。
 
-## License
+## 许可证
 
-This code is released under the [`MIT license`](LICENSE).
+本代码基于 [`MIT 许可证`](LICENSE) 发布。

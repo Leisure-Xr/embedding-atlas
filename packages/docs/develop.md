@@ -1,117 +1,112 @@
-# Development Instructions
+# 开发说明
 
-[View the code on GitHub](https://github.com/apple/embedding-atlas).
+[在 GitHub 上查看代码](https://github.com/apple/embedding-atlas)。
 
-This repository is organized as a monorepo with the following packages:
+本仓库采用单体仓库组织，包含以下包：
 
-**Frontend:**
+**前端：**
 
-- `packages/component`: The `EmbeddingView` and `EmbeddingViewMosaic` components.
-- `packages/viewer`: The frontend application for visualizing embeddings and other columns. It also provides the `EmbeddingAtlas` component that can be embedded in other applications.
-- `packages/utils`: Shared utilities.
-- `packages/embedding-atlas`: The published `embedding-atlas` package. It re-exports the above packages as a single unified API.
-- `packages/examples`: Examples showing how to use the `embedding-atlas` package.
+- `packages/component`：`EmbeddingView` 和 `EmbeddingViewMosaic` 组件。
+- `packages/viewer`：用于可视化嵌入和其他列的前端应用。它也提供可嵌入其他应用的 `EmbeddingAtlas` 组件。
+- `packages/utils`：共享工具。
+- `packages/embedding-atlas`：已发布的 `embedding-atlas` 包，将以上包重新导出为统一 API。
+- `packages/examples`：展示如何使用 `embedding-atlas` 包的示例。
 
 **Rust / WebAssembly:**
 
-- `packages/density-clustering`: A density clustering algorithm, written in Rust and compiled to WebAssembly.
-- `packages/umap`: A Rust implementation of the UMAP and NNDescent algorithms, compiled to WebAssembly.
+- `packages/density-clustering`：密度聚类算法，使用 Rust 编写并编译为 WebAssembly。
+- `packages/umap`：UMAP 和 NNDescent 算法的 Rust 实现，编译为 WebAssembly。
 
 **Python:**
 
-- `packages/backend`: A Python package named `embedding-atlas` that provides the `embedding-atlas` command-line tool.
+- `packages/backend`：名为 `embedding-atlas` 的 Python 包，提供 `embedding-atlas` 命令行工具。
 
-**Documentation:**
+**文档：**
 
-- `packages/docs`: The documentation website.
+- `packages/docs`：文档网站。
 
-## Prerequisites
+## 前置条件
 
-- [Node.js](https://nodejs.org/) and npm
-- [uv](https://docs.astral.sh/uv/) package manager
+- [Node.js](https://nodejs.org/) 和 npm
+- [uv](https://docs.astral.sh/uv/) 包管理器
 - [Rust](https://www.rust-lang.org/)
-- WebAssembly target: `rustup target add wasm32-unknown-unknown`
-- wasm-bindgen CLI: `cargo install -f wasm-bindgen-cli --version 0.2.114`
+- WebAssembly 目标：`rustup target add wasm32-unknown-unknown`
+- wasm-bindgen 命令行工具：`cargo install -f wasm-bindgen-cli --version 0.2.114`
 
-## Install and Build
+## 安装和构建
 
-Install dependencies:
+安装依赖：
 
 ```bash
 npm install
 ```
 
-Build all packages:
+构建所有包：
 
 ```bash
 npm run build
 ```
 
-This builds all packages, including the WASM packages (`umap-wasm` and `density-clustering`).
+这会构建所有包，包括 WASM 包（`umap-wasm` 和 `density-clustering`）。
 
-## Development
+## 开发
 
-Launch the command-line tool with a demo dataset:
+使用演示数据集启动命令行工具：
 
 ```bash
 cd packages/backend
 ./start.sh
 ```
 
-Start the development server for the `viewer` package:
+启动 `viewer` 包的开发服务器：
 
 ```bash
 cd packages/viewer
 npm run dev
 ```
 
-The `viewer` package is the main Embedding Atlas UI. Once `npm run dev` is running,
-it serves the UI at `http://localhost:5173`. The UI requires a
-backend server at `http://localhost:5055` to provide data. You can start one via
-`./start.sh` as described above. Without a backend server, you can still visit
-`http://localhost:5173/#/test` for a test dataset, or `http://localhost:5173/#/file` to use the file loader.
+`viewer` 包是 Embedding Atlas 的主界面。运行 `npm run dev` 后，界面会在 `http://localhost:5173` 提供服务。该界面需要位于 `http://localhost:5055` 的后端服务器提供数据。你可以按上文所述通过 `./start.sh` 启动后端。没有后端服务器时，仍可访问 `http://localhost:5173/#/test` 查看测试数据集，或访问 `http://localhost:5173/#/file` 使用文件加载器。
 
-Start the development server for the `component` package:
+启动 `component` 包的开发服务器：
 
 ```bash
 cd packages/component
 npm run dev
 ```
 
-Start the development server for the `examples` package:
+启动 `examples` 包的开发服务器：
 
 ```bash
 cd packages/examples
 npm run dev
 ```
 
-## Unit Tests
+## 单元测试
 
-To run tests for individual packages:
+运行单个包的测试：
 
 ```bash
-# JavaScript tests
+# JavaScript 测试
 cd packages/utils
 npm run test
 
-# Python tests
+# Python 测试
 cd packages/backend
 uv run pytest
 
-# Rust tests
+# Rust 测试
 cd packages/density-clustering
 cargo test
 ```
 
-To run all JavaScript, Python, and Rust tests at once:
+一次性运行所有 JavaScript、Python 和 Rust 测试：
 
 ```bash
 npm run test
 ```
 
-## Deployment
+## 部署
 
-Packages and the documentation website are deployed via [GitHub Actions](https://github.com/apple/embedding-atlas/blob/main/.github/workflows/ci.yml).
-Deployment is triggered when a release is published with a tag matching `vX.Y.Z`.
+包和文档网站通过 [GitHub Actions](https://github.com/apple/embedding-atlas/blob/main/.github/workflows/ci.yml) 部署。当发布带有 `vX.Y.Z` 格式标签的发布版本时会触发部署。
 
-The documentation website can be deployed separately by manually running the workflow with "Publish Documentation Website" enabled.
+也可以手动运行工作流，并启用 "Publish Documentation Website"，单独部署文档网站。

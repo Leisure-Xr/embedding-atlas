@@ -1,14 +1,14 @@
-# Algorithms
+# 算法
 
-The `embedding-atlas` package contains some useful algorithms for computing embeddings and clustering.
+`embedding-atlas` 包包含一些用于计算嵌入和聚类的实用算法。
 
 ## UMAP
 
-This package provides a WebAssembly implementation of [UMAP (Uniform Manifold Approximation and Projection for Dimension Reduction)](https://umap-learn.readthedocs.io/en/latest/) and approximate nearest neighbor search.
+该包提供了 [UMAP (Uniform Manifold Approximation and Projection for Dimension Reduction)](https://umap-learn.readthedocs.io/en/latest/) 和近似最近邻搜索的 WebAssembly 实现。
 
-The implementation is based on the original Python libraries [umap-learn](https://github.com/lmcinnes/umap) and [pynndescent](https://github.com/lmcinnes/pynndescent) by Leland McInnes, ported to Rust and compiled to WebAssembly.
+此实现基于 Leland McInnes 的原始 Python 库 [umap-learn](https://github.com/lmcinnes/umap) 和 [pynndescent](https://github.com/lmcinnes/pynndescent)，移植到 Rust 并编译为 WebAssembly。
 
-To initialize the UMAP algorithm, use `createUMAP`:
+要初始化 UMAP 算法，请使用 `createUMAP`：
 
 ```js
 import { createUMAP } from "embedding-atlas";
@@ -17,33 +17,33 @@ let count = 2000;
 let inputDim = 100;
 let outputDim = 2;
 
-// The data must be a Float32Array with count * inputDim elements.
+// 数据必须是包含 count * inputDim 个元素的 Float32Array。
 let data = new Float32Array(count * inputDim);
-// ... fill in the data
+// ... 填充数据
 
 let options = {
   metric: "cosine",
 };
 
-// Use `createUMAP` to initialize the algorithm.
+// 使用 `createUMAP` 初始化算法。
 let umap = await createUMAP(count, inputDim, outputDim, data, options);
 ```
 
-After initialization, use the `run` method to update the embedding coordinates:
+初始化后，使用 `run` 方法更新嵌入坐标：
 
 ```js
-// Run the algorithm to completion.
+// 运行算法直到完成。
 await umap.run();
 ```
 
-At any time, you can get the current embedding by calling the `embedding` method.
+任何时候都可以通过调用 `embedding` 方法获取当前嵌入。
 
 ```js
-// The result is a Float32Array with count * outputDim elements.
+// 结果是包含 count * outputDim 个元素的 Float32Array。
 let embedding = umap.embedding();
 ```
 
-After you are done with the instance, use the `destroy` method to release resources.
+实例使用完毕后，使用 `destroy` 方法释放资源。
 
 ```js
 umap.destroy();
@@ -51,7 +51,7 @@ umap.destroy();
 
 ## NNDescent
 
-You can use the `createNNDescent` function to perform approximate nearest neighbor search:
+可以使用 `createNNDescent` 函数执行近似最近邻搜索：
 
 ```js
 import { createNNDescent } from "embedding-atlas";
@@ -59,39 +59,39 @@ import { createNNDescent } from "embedding-atlas";
 let count = 2000;
 let inputDim = 100;
 
-// The data must be a Float32Array with count * inputDim elements.
+// 数据必须是包含 count * inputDim 个元素的 Float32Array。
 let data = new Float32Array(count * inputDim);
-// ... fill in the data
+// ... 填充数据
 
 let options = {
   metric: "cosine",
 };
 
-// Create the NNDescent index
+// 创建 NNDescent 索引
 let index = await createNNDescent(count, inputDim, data, options);
 
-// Perform queries
+// 执行查询
 let query = new Float32Array(inputDim);
 index.queryByVector(query, k);
 
-// Destroy the instance
+// 销毁实例
 index.destroy();
 ```
 
-## Density-based Clustering
+## 基于密度的聚类
 
-This package provides a WebAssembly implementation of a density map clustering algorithm.
-To run the algorithm, use `findClusters`.
+该包提供了密度图聚类算法的 WebAssembly 实现。
+要运行该算法，请使用 `findClusters`。
 
 ```js
 import { findClusters } from "embedding-atlas";
 
-// A density map of width * height floating point numbers.
+// 包含 width * height 个浮点数的密度图。
 let densityMap: Float32Array;
 
 let clusters = await findClusters(densityMap, width, height);
 ```
 
-`findClusters` returns an array of clusters, as described below:
+`findClusters` 返回一个聚类数组，如下所述：
 
 <!-- @doc(ts,no-required): Cluster -->

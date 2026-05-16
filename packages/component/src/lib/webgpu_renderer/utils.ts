@@ -21,12 +21,12 @@ export async function requestWebGPUDevice(): Promise<GPUDevice | null> {
 
   let adapter = await navigator.gpu.requestAdapter();
   if (!adapter) {
-    console.error("Could not request WebGPU adapter");
+    console.error("无法请求 WebGPU adapter");
     return null;
   }
 
   let descriptors: GPUDeviceDescriptor[] = [
-    // First attempt to request the maximum limit
+    // 先尝试请求最大限制。
     {
       requiredLimits: {
         maxBufferSize: adapter.limits.maxBufferSize,
@@ -34,7 +34,7 @@ export async function requestWebGPUDevice(): Promise<GPUDevice | null> {
       },
       requiredFeatures: ["shader-f16"],
     },
-    // If we cannot get the maximum limit, try lower limits
+    // 如果无法获取最大限制，则逐步尝试更低限制。
     ...[512, 256, 128, 64, 32].map(
       (sz): GPUDeviceDescriptor => ({
         requiredLimits: {

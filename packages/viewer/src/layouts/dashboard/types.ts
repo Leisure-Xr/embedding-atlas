@@ -1,33 +1,33 @@
 // Copyright (c) 2025 Apple Inc. Licensed under MIT License.
 
 export interface Placement {
-  /** Start x location (in grid index) of the chart */
+  /** 图表起始 x 位置（网格索引）。 */
   x: number;
-  /** Start y location (in grid index) of the chart */
+  /** 图表起始 y 位置（网格索引）。 */
   y: number;
-  /** Width (in grid cell count) of the chart */
+  /** 图表宽度（网格单元数）。 */
   width: number;
-  /** Height (in grid cell count) of the chart */
+  /** 图表高度（网格单元数）。 */
   height: number;
 }
 
 export interface DashboardLayoutState {
-  /** The number of columns in the dashboard grid, default is 24 */
+  /** 仪表板网格列数，默认为 24。 */
   numColumns?: number;
 
-  /** The number of rows in the dashboard grid, default is 16 */
+  /** 仪表板网格行数，默认为 16。 */
   numRows?: number;
 
   /**
-   * The grid, keyed by `${numColumns}x${numRows}`, e.g., "24x16".
-   * Charts can be placed in additional rows, but the user would need to scroll down to view them.
+   * 网格，以 `${numColumns}x${numRows}` 为键，例如 "24x16"。
+   * 图表可放置在额外行中，但用户需要向下滚动才能查看。
    */
   grids?: Record<
     string,
     {
-      /** Placements of charts, keyed by chart ids, value is a Placement struct. */
+      /** 图表位置，以图表 id 为键，值为 Placement 结构。 */
       placements?: Record<string, Placement>;
-      /** Order of the charts, affects overlapping charts. */
+      /** 图表顺序，会影响重叠图表。 */
       order?: string[];
     }
   >;

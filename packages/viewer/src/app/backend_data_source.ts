@@ -61,12 +61,12 @@ export class BackendDataSource implements DataSource {
   ): Promise<Partial<EmbeddingAtlasProps>> {
     let metadata = await this.metadata();
 
-    onStatus("Initializing database...");
+    onStatus("正在初始化数据库...");
     let dbType = metadata.database?.type ?? "wasm";
     await initializeDatabase(coordinator, dbType, metadata.database?.uri ?? joinUrl(this.serverUrl, "query"));
 
     if (metadata.database?.load) {
-      onStatus("Loading data...");
+      onStatus("正在加载数据...");
       let datasetUrl = metadata.database?.datasetUrl ?? joinUrl(this.serverUrl, "dataset.parquet");
       await coordinator.exec(`
         CREATE OR REPLACE TABLE ${table} AS (SELECT * FROM read_parquet(${SQL.literal(datasetUrl)}));
@@ -108,7 +108,7 @@ export class BackendDataSource implements DataSource {
   private async fetchEndpoint(endpoint: string, init?: RequestInit) {
     let resp = await fetch(joinUrl(this.serverUrl, endpoint), init);
     if (resp.status != 200) {
-      throw new Error("ERROR FETCH");
+      throw new Error("获取数据失败");
     }
     return resp;
   }
@@ -117,7 +117,7 @@ export class BackendDataSource implements DataSource {
     try {
       return await this.fetchEndpoint("metadata.json").then((x) => x.json());
     } catch (e) {
-      throw new Error("Network Error: Failed to fetch dataset metadata");
+      throw new Error("网络错误：无法获取数据集元数据");
     }
   }
 

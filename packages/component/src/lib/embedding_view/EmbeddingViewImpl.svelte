@@ -299,14 +299,14 @@
   }
 
   function setupWebGLRenderer(canvas: HTMLCanvasElement) {
-    webGPUPrompt = "WebGPU is unavailable. Falling back to WebGL.";
+    webGPUPrompt = "WebGPU 不可用，正在回退到 WebGL。";
 
     let context: WebGL2RenderingContext | null;
 
     function createRenderer() {
       context = canvas.getContext("webgl2", { antialias: false });
       if (context == null) {
-        console.error("Could not get WebGL 2 context");
+        console.error("无法获取 WebGL 2 context");
         return;
       }
       context.getExtension("EXT_color_buffer_float");
@@ -334,7 +334,7 @@
     async function createRenderer() {
       let device = await requestWebGPUDevice();
       if (device == null) {
-        console.error("Could not get WebGPU device");
+        console.error("无法获取 WebGPU device");
         if (canFallbackToWebGL) {
           setupWebGLRenderer(canvas);
         }
@@ -343,18 +343,18 @@
 
       let context = canvas.getContext("webgpu");
       if (context == null) {
-        console.error("Could not get WebGPU canvas context");
+        console.error("无法获取 WebGPU canvas context");
         if (canFallbackToWebGL) {
           setupWebGLRenderer(canvas);
         }
         return;
       }
 
-      // Once we get the context, we can't fallback to setupWebGLRenderer.
+      // 一旦获取到 context，就不能再回退到 setupWebGLRenderer。
       canFallbackToWebGL = false;
 
       device.lost.then(async (info) => {
-        console.info(`WebGPU device was lost: ${info.message}`);
+        console.info(`WebGPU device 已丢失：${info.message}`);
         if (info.reason != "destroyed") {
           renderer?.destroy();
           renderer = null;
@@ -673,12 +673,12 @@
     if (labels != null) {
       clusterLabels = await layoutLabels(vp.scale(), labels, resolvedTheme.fontFamily);
     } else {
-      statusMessage = "Generating labels...";
+      statusMessage = "正在生成标签...";
       try {
         let result = await generateLabels(viewport);
         clusterLabels = await layoutLabels(vp.scale(), result, resolvedTheme.fontFamily);
       } catch (e) {
-        console.error("Error while generating labels", e);
+        console.error("生成标签时出错", e);
       } finally {
         statusMessage = null;
       }

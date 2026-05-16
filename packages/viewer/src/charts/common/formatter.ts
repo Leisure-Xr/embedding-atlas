@@ -3,12 +3,12 @@
 import * as d3 from "d3";
 
 /**
- * Infer a number formatter for an array of values.
- * - If all values are integer, display them as integers (with toLocaleString) without decimal points.
- * - For floating point values, find a reasonable precision, and format all values consistently.
+ * 为一组值推断数字格式化器。
+ * - 如果所有值都是整数，则用整数形式显示（使用 toLocaleString），不显示小数点。
+ * - 对于浮点值，找到合理精度，并以一致格式显示所有值。
  */
 export function inferNumberFormatter(values: number[]): (value: number) => string {
-  let locale = undefined; // Use default locale.
+  let locale = undefined; // 使用默认 locale。
 
   let finite = values.filter((v) => Number.isFinite(v));
 
@@ -21,34 +21,34 @@ export function inferNumberFormatter(values: number[]): (value: number) => strin
   let maxAbs = d3.max(finite, (v) => Math.abs(v)) ?? 0;
 
   if (allInteger && maxAbs < 1e15) {
-    // Use locale grouping (e.g. 1,234,567) for reasonable integers.
+    // 对合理范围内的整数使用 locale 分组（例如 1,234,567）。
     return (value: number) => value.toLocaleString(locale, { maximumFractionDigits: 0 });
   }
 
-  // Determine a reasonable number of decimal places.
+  // 确定合理的小数位数。
   let minAbs = d3.min(finite.filter((v) => v !== 0).map((v) => Math.abs(v))) ?? Infinity;
 
-  // For very large or very small numbers, use exponential notation.
+  // 对非常大或非常小的数字使用科学计数法。
   if (maxAbs >= 1e9 || (minAbs > 0 && minAbs < 1e-3)) {
     return d3.format(".3~e");
   }
 
-  // Find a precision that distinguishes the values.
-  // Use the range (or max absolute value if range is zero) to determine decimal digits.
+  // 找到可区分这些值的精度。
+  // 使用范围（如果范围为零，则使用最大绝对值）确定小数位数。
   let range = (d3.max(finite) ?? 0) - (d3.min(finite) ?? 0);
   let ref = range > 0 ? range : maxAbs;
 
-  // Number of integer digits in the reference magnitude.
+  // 参考量级中的整数位数。
   let intDigits = ref >= 1 ? Math.floor(Math.log10(ref)) + 1 : 0;
 
-  // We want ~4 significant digits total, with at least 1 decimal for floats.
+  // 总体目标约为 4 位有效数字，浮点数至少保留 1 位小数。
   let sigFigs = Math.max(4, intDigits + 1);
   let decimals = Math.max(1, sigFigs - intDigits);
-  // Clamp to a reasonable range.
+  // 限制在合理范围内。
   decimals = Math.min(decimals, 6);
 
-  // If the values already look "clean" at fewer decimals, reduce.
-  // Check if all values round-trip at fewer decimal places.
+  // 如果用更少小数位时这些值已经足够“干净”，则减少位数。
+  // 检查所有值是否能用更少小数位往返表示。
   for (let d = 1; d < decimals; d++) {
     let factor = 10 ** d;
     if (finite.every((v) => Math.abs(v - Math.round(v * factor) / factor) < 1e-12)) {
@@ -62,11 +62,11 @@ export function inferNumberFormatter(values: number[]): (value: number) => strin
 }
 
 /**
- * Infer a time formatter. The inputs are milliseconds since epoch. If `hasTimezone` is true, use local time, otherwise use UTC time.
- * The goal of the inferred format is to have a concise representation of the values.
- * For instance, if all values are rounded year (e.g., 2020-01-01 00:00:00),
- * then output a formatter that displays year only.
- * If all value are rounded to day, month, format up to the unit respectively.
+ * 推断时间格式化器。输入为 epoch 以来的毫秒数。如果 `hasTimezone` 为 true，则使用本地时间，否则使用 UTC 时间。
+ * 推断格式的目标是让这些值以简洁形式表示。
+ * 例如，如果所有值都舍入到年份（如 2020-01-01 00:00:00），
+ * 则输出只显示年份的格式化器。
+ * 如果所有值都舍入到天、月等单位，则分别格式化到对应单位。
  */
 export function inferTimeFormatter(values: number[], hasTimezone: boolean = false): (value: number) => string {
   if (values.length === 0) {
@@ -75,7 +75,7 @@ export function inferTimeFormatter(values: number[], hasTimezone: boolean = fals
     return (value: number) => formatter(new Date(value));
   }
 
-  // When hasTimezone is true, use local time via Date methods; otherwise use UTC methods.
+  // hasTimezone 为 true 时，通过 Date 方法使用本地时间；否则使用 UTC 方法。
   let tzOffsetMs = hasTimezone ? -new Date().getTimezoneOffset() * 60_000 : 0;
   let adjusted = (ms: number) => new Date(ms + tzOffsetMs);
 
@@ -87,7 +87,7 @@ export function inferTimeFormatter(values: number[], hasTimezone: boolean = fals
   let getSecond = (ms: number) => adjusted(ms).getUTCSeconds();
   let getMs = (ms: number) => adjusted(ms).getUTCMilliseconds();
 
-  // Determine the finest granularity needed
+  // 确定所需的最细粒度。
   let hasSubSecond = values.some((v) => getMs(v) !== 0);
   let hasSeconds = hasSubSecond || values.some((v) => getSecond(v) !== 0);
   let hasMinutes = hasSeconds || values.some((v) => getMinute(v) !== 0);
@@ -95,10 +95,10 @@ export function inferTimeFormatter(values: number[], hasTimezone: boolean = fals
   let hasDays = hasHours || values.some((v) => getDay(v) !== 1);
   let hasMonths = hasDays || values.some((v) => getMonth(v) !== 0);
 
-  // Check if all values share the same year (for more compact formatting)
+  // 检查所有值是否同一年（用于更紧凑的格式）。
   let allSameYear = values.every((v) => getYear(v) === getYear(values[0]));
 
-  // Pick the most concise format specifier
+  // 选择最简洁的格式说明符。
   let specifier: string;
   if (!hasMonths) {
     specifier = "%Y";

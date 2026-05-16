@@ -181,7 +181,7 @@
             }}
           />
           <ConfirmButton
-            label="Confirm"
+            label="确认"
             disabled={editingSpec == undefined}
             onClick={() => {
               if (editingSpec != undefined) {

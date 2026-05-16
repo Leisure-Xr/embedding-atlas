@@ -37,30 +37,30 @@ async def async_map(
     max_retry: int = 0,
     retry_base_delay: float = 1.0,
     retry_max_delay: float = 30.0,
-    description: str = "Task",
+    description: str = "任务",
     fallback: R | None = None,
 ) -> list[R]:
     """
-    Map the inputs by an async function, return a future that resolves to the mapped array (in correct order).
+    使用 async 函数映射输入，并返回按原顺序排列的结果列表。
 
     Args:
-        inputs: List of items to process
-        func: Async function to apply to each item
-        concurrency: Maximum number of concurrent calls
-        max_retry: Maximum number of retry attempts on failure (0 means no retries)
-        retry_base_delay: Base delay in seconds for exponential backoff (default 1.0)
-        retry_max_delay: Maximum delay in seconds for backoff cap (default 30.0)
-        description: Description in the progress bar
-        fallback: When an error happens, fill the given result. If None, raise the error.
-                  When fallback is None and an error occurs, stops processing new tasks immediately.
+        inputs: 要处理的条目列表。
+        func: 应用于每个条目的 async 函数。
+        concurrency: 最大并发调用数。
+        max_retry: 失败后的最大重试次数（0 表示不重试）。
+        retry_base_delay: 指数退避的基础延迟秒数（默认 1.0）。
+        retry_max_delay: 退避延迟上限秒数（默认 30.0）。
+        description: 进度条描述。
+        fallback: 出错时填入的结果。若为 None，则抛出错误。
+                  当 fallback 为 None 且发生错误时，会立即停止处理新任务。
     """
     count = len(inputs)
     results: list[R | None] = [None] * count
     semaphore = asyncio.Semaphore(concurrency)
     backoff = _BackoffState(retry_base_delay, retry_max_delay)
-    # Event to signal that processing should stop (used when fallback is None and an error occurs)
+    # 用于通知处理应停止的事件（fallback 为 None 且发生错误时使用）。
     stop_event = asyncio.Event()
-    # Store the first error encountered when fallback is None
+    # fallback 为 None 时保存遇到的第一个错误。
     first_error: list[Exception | None] = [None]
 
     pbar = tqdm(total=count, desc=description)
@@ -69,16 +69,16 @@ async def async_map(
         async with semaphore:
             last_error: Exception | None = None
             for attempt in range(max_retry + 1):
-                # Check if we should stop before each retry attempt
+                # 每次重试前检查是否应停止。
                 if stop_event.is_set():
                     return
 
                 try:
-                    # All tasks respect the shared backoff
+                    # 所有任务共享同一个 backoff。
                     if backoff.current_delay > 0:
                         delay = random.uniform(0, backoff.current_delay)
                         logger.warning(
-                            f"Backoff: waiting {delay:.1f}s before attempt {attempt + 1} for item {index}"
+                            f"Backoff：等待 {delay:.1f}s 后再对第 {index} 项进行第 {attempt + 1} 次尝试"
                         )
                         await asyncio.sleep(delay)
                     results[index] = await func(item)
@@ -93,7 +93,7 @@ async def async_map(
                         continue
             if last_error is not None:
                 if fallback is None:
-                    # Signal other tasks to stop and store the error
+                    # 通知其他任务停止并保存错误。
                     if first_error[0] is None:
                         first_error[0] = last_error
                     stop_event.set()
@@ -105,7 +105,7 @@ async def async_map(
 
     pbar.close()
 
-    # If we stopped due to an error, raise it
+    # 如果因错误停止，则抛出该错误。
     if first_error[0] is not None:
         raise first_error[0]
 

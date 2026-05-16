@@ -16,8 +16,10 @@
   let value = $state<any>(undefined);
 
   $effect.pre(() =>
-    context.highlight.subscribe(async (id) => {
+    context.highlight.subscribe(async (ids) => {
+      let id = ids?.at(-1);
       if (id == null) {
+        value = undefined;
         return;
       }
       let r = await context.coordinator.query(

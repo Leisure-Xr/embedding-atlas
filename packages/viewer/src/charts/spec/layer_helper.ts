@@ -145,7 +145,7 @@ function resolveInterpolate(value: Interpolate, orientation: "horizontal" | "ver
     case "linear":
       return d3.curveLinear;
     default:
-      console.warn(`Unknown interpolate: ${value}`);
+      console.warn(`未知插值方法：${value}`);
       return d3.curveLinear;
   }
 }

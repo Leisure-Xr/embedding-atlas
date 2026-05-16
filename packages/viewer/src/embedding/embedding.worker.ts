@@ -33,7 +33,7 @@ class Embedder {
     } else if (options.type === "image") {
       e.extractor = await pipeline("image-feature-extraction", options.model, pipelineOptions);
     } else {
-      throw new Error("invalid data type");
+      throw new Error("数据类型无效");
     }
     return e;
   }
@@ -51,7 +51,7 @@ class Embedder {
       embedding = embedding.mean(1);
     }
     if (embedding.dims.length !== 2 || embedding.dims[0] !== data.length) {
-      throw new Error("output embedding dimension mismatch");
+      throw new Error("输出嵌入维度不匹配");
     }
     this.batches.push(embedding);
   }
@@ -103,7 +103,7 @@ class Embedder {
     return index.queryByVector(vector, k);
   }
 
-  /** Query neighbors for all indexed points in one call, avoiding per-point worker round-trips. */
+  /** 一次性查询所有已索引点的邻居，避免逐点往返 worker。 */
   async bulkNeighbors(
     k: number,
   ): Promise<{ allIndices: Int32Array; allDistances: Float32Array; count: number; k: number }> {
@@ -111,9 +111,9 @@ class Embedder {
     let index = await this._getNNIndex();
     let allIndices = new Int32Array(count * k);
     let allDistances = new Float32Array(count * k);
-    // Fill with sentinel values: index -1, distance Infinity
-    // so that unfilled slots (when queryByIndex returns < k results)
-    // are never mistaken for valid neighbors
+    // 使用哨兵值填充：索引 -1，距离 Infinity。
+    // 这样未填充的位置（queryByIndex 返回少于 k 个结果时）
+    // 永远不会被误认为有效邻居。
     allIndices.fill(-1);
     for (let i = 0; i < count * k; i++) allDistances[i] = Infinity;
     for (let i = 0; i < count; i++) {
@@ -125,17 +125,17 @@ class Embedder {
     return transfer({ allIndices, allDistances, count, k }, [allIndices.buffer, allDistances.buffer]);
   }
 
-  /** Compute exact cosine distances between pairs of indexed points. */
+  /** 计算已索引点对之间的精确余弦距离。 */
   async exactDistances(sourceIndices: number[], targetIndices: number[]): Promise<Float32Array> {
     let { data, dimension } = this._getData();
-    // Returns a flat array: for each source, distances to all targets
+    // 返回扁平数组：对每个 source，包含它到所有 target 的距离。
     let result = new Float32Array(sourceIndices.length * targetIndices.length);
     for (let si = 0; si < sourceIndices.length; si++) {
       let sOff = sourceIndices[si] * dimension;
       for (let ti = 0; ti < targetIndices.length; ti++) {
         let tOff = targetIndices[ti] * dimension;
-        // Cosine distance = 1 - cosine_similarity
-        // Since vectors are L2-normalized, cosine_similarity = dot product
+        // 余弦距离 = 1 - cosine_similarity。
+        // 由于向量已做 L2 归一化，cosine_similarity 等于点积。
         let dot = 0;
         for (let d = 0; d < dimension; d++) {
           dot += data[sOff + d] * data[tOff + d];

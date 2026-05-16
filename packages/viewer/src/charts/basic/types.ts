@@ -7,20 +7,20 @@ export interface CountPlotSpec {
   title?: string;
 
   data: {
-    /** The data field */
+    /** 数据字段。 */
     field: SQLField;
 
-    /** Indicate if the field contains list[str] data, default false */
+    /** 指示字段是否包含 list[str] 数据，默认为 false。 */
     isList?: boolean;
   };
 
-  /** The max number of categories to show, default 10 */
+  /** 要显示的最大类别数，默认为 10。 */
   limit?: number;
 
-  /** Labeling method, '%': percentage, '#': count, '#/#': selected count over total count */
+  /** 标签方式，'%' 表示百分比，'#' 表示计数，'#/#' 表示选中计数/总计数。 */
   labels?: "%" | "#" | "#/#";
 
-  /** Order the categories by total count, selected count, alphabetical, or custom order, default 'total-descending' */
+  /** 按总计数、选中计数、字母顺序或自定义顺序排列类别，默认为 'total-descending'。 */
   order?:
     | "total-descending"
     | "total-ascending"
@@ -29,12 +29,12 @@ export interface CountPlotSpec {
     | "alphabetical"
     | string[];
 
-  /** The width of the category column */
+  /** 类别列宽度。 */
   categoryWidth?: number;
 }
 
 export interface CountPlotState {
-  /** List of selected categories */
+  /** 已选类别列表。 */
   selection?: string[];
 }
 
@@ -45,7 +45,7 @@ export interface PredicatesSpec {
 }
 
 export interface PredicatesState {
-  /** List of selected predicates. Values in this list should be the exact predicates. */
+  /** 已选谓词列表。此列表中的值应为精确的谓词字符串。 */
   selection?: string[];
 }
 

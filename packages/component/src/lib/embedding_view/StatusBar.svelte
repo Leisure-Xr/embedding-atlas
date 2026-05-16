@@ -80,18 +80,18 @@
     <Button
       icon="marquee"
       active={selectionMode == "marquee"}
-      title="Toggle rectangle selection mode. In normal mode, use shift + drag for rectangle selection."
+      title="切换矩形选择模式。普通模式下，可使用 shift + 拖拽进行矩形选择。"
       onClick={() => onSelectionMode(selectionMode == "marquee" ? "none" : "marquee")}
     />
     <Button
       icon="lasso"
       active={selectionMode == "lasso"}
-      title="Toggle lasso selection mode. In normal mode, use shift + meta + drag for lasso selection."
+      title="切换套索选择模式。普通模式下，可使用 shift + meta + 拖拽进行套索选择。"
       onClick={() => onSelectionMode(selectionMode == "lasso" ? "none" : "lasso")}
     />
     <div style="border-right: 1px solid currentColor; margin: 4px 2px; opacity: 0.3; width: 0; height: 10px"></div>
     <MapScaleLegend distancePerPoint={distancePerPoint} />
     <div style="border-right: 1px solid currentColor; margin: 4px 2px; opacity: 0.3; width: 0; height: 10px"></div>
-    <span>{pointCount.toLocaleString()} points</span>
+    <span>{pointCount.toLocaleString()} 个点</span>
   </div>
 </div>

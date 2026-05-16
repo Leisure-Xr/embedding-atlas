@@ -8,7 +8,7 @@
 
 <div style="padding-bottom:8px">
   <label style="display:flex;align-items:center;gap:4px">
-    Component:
+    组件：
     <select bind:value={testView}>
       <option value="EmbeddingView">EmbeddingView</option>
       <option value="EmbeddingViewMosaic">EmbeddingViewMosaic</option>

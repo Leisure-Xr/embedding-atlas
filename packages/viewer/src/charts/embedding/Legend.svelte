@@ -98,7 +98,7 @@
             {item.label}
           </div>
         </td>
-        <td class="text-slate-400 px-2 text-xs text-right last:rounded-tr-md last:rounded-br-md" title="Count"
+        <td class="text-slate-400 px-2 text-xs text-right last:rounded-tr-md last:rounded-br-md" title="数量"
           >{item.count.toLocaleString()}</td
         >
       </tr>

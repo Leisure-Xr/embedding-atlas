@@ -5,30 +5,30 @@ import { type Coordinator } from "@uwdata/mosaic-core";
 import type { EmbeddingAtlasProps } from "../api.js";
 import type { ExportFormat } from "../utils/mosaic_exporter.js";
 
-/** A key-value cache */
+/** 键值缓存。 */
 export interface Cache {
-  /** Gets an object from the cache with the given key. Returns `null` if the entry is not found. */
+  /** 使用给定键从缓存获取对象。未找到条目时返回 `null`。 */
   get(key: string): Promise<any | null>;
 
-  /** Sets an object to the cache with the given key */
+  /** 使用给定键将对象写入缓存。 */
   set(key: string, value: any): Promise<void>;
 }
 
-/** A data source for the viewer */
+/** 查看器的数据源。 */
 export interface DataSource {
-  /** Loads the dataset into the given table in the coordinator's database */
+  /** 将数据集加载到协调器数据库中的给定表。 */
   initializeCoordinator(
     coordinator: Coordinator,
     table: string,
     onStatus: (message: string) => void,
   ): Promise<Partial<EmbeddingAtlasProps>>;
 
-  /** Downloads a zip archive of the dataset plus static assets of the viewer */
+  /** 下载包含数据集和查看器静态资源的 zip 归档。 */
   downloadArchive?: () => Promise<void>;
 
-  /** Download the selection with the given predicate */
+  /** 使用给定谓词下载选区。 */
   downloadSelection?: (predicate: string | null, format: ExportFormat) => Promise<void>;
 
-  /** A cache suitable for this data source */
+  /** 适用于此数据源的缓存。 */
   cache?: Cache;
 }

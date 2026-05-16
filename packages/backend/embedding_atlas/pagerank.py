@@ -61,7 +61,8 @@ def pagerank(
     max_node_id = max(max(sources), max(targets))
     if n <= max_node_id:
         raise ValueError(
-            f"n={n} but edges contain node ID {max_node_id} (n must be > max node ID)"
+            f"n={n}，但 edges 包含节点 ID {max_node_id}（n 必须大于最大节点 ID）。"
+            f"（n={n} but edges contain node ID {max_node_id}）"
         )
 
     # Build sparse transition matrix M where M[j, i] = weight(i -> j) / out_degree(i)
@@ -253,26 +254,24 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         description="""\
-            Compute PageRank scores from a parquet file containing KNN neighbor data.
+            从包含 KNN neighbor 数据的 parquet 文件计算 PageRank 分数。
 
-            Input parquet file must contain a '__neighbors' column where each row is a
-            dict with two parallel arrays:
-            - 'ids': 0-indexed row IDs of the k nearest neighbors (int[])
+            输入 parquet 文件必须包含 '__neighbors' 列，其中每一行都是一个
+            带有两个并行数组的 dict：
+            - 'ids'：k 个 nearest neighbors 的从 0 开始的行 ID（int[]）
                 e.g. [0, 110431, 61815, ...] or [113494, 75640, 4, ...]
-            - 'distances': raw distances to those neighbors (float[])
+            - 'distances'：到这些 neighbors 的原始距离（float[]）
                 e.g. [0.0, 0.07, 0.11, ...] or [0.0, 0.0, 0.0, ...]
 
-            The arrays are aligned: ids[j] is the neighbor and distances[j] is its
-            distance. A row's own ID typically appears in its own ids array (often at
-            position 0 with distance 0.0), but it is not guaranteed to be first because
-            other neighbors can also have distance 0.0.
+            这些数组按位置对齐：ids[j] 是 neighbor，distances[j] 是其距离。
+            一行自身的 ID 通常会出现在自己的 ids 数组中（常见于位置 0，距离为 0.0），
+            但不保证一定排第一，因为其他 neighbors 也可能距离为 0.0。
 
-            This is the format produced by projection.py (see compute_text_projection,
-            compute_vector_projection, compute_image_projection).
+            这是 projection.py 生成的格式。
 
-            Output parquet file contains all original columns plus a 'pagerank' column
-            with float scores that sum to 1.0, e.g. 0.000312 (higher = more central
-            in the KNN graph).
+            输出 parquet 文件包含所有原始列，并新增 'pagerank' 列；
+            该列为总和为 1.0 的 float 分数，例如 0.000312
+            （越高表示在 KNN graph 中越中心）。
             """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -281,39 +280,39 @@ if __name__ == "__main__":
         dest="input_file",
         type=str,
         required=True,
-        help="Input parquet file with __neighbors column (see above for format)",
+        help="包含 __neighbors 列的输入 parquet 文件（格式见上方说明）",
     )
     parser.add_argument(
         "--out",
         dest="output_file",
         type=str,
         required=True,
-        help="Output parquet file: same as input with a 'pagerank' column added",
+        help="输出 parquet 文件：与输入相同，但新增 'pagerank' 列",
     )
     args = parser.parse_args()
 
-    # Load parquet and extract KNN arrays from the __neighbors column
-    print(f"Loading {args.input_file} ...")
+    # 加载 parquet，并从 __neighbors 列提取 KNN 数组
+    print(f"正在加载 {args.input_file} ...")
     df = pq.read_table(args.input_file).to_pandas()
-    print(f"Loaded {len(df)} rows")
+    print(f"已加载 {len(df)} 行")
 
-    # Compute PageRank and add as a column
-    print("Computing PageRank...")
+    # 计算 PageRank 并新增为一列
+    print("正在计算 PageRank...")
     start_time = time.time()
     df["pagerank"] = compute_pagerank_column(df)
-    print(f"PageRank completed in {time.time() - start_time:.4f} seconds")
+    print(f"PageRank 已完成，用时 {time.time() - start_time:.4f} 秒")
 
-    # Summary
+    # 摘要
     scores = df["pagerank"].values
     top_indices = np.argsort(scores)[::-1][:10]
-    print("\nTop 10 nodes by PageRank score:")
+    print("\nPageRank 分数最高的 10 个节点：")
     for idx in top_indices:
-        print(f"  node {idx:>6d}   score {scores[idx]:.10f}")
+        print(f"  节点 {idx:>6d}   分数 {scores[idx]:.10f}")
 
     print(
-        f"\nScore statistics: min={scores.min():.10f}, max={scores.max():.10f}, mean={scores.mean():.10f}"
+        f"\n分数统计：min={scores.min():.10f}, max={scores.max():.10f}, mean={scores.mean():.10f}"
     )
 
-    # Write output
+    # 写入输出
     df.to_parquet(args.output_file, index=False)
-    print(f"\nSaved to {args.output_file} with 'pagerank' column added")
+    print(f"\n已保存到 {args.output_file}，并新增 'pagerank' 列")

@@ -44,25 +44,25 @@ export default function Component() {
   }
 
   async function queryClusterLabels(regions: Rectangle[][]): Promise<(string | null)[]> {
-    return regions.map((_) => "label");
+    return regions.map((_) => "标签");
   }
 
   return (
     <>
       <div style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "8px" }}>
         <label style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          Mode:
+          模式：
           <select value={mode} onChange={(e) => setMode(e.target.value as any)}>
-            <option value="points">Points</option>
-            <option value="density">Density</option>
+            <option value="points">点</option>
+            <option value="density">密度</option>
           </select>
         </label>
 
         <label style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          Color Scheme:
+          配色：
           <select value={colorScheme} onChange={(e) => setColorScheme(e.target.value as any)}>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
+            <option value="light">浅色</option>
+            <option value="dark">深色</option>
           </select>
         </label>
 
@@ -108,14 +108,14 @@ export default function Component() {
         <div>
           {tooltip && (
             <>
-              Tooltip:
+              提示：
               <br />
               <pre>{JSON.stringify(tooltip, null, 2)}</pre>
             </>
           )}
           {selection && selection.length > 0 && (
             <>
-              {selection.length} Selected points:
+              已选择 {selection.length} 个点：
               <br />
               {selection.map((point, index) => (
                 <pre key={index}>{JSON.stringify(point, null, 2)}</pre>
@@ -123,7 +123,7 @@ export default function Component() {
             </>
           )}
           {rangeSelection && <pre>{JSON.stringify(rangeSelection, null, 2)}</pre>}
-          Viewport:
+          视口：
           <br />
           <pre>{JSON.stringify(viewportState, null, 2)}</pre>
         </div>

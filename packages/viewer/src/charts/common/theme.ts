@@ -9,47 +9,47 @@ export { defaultCategoryColors } from "@embedding-atlas/component";
 export interface ChartTheme {
   scheme: "light" | "dark";
 
-  /** Default interpolate for continuous color scales */
+  /** 连续颜色比例尺的默认插值。 */
   interpolate: string | string[] | ((v: number) => string);
 
-  /** Category color scheme */
+  /** 类别配色方案。 */
   categoryColors: string[] | ((count: number) => string[]);
 
-  /** Ordinal color scheme */
+  /** 序数配色方案。 */
   ordinalColors: string[] | ((count: number) => string[]);
 
-  /** Color for the '(other)' category */
+  /** '(other)' 类别的颜色。 */
   otherColor: string;
 
-  /** Color for the '(null)' category */
+  /** '(null)' 类别的颜色。 */
   nullColor: string;
 
-  /** Mark color */
+  /** 标记颜色。 */
   markColor: string;
   markColorFade: string;
   markColorGray: string;
   markColorGrayFade: string;
   ruleColor: string;
 
-  /** Embedding view point / contour color when there is no color encoding */
+  /** 没有颜色编码时，嵌入视图点 / 等高线的颜色。 */
   embeddingColor: string;
 
-  /** Grid color */
+  /** 网格颜色。 */
   gridColor: string;
 
-  /** Label color */
+  /** 标签颜色。 */
   labelColor: string;
   labelFontFamily: string;
   labelFontSize: number;
   labelMaxWidth: number;
 
-  /** Border of the brush selection */
+  /** 刷选选区边框。 */
   brushBorder: string;
 
-  /** Back border of the brush selection */
+  /** 刷选选区后置边框。 */
   brushBorderBack: string;
 
-  /** Fill color of the brush selection */
+  /** 刷选选区填充颜色。 */
   brushFill: string;
 }
 

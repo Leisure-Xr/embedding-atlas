@@ -129,7 +129,7 @@ export function inferBinning(
       };
     }
     default:
-      throw new Error("invalid scale type");
+      throw new Error("比例尺类型无效");
   }
 }
 
@@ -137,13 +137,13 @@ type TimeStepType = "fixed" | "day" | "month" | "year";
 
 interface TimeStep {
   type: TimeStepType;
-  /** For 'fixed': exact step in ms. For 'day': number of days. For 'month': number of months. For 'year': number of years. */
+  /** 对于 'fixed'：精确步长（毫秒）。对于 'day'：天数。对于 'month'：月数。对于 'year'：年数。 */
   value: number;
-  /** Approximate number of milliseconds for this step */
+  /** 此步长对应的近似毫秒数。 */
   approxMs: number;
 }
 
-// Time constants in milliseconds
+// 时间常量，单位为毫秒。
 const MS_SECOND = 1000;
 const MS_MINUTE = 60 * MS_SECOND;
 const MS_HOUR = 60 * MS_MINUTE;
@@ -151,7 +151,7 @@ const MS_DAY = 24 * MS_HOUR;
 const MS_MONTH_APPROX = 30.44 * MS_DAY;
 const MS_YEAR_APPROX = 365.25 * MS_DAY;
 
-/** Candidate time steps: [approxMs, type, value] */
+/** 候选时间步长：[approxMs, type, value]。 */
 const TIME_STEP_CANDIDATES: TimeStep[] = [
   ...[1, 5, 10, 15, 30].map((k): TimeStep => ({ approxMs: k * MS_SECOND, type: "fixed", value: k * MS_SECOND })),
   ...[1, 5, 10, 15, 30].map((k): TimeStep => ({ approxMs: k * MS_MINUTE, type: "fixed", value: k * MS_MINUTE })),
@@ -161,7 +161,7 @@ const TIME_STEP_CANDIDATES: TimeStep[] = [
   ...[1, 2, 5, 10, 25, 50, 100].map((k): TimeStep => ({ approxMs: k * MS_YEAR_APPROX, type: "year", value: k })),
 ];
 
-/** Pick a nice time step that divides the given duration into approximately desiredCount bins. */
+/** 选择一个合适的时间步长，将给定时长大致划分为 desiredCount 个分箱。 */
 function inferTimeStep(durationMs: number, desiredCount: number): TimeStep {
   let targetStepMs = durationMs / Math.max(desiredCount, 1);
   let logTarget = Math.log(Math.max(targetStepMs, 1));
@@ -181,21 +181,21 @@ function inferTimeStep(durationMs: number, desiredCount: number): TimeStep {
 }
 
 function dateHelpers(hasTimezone: boolean) {
-  // When hasTimezone is true, shift epoch_ms by the current timezone offset so that
-  // UTC date functions (getUTCFullYear, etc.) return local calendar values.
-  // This avoids relying on timezone name strings that DuckDB may not support.
-  // getTimezoneOffset() returns minutes, positive for west of UTC.
-  // For UTC+8 it returns -480, so tzOffsetMs = +28800000.
+  // hasTimezone 为 true 时，按当前时区偏移移动 epoch_ms，
+  // 使 UTC 日期函数（getUTCFullYear 等）返回本地日历值。
+  // 这样可避免依赖 DuckDB 可能不支持的时区名称字符串。
+  // getTimezoneOffset() 返回分钟数，UTC 以西为正。
+  // 对于 UTC+8，它返回 -480，因此 tzOffsetMs = +28800000。
   let tzOffsetMs = hasTimezone ? -new Date().getTimezoneOffset() * 60_000 : 0;
 
-  // Shift ms to "local-adjusted UTC" so UTC extraction gives local calendar values
+  // 将 ms 移到“本地调整后的 UTC”，使 UTC 提取可得到本地日历值。
   let adjusted = (ms: number) => new Date(ms + tzOffsetMs);
 
   return {
     tzOffsetMs,
     yearOf: (ms: number) => adjusted(ms).getUTCFullYear(),
     monthOf: (ms: number) => adjusted(ms).getUTCMonth(), // 0-based
-    // Construct epoch_ms for midnight of the given calendar date in the target timezone
+    // 构造目标时区中给定日历日期午夜的 epoch_ms。
     makeDate: (y: number, m: number, d: number = 1) => Date.UTC(y, m, d) - tzOffsetMs,
   };
 }
@@ -213,11 +213,11 @@ export function inferTimeBinning(
 
   let { type: stepType, value: stepValue } = inferTimeStep(max - min, desiredCount);
 
-  // Date helpers that respect timezone setting
+  // 遵循时区设置的日期辅助函数。
   let { tzOffsetMs, yearOf, monthOf, makeDate } = dateHelpers(hasTimezone);
 
-  // SQL helper: convert epoch_ms to a TIMESTAMP, offset-adjusted so that
-  // UTC date extraction (YEAR, MONTH, CAST AS DATE) yields local calendar values.
+  // SQL 辅助函数：将 epoch_ms 转换为 TIMESTAMP，并进行偏移调整，
+  // 使 UTC 日期提取（YEAR、MONTH、CAST AS DATE）得到本地日历值。
   let toTimestampSQL = (x: SQL.ExprNode) => {
     if (tzOffsetMs !== 0) {
       return SQL.sql`epoch_ms(CAST(${x} AS BIGINT) + ${SQL.literal(tzOffsetMs)})`;
@@ -244,9 +244,9 @@ export function inferTimeBinning(
     case "day": {
       let stepDays = stepValue;
 
-      // Day number from epoch_ms: shift by timezone offset, then divide by MS_DAY.
+      // 从 epoch_ms 得到天编号：先按时区偏移移动，再除以 MS_DAY。
       let msToDayNum = (ms: number) => Math.floor((ms + tzOffsetMs) / MS_DAY);
-      // Inverse: day number back to epoch_ms (midnight in target timezone)
+      // 反向转换：将天编号转回 epoch_ms（目标时区午夜）。
       let dayNumToMs = (dayNum: number) => dayNum * MS_DAY - tzOffsetMs;
 
       let originDayNum = Math.floor(msToDayNum(min) / stepDays) * stepDays;
@@ -270,7 +270,7 @@ export function inferTimeBinning(
     }
     case "month": {
       let stepMonths = stepValue;
-      // yearMonth = year * 12 + month (0-based month)
+      // yearMonth = year * 12 + month（month 从 0 开始）。
       let minYM = yearOf(min) * 12 + monthOf(min);
       let originYM = Math.floor(minYM / stepMonths) * stepMonths;
       let maxYM = yearOf(max) * 12 + monthOf(max);
@@ -283,7 +283,7 @@ export function inferTimeBinning(
         scale: { type: "time", domain: [ymToMs(originYM), ymToMs(endYM)] },
         binIndexExpr: (x) => {
           let ts = toTimestampSQL(x);
-          // DuckDB MONTH() returns 1-12, subtract 1 for 0-based
+          // DuckDB MONTH() 返回 1-12，减 1 后转为从 0 开始。
           let ym = SQL.sql`(YEAR(${ts}) * 12 + MONTH(${ts}) - 1)`;
           return SQL.cond(
             SQL.isFinite(x),
@@ -297,7 +297,7 @@ export function inferTimeBinning(
       };
     }
     case "year": {
-      // Year-based binning
+      // 基于年份的分箱。
       let stepYears = stepValue;
       let originYear = Math.floor(yearOf(min) / stepYears) * stepYears;
       let maxYear = yearOf(max);
@@ -322,6 +322,6 @@ export function inferTimeBinning(
       };
     }
     default:
-      throw new Error("invalid step type");
+      throw new Error("步长类型无效");
   }
 }

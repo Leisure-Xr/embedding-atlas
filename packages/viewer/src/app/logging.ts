@@ -3,7 +3,7 @@
 import { nanoid } from "nanoid";
 import { writable, type Writable } from "svelte/store";
 
-/** A log message for the data importing UI */
+/** 数据导入 UI 的日志消息。 */
 export interface LogMessage {
   text: string;
   markdown?: boolean;

@@ -41,44 +41,44 @@
   }
 
   async function queryClusterLabels(clusters: Rectangle[][]): Promise<(string | null)[]> {
-    return clusters.map(() => "label");
+    return clusters.map(() => "标签");
   }
 </script>
 
 <div style="margin-bottom:5px;display:flex;align-items:center;gap:8px">
   <label style="display:flex;align-items:center;gap:4px">
-    Mode:
+    模式：
     <select bind:value={mode}>
-      <option value="points">Points</option>
-      <option value="density">Density</option>
+      <option value="points">点</option>
+      <option value="density">密度</option>
     </select>
   </label>
 
   <label style="display:flex;align-items:center;gap:4px">
-    Color Scheme:
+    配色：
     <select bind:value={colorScheme}>
-      <option value="light">Light</option>
-      <option value="dark">Dark</option>
+      <option value="light">浅色</option>
+      <option value="dark">深色</option>
     </select>
   </label>
 
   <label style="display:flex;align-items:center;gap:4px">
-    Min Density:
+    最小密度：
     <input type="range" bind:value={minimumDensity} min={0} max={0.2} step={0.0001} />
     {minimumDensity.toFixed(4)}
   </label>
 
   <label style="display:flex;align-items:center;gap:4px">
-    Max Points:
+    最大点数：
     {#if downsampleMaxPoints != null}
       <input type="range" bind:value={downsampleMaxPoints} min={5000} max={numPoints} step={5000} />
       {downsampleMaxPoints >= 1000000
         ? (downsampleMaxPoints / 1000000).toFixed(1) + "M"
         : (downsampleMaxPoints / 1000).toFixed(0) + "K"}
-      <button onclick={() => (downsampleMaxPoints = null)}>Disable</button>
+      <button onclick={() => (downsampleMaxPoints = null)}>禁用</button>
     {:else}
-      <span>Disabled</span>
-      <button onclick={() => (downsampleMaxPoints = 4000000)}>Enable</button>
+      <span>已禁用</span>
+      <button onclick={() => (downsampleMaxPoints = 4000000)}>启用</button>
     {/if}
   </label>
 </div>
@@ -115,11 +115,11 @@
   </div>
   <div>
     {#if tooltip}
-      Tooltip:<br />
+      提示：<br />
       <pre>{JSON.stringify(tooltip, null, 2)}</pre>
     {/if}
     {#if selection && selection.length > 0}
-      {selection.length} Selected points:<br />
+      已选择 {selection.length} 个点：<br />
       {#each selection as point}
         <pre>{JSON.stringify(point, null, 2)}</pre>
       {/each}
@@ -127,7 +127,7 @@
     {#if rangeSelection}
       <pre>{JSON.stringify(rangeSelection, null, 2)}</pre>
     {/if}
-    Viewport:<br />
+    视口：<br />
     <pre>{JSON.stringify(viewportState, null, 2)}</pre>
   </div>
 </div>

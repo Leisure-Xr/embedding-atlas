@@ -220,7 +220,7 @@ function makeContinuousScale(
       break;
     }
     default: {
-      throw new Error("invalid scale type");
+      throw new Error("比例尺类型无效");
     }
   }
 

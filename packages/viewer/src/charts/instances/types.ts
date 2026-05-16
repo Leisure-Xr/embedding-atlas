@@ -9,34 +9,34 @@ export interface InstancesSpec {
   title?: string;
 
   /**
-   * Columns to show in the instance view.
-   * If specified, the table and card views will be limited to the given columns, and custom card template will only receive the given columns as data.
-   * If not specified, include all columns from the dataset (or query result is `query` is specified).
+   * 实例视图中要显示的列。
+   * 如果指定，表格和卡片视图会限制为给定列，自定义卡片模板也只会收到给定列作为数据。
+   * 如果未指定，则包含数据集中的所有列（或指定 `query` 时的查询结果列）。
    */
   columns?: string[];
 
-  /** Sort order. If not specified, use original data order. */
+  /** 排序顺序。未指定时使用原始数据顺序。 */
   sort?: SortOrder;
 
-  /** View mode, defaults to "table" */
+  /** 视图模式，默认为 "table"。 */
   viewMode?: "table" | "cards";
 
-  /** Optional custom SQL query to filter or transform the data */
+  /** 可选的自定义 SQL 查询，用于筛选或转换数据。 */
   query?: string;
 
-  /** Number of items per page, defaults to 100 */
+  /** 每页项目数，默认为 100。 */
   pageSize?: number;
 
-  /** Default height in pixels, defaults to 500. This value is used when the view's height is flexible. */
+  /** 默认高度（像素），默认为 500。视图高度可变时使用此值。 */
   defaultHeight?: number;
 
-  /** Column styles specific to this instance view. These will override global column styles. */
+  /** 此实例视图专用的列样式，会覆盖全局列样式。 */
   columnStyles?: Record<string, ColumnStyle>;
 
   /**
-   * Liquid template for the cards (rendered with liquidjs).
-   * Use a Liquid template instead of column styles for custom cards.
-   * If not specified, use the tooltip view as card.
+   * 卡片使用的 Liquid 模板（由 liquidjs 渲染）。
+   * 自定义卡片时，可使用 Liquid 模板代替列样式。
+   * 未指定时，使用工具提示视图作为卡片。
    */
   cardTemplate?: string;
 }

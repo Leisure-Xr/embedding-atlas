@@ -3,15 +3,13 @@
 import { type Writable } from "svelte/store";
 
 /**
- * Wraps an existing Svelte writable store and returns a new store
- * that ignores its own updates when notifying subscribers.
+ * 包装现有 Svelte writable store，并返回一个在通知订阅者时会忽略自身更新的新 store。
  *
- * Subscribers of the returned store will **not be called** when
- * the wrapped store is updated through this wrapper's `set` or `update` methods.
- * Updates made directly to the original store will still notify subscribers.
+ * 当通过此包装器的 `set` 或 `update` 方法更新被包装 store 时，
+ * 返回 store 的订阅者**不会被调用**。
+ * 直接更新原始 store 仍会通知订阅者。
  *
- * This is useful when a component both writes to and subscribes from the same store,
- * and you want to prevent its own writes from re-triggering its callbacks.
+ * 当组件既写入又订阅同一个 store，并希望避免自身写入再次触发回调时，此函数很有用。
  */
 export function isolatedWritable<T>(wrapped: Writable<T>): Writable<T> {
   let counter = 0;
