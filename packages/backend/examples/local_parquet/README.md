@@ -23,6 +23,48 @@
 | `wine_reviews_sample.parquet` | Hugging Face: `james-burton/wine_reviews` | `description` | `country`, `province`, `points` |
 | `medmcqa_sample.parquet` | Hugging Face: `openlifescienceai/medmcqa` | `question` | `subject_name`, `topic_name`, `choice_type` |
 
+## 前置条件
+
+### 基础环境（必需）
+
+| 工具 | macOS | Windows |
+| --- | --- | --- |
+| Node.js + npm | `brew install node` 或从 https://nodejs.org/ 下载 | 从 https://nodejs.org/ 下载安装 |
+| uv | `brew install uv` 或 `curl -LsSf https://astral.sh/uv/install.sh \| sh` | `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 \| iex"` |
+
+安装 JS 依赖（在仓库根目录运行）：
+
+```bash
+npm install
+```
+
+仓库已包含预构建的 WASM 文件，安装依赖后即可直接运行示例。
+
+### Rust 工具链（可选，仅修改 Rust/WASM 源码时需要）
+
+如果需要修改 `packages/umap` 或 `packages/density-clustering` 中的 Rust 代码，需要安装 Rust 工具链来重新编译 WASM：
+
+macOS / Linux：
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup target add wasm32-unknown-unknown
+cargo install -f wasm-bindgen-cli --version 0.2.114
+```
+
+Windows（先从 https://www.rust-lang.org/tools/install 下载并运行 rustup-init.exe）：
+
+```powershell
+rustup target add wasm32-unknown-unknown
+cargo install -f wasm-bindgen-cli --version 0.2.114
+```
+
+修改 Rust 代码后，在仓库根目录运行：
+
+```bash
+npm run build
+```
+
 ## 一键启动脚本
 
 macOS / Linux:
