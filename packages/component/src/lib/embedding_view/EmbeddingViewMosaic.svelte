@@ -121,7 +121,6 @@
           yData = yArray;
           categoryData = categoryArray;
           updateTooltip(null);
-          updateSelection(null);
         },
       });
       (client as any).reset = () => {

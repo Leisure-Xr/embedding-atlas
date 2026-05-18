@@ -40,7 +40,7 @@
       $effect.pre(() => {
         container.style.left = "0px";
         container.style.top = "0px";
-        container.style.pointerEvents = allowInteraction ? "all" : "none";
+        container.style.pointerEvents = allowInteraction ? "auto" : "none";
 
         if (instance == null) {
           instance = capturedAction(container, instanceProps);
@@ -48,42 +48,65 @@
           instance.update?.(instanceProps);
         }
 
-        function updatePosition(width: number, height: number, xMin: number, xMax: number) {
+        function updatePosition(width: number, height: number, xMin: number, xMax: number, yMax: number) {
           let px = location.x;
           let py = location.y;
           let yMin = 2;
           let anchorX = width / 2;
-          let anchorY = height + (targetHeight + margin);
           if (px - anchorX < xMin) {
             anchorX = px - xMin;
           }
           if (px - anchorX > xMax - width) {
             anchorX = px - xMax + width;
           }
-          if (py - anchorY < yMin) {
-            anchorY = -(targetHeight + margin);
+
+          let top = py - targetHeight - margin - height;
+          let bottom = top + height;
+          if (top < yMin) {
+            let topBelow = py + targetHeight + margin;
+            let bottomBelow = topBelow + height;
+            if (bottomBelow <= yMax || bottom > yMax) {
+              top = topBelow;
+              bottom = bottomBelow;
+            }
+          }
+          if (bottom > yMax) {
+            top = Math.max(yMin, yMax - height);
           }
           container.style.left = px - anchorX + "px";
-          container.style.top = py - anchorY + "px";
+          container.style.top = top + "px";
         }
 
-        let parentRect = parentContainer.getBoundingClientRect();
-        let { width, height } = container.getBoundingClientRect();
-        updatePosition(width, height, 2, parentRect.width - 2);
+        function reposition() {
+          let parentRect = parentContainer.getBoundingClientRect();
+          let { width, height } = container.getBoundingClientRect();
+          updatePosition(width, height, 2, parentRect.width - 2, parentRect.height - 2);
+        }
 
-        // 有时尺寸会在下一帧变化，因此再检查一次。
+        reposition();
+
+        // Tooltip content can change size after Svelte mounts nested renderers.
         let req: number | null = requestAnimationFrame(() => {
           req = null;
-
-          let rect = container.getBoundingClientRect();
-          if (rect.width != width || rect.height != height) {
-            updatePosition(rect.width, rect.height, 2, parentRect.width - 2);
-          }
+          reposition();
         });
+        let resizeObserver = new ResizeObserver(() => {
+          if (req != null) {
+            cancelAnimationFrame(req);
+          }
+          req = requestAnimationFrame(() => {
+            req = null;
+            reposition();
+          });
+        });
+        resizeObserver.observe(container);
+        resizeObserver.observe(parentContainer);
+
         return () => {
           if (req != null) {
             cancelAnimationFrame(req);
           }
+          resizeObserver.disconnect();
         };
       });
 
@@ -95,7 +118,14 @@
   });
 </script>
 
-<div bind:this={parentContainer} style:position="absolute" style:width="100%">
+<div
+  bind:this={parentContainer}
+  style:position="absolute"
+  style:inset="0"
+  style:width="100%"
+  style:height="100%"
+  style:pointer-events="none"
+>
   <div
     bind:this={container}
     style:display="flex"
