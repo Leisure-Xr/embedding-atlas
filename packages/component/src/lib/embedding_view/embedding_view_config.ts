@@ -16,9 +16,9 @@ export interface EmbeddingViewConfig {
   pointSize?: number | null;
 
   /** 自动生成标签。
-   * 默认情况下，如果未指定 `labels` prop，并且 Mosaic 视图中指定了 `text` 列，
+   * 默认关闭。设置为 `true` 时，如果未指定 `labels` prop，并且 Mosaic 视图中指定了 `text` 列，
    * 或非 Mosaic 视图中指定了 `queryClusterLabels` 回调，则会自动生成标签。
-   * 设置为 `false` 可禁用自动标签。 */
+   * 显式传入的 `labels` prop 不受此选项影响。 */
   autoLabelEnabled?: boolean | null;
 
   /** 生成自动标签前用于筛选聚类的密度阈值。

@@ -224,7 +224,7 @@
   let minimumDensity = $derived(config?.minimumDensity ?? 1 / 16);
   let userPointSize = $derived(config?.pointSize ?? null);
   let mode = $derived(config?.mode ?? "points");
-  let autoLabelEnabled = $derived(config?.autoLabelEnabled);
+  let autoLabelEnabled = $derived(config?.autoLabelEnabled ?? false);
   let downsampleMaxPoints = $derived(config?.downsampleMaxPoints ?? 4000000);
   let downsampleDensityWeight = $derived(config?.downsampleDensityWeight ?? 5);
 
@@ -266,7 +266,7 @@
     if (needsRender) {
       setNeedsRender();
       if (
-        (autoLabelEnabled !== false || labels != null) &&
+        (autoLabelEnabled || labels != null) &&
         needsUpdateLabels &&
         renderer != null &&
         data.x != null &&
